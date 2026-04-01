@@ -6,6 +6,7 @@ use App\Enums\OrderStatus;
 use App\Enums\PaymentStatus;
 use App\Models\Cart;
 use App\Models\Coupon;
+use App\Models\Address;
 use App\Models\Order;
 use App\Models\OrderItem;
 use App\Models\OrderItemTopping;
@@ -118,6 +119,17 @@ class OrderService
 
             if ($pointsUsed > 0) {
                 $this->loyaltyService->redeemPoints($user, $pointsUsed, $order);
+            }
+
+            if (!empty($data['save_address']) && !empty($data['shipping_address'])) {
+                Address::create([
+                    'user_id' => $user->id,
+                    'label' => $data['address_label'] ?? null,
+                    'recipient_name' => $data['customer_name'] ?? $user->name,
+                    'phone' => $data['customer_phone'] ?? $user->phone,
+                    'address_line' => $data['shipping_address'],
+                    'is_default' => $user->addresses()->count() === 0,
+                ]);
             }
 
             $this->cartService->clearCart();

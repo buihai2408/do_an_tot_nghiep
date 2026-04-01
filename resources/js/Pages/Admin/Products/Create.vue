@@ -18,6 +18,7 @@ const imagePreviews = ref([]);
 const selectedSizes = ref(props.sizes.map(s => ({ size_id: s.id, name: s.name, price: '', enabled: false })));
 const selectedToppings = ref([]);
 const errors = ref({});
+const generalError = ref('');
 const submitting = ref(false);
 
 const handleImageSelect = (e) => {
@@ -52,10 +53,16 @@ const submit = async () => {
     selectedToppings.value.forEach((id, i) => formData.append(`topping_ids[${i}]`, id));
 
     try {
+        generalError.value = '';
+        errors.value = {};
         await axios.post('/api/admin/products', formData);
         router.visit('/admin/products');
     } catch (e) {
-        errors.value = e.response?.data?.errors || {};
+        if (e.response?.status === 422) {
+            errors.value = e.response.data.errors || {};
+        } else {
+            generalError.value = e.response?.data?.message || 'Có lỗi xảy ra, vui lòng thử lại.';
+        }
     } finally {
         submitting.value = false;
     }
@@ -67,6 +74,7 @@ const submit = async () => {
         <h1 class="text-2xl font-bold text-gray-800 mb-6">Thêm sản phẩm</h1>
 
         <div class="bg-white rounded-2xl shadow-md p-6 max-w-3xl">
+            <div v-if="generalError" class="mb-4 p-3 bg-red-50 border border-red-200 text-red-700 rounded-lg text-sm">{{ generalError }}</div>
             <div class="space-y-6">
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div>

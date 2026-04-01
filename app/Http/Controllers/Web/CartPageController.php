@@ -21,7 +21,7 @@ class CartPageController extends Controller
                         'id' => $item->product->id,
                         'name' => $item->product->name,
                         'slug' => $item->product->slug,
-                        'image' => $item->product->image,
+                        'image' => $item->product->primaryImage?->path,
                     ],
                     'size' => $item->size ? ['name' => $item->size->name, 'label' => $item->size->label] : null,
                     'ice_level' => $item->ice_level?->value,

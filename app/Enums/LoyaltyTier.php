@@ -23,9 +23,9 @@ enum LoyaltyTier: string
     {
         return match ($this) {
             self::Bronze => 0,
-            self::Silver => 500,
-            self::Gold => 1500,
-            self::Diamond => 5000,
+            self::Silver => 50,
+            self::Gold => 200,
+            self::Diamond => 500,
         };
     }
 
@@ -33,9 +33,9 @@ enum LoyaltyTier: string
     {
         return match ($this) {
             self::Bronze => 1.0,
-            self::Silver => 1.5,
-            self::Gold => 2.0,
-            self::Diamond => 3.0,
+            self::Silver => 1.2,
+            self::Gold => 1.5,
+            self::Diamond => 2.0,
         };
     }
 

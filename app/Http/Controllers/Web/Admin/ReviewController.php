@@ -11,7 +11,7 @@ class ReviewController extends Controller
     public function index()
     {
         return Inertia::render('Admin/Reviews/Index', [
-            'reviews' => Review::with(['user', 'product'])->latest()->paginate(15),
+            'reviews' => Review::with(['user', 'order'])->latest()->paginate(15),
         ]);
     }
 }

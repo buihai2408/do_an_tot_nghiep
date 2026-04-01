@@ -15,9 +15,6 @@ class UpdateAddressRequest extends FormRequest
             'recipient_name' => 'sometimes|required|string|max:255',
             'phone' => 'sometimes|required|string|max:20',
             'address_line' => 'sometimes|required|string|max:500',
-            'ward' => 'nullable|string|max:100',
-            'district' => 'nullable|string|max:100',
-            'city' => 'nullable|string|max:100',
             'is_default' => 'nullable|boolean',
         ];
     }

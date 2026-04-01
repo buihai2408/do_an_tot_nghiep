@@ -14,7 +14,7 @@ class Product extends Model
     use HasFactory, SoftDeletes;
 
     protected $fillable = [
-        'category_id', 'name', 'slug', 'description', 'image',
+        'category_id', 'name', 'slug', 'description',
         'base_price', 'is_active', 'is_featured',
     ];
 
@@ -63,6 +63,19 @@ class Product extends Model
         return $this->hasMany(Review::class)->where('is_approved', true);
     }
 
+    public function orderBasedReviews()
+    {
+        return Review::where('is_approved', true)
+            ->where(function ($q) {
+                $q->where('product_id', $this->id)
+                  ->orWhereIn('order_id', fn($sub) =>
+                      $sub->select('order_id')
+                          ->from('order_items')
+                          ->where('product_id', $this->id)
+                  );
+            });
+    }
+
     public function orderItems(): HasMany
     {
         return $this->hasMany(OrderItem::class);
@@ -80,11 +93,11 @@ class Product extends Model
 
     public function getAvgRatingAttribute(): float
     {
-        return round($this->approvedReviews()->avg('rating') ?? 0, 1);
+        return round($this->orderBasedReviews()->avg('rating') ?? 0, 1);
     }
 
     public function getReviewCountAttribute(): int
     {
-        return $this->approvedReviews()->count();
+        return $this->orderBasedReviews()->count();
     }
 }

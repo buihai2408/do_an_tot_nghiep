@@ -8,16 +8,14 @@ defineProps({ categories: Object });
 
 const showForm = ref(false);
 const editingCategory = ref(null);
-const form = ref({ name: '', description: '', sort_order: 0, is_active: true });
-const imageFile = ref(null);
+const form = ref({ name: '', sort_order: 0, is_active: true });
 
-const openCreate = () => { editingCategory.value = null; form.value = { name: '', description: '', sort_order: 0, is_active: true }; showForm.value = true; };
-const openEdit = (cat) => { editingCategory.value = cat; form.value = { name: cat.name, description: cat.description || '', sort_order: cat.sort_order, is_active: cat.is_active }; showForm.value = true; };
+const openCreate = () => { editingCategory.value = null; form.value = { name: '', sort_order: 0, is_active: true }; showForm.value = true; };
+const openEdit = (cat) => { editingCategory.value = cat; form.value = { name: cat.name, sort_order: cat.sort_order, is_active: cat.is_active }; showForm.value = true; };
 
 const submit = async () => {
     const formData = new FormData();
     Object.entries(form.value).forEach(([k, v]) => formData.append(k, v === true ? '1' : v === false ? '0' : v ?? ''));
-    if (imageFile.value) formData.append('image', imageFile.value);
 
     try {
         if (editingCategory.value) {
@@ -86,8 +84,6 @@ const deleteCategory = async (id) => {
                 <h3 class="text-lg font-bold mb-4">{{ editingCategory ? 'Sửa danh mục' : 'Thêm danh mục' }}</h3>
                 <div class="space-y-4">
                     <div><label class="block text-sm font-medium mb-1">Tên</label><input v-model="form.name" class="w-full rounded-lg border-gray-300" /></div>
-                    <div><label class="block text-sm font-medium mb-1">Mô tả</label><textarea v-model="form.description" rows="2" class="w-full rounded-lg border-gray-300"></textarea></div>
-                    <div><label class="block text-sm font-medium mb-1">Hình ảnh</label><input type="file" @change="imageFile = $event.target.files[0]" accept="image/*" class="w-full" /></div>
                     <div><label class="block text-sm font-medium mb-1">Thứ tự</label><input v-model.number="form.sort_order" type="number" class="w-full rounded-lg border-gray-300" /></div>
                     <label class="flex items-center"><input v-model="form.is_active" type="checkbox" class="rounded text-amber-600 mr-2" /> Hoạt động</label>
                 </div>

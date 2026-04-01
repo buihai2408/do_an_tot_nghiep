@@ -20,7 +20,7 @@ class HomeController extends Controller
                 'id' => $p->id,
                 'name' => $p->name,
                 'slug' => $p->slug,
-                'image' => $p->primaryImage?->path ?? $p->image,
+                'image' => $p->primaryImage?->path,
                 'base_price' => $p->base_price,
                 'category' => $p->category?->name,
                 'avg_rating' => $p->avg_rating,

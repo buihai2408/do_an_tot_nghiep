@@ -11,9 +11,19 @@ class StoreReviewRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'product_id' => 'required|exists:products,id',
             'rating' => 'required|integer|min:1|max:5',
             'comment' => 'nullable|string|max:1000',
+        ];
+    }
+
+    public function messages(): array
+    {
+        return [
+            'rating.required' => 'Vui lòng chọn số sao đánh giá.',
+            'rating.integer' => 'Đánh giá phải là số nguyên.',
+            'rating.min' => 'Đánh giá tối thiểu 1 sao.',
+            'rating.max' => 'Đánh giá tối đa 5 sao.',
+            'comment.max' => 'Nhận xét không được vượt quá 1000 ký tự.',
         ];
     }
 }

@@ -32,15 +32,21 @@ class RegisteredUserController extends Controller
     {
         $request->validate([
             'name' => 'required|string|max:255',
-            'phone' => 'required|string|max:20',
-            'email' => 'required|string|lowercase|email|max:255|unique:'.User::class,
+            'phone' => ['required', 'string', 'regex:/^(0[3|5|7|8|9])\d{8}$/', 'unique:'.User::class],
+            'email' => 'nullable|string|lowercase|email|max:255|unique:'.User::class,
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
+        ], [
+            'phone.regex' => 'Số điện thoại không đúng định dạng (VD: 0901234567).',
+            'phone.unique' => 'Số điện thoại này đã được sử dụng.',
+            'email.email' => 'Email không đúng định dạng.',
+            'email.unique' => 'Email này đã được sử dụng.',
+            'password.confirmed' => 'Mật khẩu xác nhận không khớp.',
         ]);
 
         $user = User::create([
             'name' => $request->name,
             'phone' => $request->phone,
-            'email' => $request->email,
+            'email' => $request->email ?: null,
             'password' => Hash::make($request->password),
         ]);
 

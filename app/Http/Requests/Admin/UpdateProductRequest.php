@@ -14,7 +14,6 @@ class UpdateProductRequest extends FormRequest
             'category_id' => 'sometimes|required|exists:categories,id',
             'name' => 'sometimes|required|string|max:255',
             'description' => 'nullable|string',
-            'image' => 'nullable|image|max:2048',
             'images' => 'nullable|array|max:10',
             'images.*' => 'image|max:2048',
             'delete_images' => 'nullable',

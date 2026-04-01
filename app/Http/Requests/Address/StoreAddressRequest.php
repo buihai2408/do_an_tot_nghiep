@@ -15,9 +15,6 @@ class StoreAddressRequest extends FormRequest
             'recipient_name' => 'required|string|max:255',
             'phone' => 'required|string|max:20',
             'address_line' => 'required|string|max:500',
-            'ward' => 'nullable|string|max:100',
-            'district' => 'nullable|string|max:100',
-            'city' => 'nullable|string|max:100',
             'is_default' => 'nullable|boolean',
         ];
     }

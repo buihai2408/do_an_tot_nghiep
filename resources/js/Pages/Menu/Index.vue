@@ -34,74 +34,81 @@ watch([selectedCategory, selectedSort], applyFilters);
 
 <template>
     <AppLayout>
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-            <h1 class="text-3xl font-bold text-amber-900 mb-8">Thực đơn</h1>
+        <!-- Page Header -->
+        <section class="bg-[#1a1a1a] py-16 lg:py-20">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+                <h1 class="text-4xl lg:text-5xl font-bold text-white" style="font-family: 'Playfair Display', serif;">Menu</h1>
+                <p class="text-gray-400 mt-3">Khám phá thế giới cà phê đa dạng của chúng tôi</p>
+            </div>
+        </section>
 
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
             <!-- Filters -->
-            <div class="bg-white rounded-2xl p-6 shadow-md mb-8">
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div class="flex flex-col md:flex-row gap-4 mb-10 pb-8 border-b border-gray-200">
+                <div class="flex-1">
                     <input
                         v-model="search"
                         type="text"
                         placeholder="Tìm kiếm sản phẩm..."
-                        class="w-full rounded-lg border-amber-300 focus:border-amber-500 focus:ring-amber-500"
+                        class="w-full border-gray-300 focus:border-[#1a1a1a] focus:ring-[#1a1a1a] text-sm py-3 px-4"
                     />
-                    <select v-model="selectedCategory" class="rounded-lg border-amber-300 focus:border-amber-500 focus:ring-amber-500">
-                        <option value="">Tất cả danh mục</option>
-                        <option v-for="cat in categories" :key="cat.id" :value="cat.slug">{{ cat.name }}</option>
-                    </select>
-                    <select v-model="selectedSort" class="rounded-lg border-amber-300 focus:border-amber-500 focus:ring-amber-500">
-                        <option value="">Mới nhất</option>
-                        <option value="price_asc">Giá tăng dần</option>
-                        <option value="price_desc">Giá giảm dần</option>
-                        <option value="name">Tên A-Z</option>
-                    </select>
                 </div>
+                <select v-model="selectedCategory" class="border-gray-300 focus:border-[#1a1a1a] focus:ring-[#1a1a1a] text-sm py-3 px-4 min-w-[180px]">
+                    <option value="">Tất cả danh mục</option>
+                    <option v-for="cat in categories" :key="cat.id" :value="cat.slug">{{ cat.name }}</option>
+                </select>
+                <select v-model="selectedSort" class="border-gray-300 focus:border-[#1a1a1a] focus:ring-[#1a1a1a] text-sm py-3 px-4 min-w-[160px]">
+                    <option value="">Mới nhất</option>
+                    <option value="price_asc">Giá tăng dần</option>
+                    <option value="price_desc">Giá giảm dần</option>
+                    <option value="name">Tên A-Z</option>
+                </select>
             </div>
 
             <!-- Products grid -->
-            <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+            <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 lg:gap-8">
                 <Link
                     v-for="product in products.data"
                     :key="product.id"
                     :href="`/menu/${product.slug}`"
-                    class="bg-white rounded-2xl overflow-hidden shadow-md hover:shadow-xl hover:-translate-y-1 transition-all group"
+                    class="group"
                 >
-                    <div class="h-48 bg-amber-100 flex items-center justify-center overflow-hidden">
-                        <img v-if="product.image" :src="`/storage/${product.image}`" class="w-full h-full object-cover group-hover:scale-105 transition-transform" />
-                        <span v-else class="text-6xl">☕</span>
+                    <div class="aspect-square bg-[#f8f5f0] overflow-hidden mb-4">
+                        <img v-if="product.image" :src="`/storage/${product.image}`" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
+                        <div v-else class="w-full h-full flex items-center justify-center">
+                            <svg class="w-16 h-16 text-amber-300" fill="currentColor" viewBox="0 0 24 24"><path d="M2 21h18v-2H2v2zM20 8h-2V5h2v3zm2-4h-2V2a1 1 0 00-1-1H3a1 1 0 00-1 1v11a4 4 0 004 4h8a4 4 0 004-4v-1h2a2 2 0 002-2V6a2 2 0 00-2-2zm-4 9a2 2 0 01-2 2H6a2 2 0 01-2-2V3h14v10zm4-3h-2V6h2v4z"/></svg>
+                        </div>
                     </div>
-                    <div class="p-4">
-                        <p class="text-xs text-amber-600 mb-1">{{ product.category }}</p>
-                        <h3 class="font-semibold text-amber-900 mb-2 line-clamp-1">{{ product.name }}</h3>
-                        <div class="flex items-center justify-between">
-                            <span class="text-lg font-bold text-amber-700">{{ formatCurrency(product.base_price) }}</span>
-                            <span v-if="product.avg_rating > 0" class="text-sm text-amber-600">⭐ {{ product.avg_rating }}</span>
-                        </div>
-                        <div v-if="product.sizes?.length" class="mt-2 flex flex-wrap gap-1">
-                            <span v-for="size in product.sizes" :key="size.id" class="text-xs bg-amber-100 text-amber-700 px-2 py-0.5 rounded-full">
-                                {{ size.name }}
-                            </span>
-                        </div>
+                    <p class="text-xs text-gray-400 uppercase tracking-wider mb-1">{{ product.category }}</p>
+                    <h3 class="text-sm font-semibold text-[#1a1a1a] mb-1 group-hover:text-amber-700 transition line-clamp-1">{{ product.name }}</h3>
+                    <div class="flex items-center justify-between">
+                        <span class="text-sm font-bold text-[#1a1a1a]">{{ formatCurrency(product.base_price) }}</span>
+                        <span v-if="product.avg_rating > 0" class="text-xs text-amber-600">★ {{ product.avg_rating }}</span>
+                    </div>
+                    <div v-if="product.sizes?.length" class="mt-2 flex flex-wrap gap-1">
+                        <span v-for="size in product.sizes" :key="size.id" class="text-[10px] bg-gray-100 text-gray-500 px-2 py-0.5">
+                            {{ size.name }}
+                        </span>
                     </div>
                 </Link>
             </div>
 
-            <div v-if="products.data.length === 0" class="text-center py-16 text-gray-500">
+            <div v-if="products.data.length === 0" class="text-center py-20 text-gray-400">
+                <svg class="w-16 h-16 mx-auto mb-4 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
                 <p class="text-lg">Không tìm thấy sản phẩm nào.</p>
             </div>
 
             <!-- Pagination -->
-            <div v-if="products.links?.length > 3" class="flex justify-center mt-8 space-x-1">
+            <div v-if="products.links?.length > 3" class="flex justify-center mt-12 space-x-1">
                 <template v-for="link in products.links" :key="link.label">
                     <Link
                         v-if="link.url"
                         :href="link.url"
                         v-html="link.label"
-                        class="px-4 py-2 rounded-lg text-sm"
-                        :class="link.active ? 'bg-amber-700 text-white' : 'bg-white text-amber-700 hover:bg-amber-100'"
+                        class="px-4 py-2 text-sm border transition"
+                        :class="link.active ? 'bg-[#1a1a1a] text-white border-[#1a1a1a]' : 'bg-white text-gray-600 border-gray-300 hover:border-[#1a1a1a] hover:text-[#1a1a1a]'"
                     />
-                    <span v-else v-html="link.label" class="px-4 py-2 text-sm text-gray-400" />
+                    <span v-else v-html="link.label" class="px-4 py-2 text-sm text-gray-300" />
                 </template>
             </div>
         </div>

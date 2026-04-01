@@ -40,7 +40,7 @@ class MenuController extends Controller
             'id' => $p->id,
             'name' => $p->name,
             'slug' => $p->slug,
-            'image' => $p->primaryImage?->path ?? $p->image,
+            'image' => $p->primaryImage?->path,
             'base_price' => $p->base_price,
             'category' => $p->category?->name,
             'avg_rating' => $p->avg_rating,
@@ -64,7 +64,7 @@ class MenuController extends Controller
 
     public function show(string $slug)
     {
-        $product = Product::with(['category', 'sizes', 'toppings' => fn($q) => $q->active(), 'approvedReviews.user', 'images'])
+        $product = Product::with(['category', 'sizes', 'toppings' => fn($q) => $q->active(), 'images'])
             ->where('slug', $slug)
             ->active()
             ->firstOrFail();
@@ -75,7 +75,7 @@ class MenuController extends Controller
                 'name' => $product->name,
                 'slug' => $product->slug,
                 'description' => $product->description,
-                'image' => $product->primaryImage?->path ?? $product->image,
+                'image' => $product->primaryImage?->path,
                 'images' => $product->images->map(fn($img) => [
                     'id' => $img->id,
                     'path' => $img->path,
@@ -96,13 +96,18 @@ class MenuController extends Controller
                 ]),
                 'avg_rating' => $product->avg_rating,
                 'review_count' => $product->review_count,
-                'reviews' => $product->approvedReviews->take(10)->map(fn($r) => [
-                    'id' => $r->id,
-                    'user_name' => $r->user->name,
-                    'rating' => $r->rating,
-                    'comment' => $r->comment,
-                    'created_at' => $r->created_at->diffForHumans(),
-                ]),
+                'reviews' => $product->orderBasedReviews()
+                    ->with('user')
+                    ->latest()
+                    ->take(10)
+                    ->get()
+                    ->map(fn($r) => [
+                        'id' => $r->id,
+                        'user_name' => $r->user->name,
+                        'rating' => $r->rating,
+                        'comment' => $r->comment,
+                        'created_at' => $r->created_at->diffForHumans(),
+                    ]),
             ],
             'ice_levels' => collect(IceLevel::cases())->map(fn($l) => ['value' => $l->value, 'label' => $l->label()]),
             'sugar_levels' => collect(SugarLevel::cases())->map(fn($l) => ['value' => $l->value, 'label' => $l->label()]),

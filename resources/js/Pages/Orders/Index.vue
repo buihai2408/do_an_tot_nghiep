@@ -20,13 +20,20 @@ const statusColors = {
 
 <template>
     <AppLayout>
-        <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-            <h1 class="text-3xl font-bold text-amber-900 mb-8">Đơn hàng của tôi</h1>
+        <!-- Page Header -->
+        <section class="bg-[#1a1a1a] py-16 lg:py-20">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+                <h1 class="text-4xl lg:text-5xl font-bold text-white" style="font-family: 'Playfair Display', serif;">Đơn hàng của tôi</h1>
+            </div>
+        </section>
 
-            <div v-if="orders.data.length === 0" class="bg-white rounded-2xl shadow-md p-12 text-center">
-                <p class="text-6xl mb-4">📋</p>
-                <p class="text-xl text-gray-500 mb-6">Bạn chưa có đơn hàng nào</p>
-                <Link href="/menu" class="inline-block bg-amber-700 text-white px-8 py-3 rounded-full font-semibold hover:bg-amber-600 transition">Đặt hàng ngay →</Link>
+        <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+            <div v-if="orders.data.length === 0" class="text-center py-20">
+                <svg class="w-20 h-20 mx-auto mb-6 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/>
+                </svg>
+                <p class="text-xl text-gray-400 mb-8">Bạn chưa có đơn hàng nào</p>
+                <Link href="/menu" class="inline-block px-10 py-3.5 bg-[#1a1a1a] text-white text-sm font-semibold tracking-widest uppercase hover:bg-[#333] transition">Đặt hàng ngay</Link>
             </div>
 
             <div v-else class="space-y-4">
@@ -34,26 +41,32 @@ const statusColors = {
                     v-for="order in orders.data"
                     :key="order.id"
                     :href="`/orders/${order.id}`"
-                    class="block bg-white rounded-2xl shadow-md p-6 hover:shadow-lg transition"
+                    class="block bg-white border border-gray-100 p-6 hover:border-gray-300 transition"
                 >
                     <div class="flex items-center justify-between mb-2">
-                        <span class="font-bold text-amber-900">#{{ order.order_number }}</span>
-                        <span :class="statusColors[order.status_color]" class="px-3 py-1 rounded-full text-xs font-semibold">
+                        <span class="font-bold text-[#1a1a1a]">#{{ order.order_number }}</span>
+                        <span :class="statusColors[order.status_color]" class="px-3 py-1 text-xs font-semibold">
                             {{ order.status_label }}
                         </span>
                     </div>
                     <div class="flex items-center justify-between text-sm text-gray-500">
                         <span>{{ order.items_count }} sản phẩm · {{ order.created_at }}</span>
-                        <span class="font-bold text-amber-700 text-lg">{{ formatCurrency(order.total) }}</span>
+                        <span class="font-bold text-[#1a1a1a] text-lg">{{ formatCurrency(order.total) }}</span>
                     </div>
                 </Link>
             </div>
 
             <!-- Pagination -->
-            <div v-if="orders.links?.length > 3" class="flex justify-center mt-8 space-x-1">
+            <div v-if="orders.links?.length > 3" class="flex justify-center mt-12 space-x-1">
                 <template v-for="link in orders.links" :key="link.label">
-                    <Link v-if="link.url" :href="link.url" v-html="link.label" class="px-4 py-2 rounded-lg text-sm" :class="link.active ? 'bg-amber-700 text-white' : 'bg-white text-amber-700 hover:bg-amber-100'" />
-                    <span v-else v-html="link.label" class="px-4 py-2 text-sm text-gray-400" />
+                    <Link
+                        v-if="link.url"
+                        :href="link.url"
+                        v-html="link.label"
+                        class="px-4 py-2 text-sm border transition"
+                        :class="link.active ? 'bg-[#1a1a1a] text-white border-[#1a1a1a]' : 'bg-white text-gray-600 border-gray-300 hover:border-[#1a1a1a]'"
+                    />
+                    <span v-else v-html="link.label" class="px-4 py-2 text-sm text-gray-300" />
                 </template>
             </div>
         </div>

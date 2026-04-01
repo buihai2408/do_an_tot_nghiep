@@ -16,7 +16,6 @@ class CategoryFactory extends Factory
         return [
             'name' => $name,
             'slug' => Str::slug($name),
-            'description' => $this->faker->sentence(),
             'sort_order' => $this->faker->numberBetween(1, 10),
             'is_active' => true,
         ];

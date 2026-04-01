@@ -13,7 +13,7 @@ class LoyaltyService
     public function earnPoints(User $user, Order $order): int
     {
         $tier = LoyaltyTier::fromPoints($user->total_points_earned ?? 0);
-        $basePoints = (int) floor((float) $order->total / 1000);
+        $basePoints = (int) floor((float) $order->total / 10000);
         $earnedPoints = (int) floor($basePoints * $tier->multiplier());
 
         if ($earnedPoints <= 0) {
@@ -86,13 +86,13 @@ class LoyaltyService
 
     public function calculateEarnablePoints(int $orderTotal, LoyaltyTier $tier): int
     {
-        $basePoints = (int) floor($orderTotal / 1000);
+        $basePoints = (int) floor($orderTotal / 10000);
         return (int) floor($basePoints * $tier->multiplier());
     }
 
     public function getMaxRedeemable(User $user, int $orderSubtotal): int
     {
-        $maxDiscount = (int) floor($orderSubtotal * 0.5);
+        $maxDiscount = (int) floor($orderSubtotal * 0.3);
         $maxPointsByDiscount = (int) floor($maxDiscount / 1000);
         return min($user->loyalty_points, $maxPointsByDiscount);
     }

@@ -20,6 +20,8 @@ class PlaceOrderRequest extends FormRequest
             'coupon_code' => 'nullable|string',
             'points_used' => 'nullable|integer|min:0',
             'note' => 'nullable|string|max:500',
+            'save_address' => 'nullable|boolean',
+            'address_label' => 'nullable|string|max:255',
         ];
     }
 

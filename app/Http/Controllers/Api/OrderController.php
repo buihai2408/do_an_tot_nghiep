@@ -28,9 +28,16 @@ class OrderController extends Controller
     {
         if ($order->user_id !== Auth::id()) abort(403);
 
+        if ($order->status->value !== 'completed') {
+            return response()->json(['message' => 'Chỉ có thể đánh giá đơn hàng đã hoàn thành.'], 422);
+        }
+
+        if ($order->reviews()->where('user_id', Auth::id())->exists()) {
+            return response()->json(['message' => 'Bạn đã đánh giá đơn hàng này rồi.'], 422);
+        }
+
         $review = Review::create([
             'user_id' => Auth::id(),
-            'product_id' => $request->product_id,
             'order_id' => $order->id,
             'rating' => $request->rating,
             'comment' => $request->comment,

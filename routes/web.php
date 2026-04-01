@@ -23,6 +23,8 @@ Route::get('/', HomeController::class)->name('home');
 Route::get('/menu', [MenuController::class, 'index'])->name('menu.index');
 Route::get('/menu/{slug}', [MenuController::class, 'show'])->name('menu.show');
 Route::get('/cart', CartPageController::class)->name('cart.index');
+Route::get('/about', fn () => inertia('About'))->name('about');
+Route::get('/contact', fn () => inertia('Contact'))->name('contact');
 
 Route::middleware('auth')->group(function () {
     Route::get('/checkout', CheckoutPageController::class)->name('checkout.index');

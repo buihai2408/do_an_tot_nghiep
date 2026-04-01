@@ -16,11 +16,10 @@ class ProductController extends Controller
     public function store(StoreProductRequest $request)
     {
         $data = $request->validated();
-        $data['slug'] = Str::slug($data['name']);
-
-        if ($request->hasFile('image')) {
-            $data['image'] = $request->file('image')->store('products', 'public');
-        }
+        $slug = Str::slug($data['name']);
+        $data['slug'] = Product::withTrashed()->where('slug', $slug)->exists()
+            ? $slug . '-' . uniqid()
+            : $slug;
 
         $product = Product::create(collect($data)->except(['sizes', 'topping_ids', 'images'])->toArray());
 
@@ -43,12 +42,10 @@ class ProductController extends Controller
     {
         $data = $request->validated();
         if (isset($data['name'])) {
-            $data['slug'] = Str::slug($data['name']);
-        }
-
-        if ($request->hasFile('image')) {
-            if ($product->image) Storage::disk('public')->delete($product->image);
-            $data['image'] = $request->file('image')->store('products', 'public');
+            $slug = Str::slug($data['name']);
+            $data['slug'] = Product::withTrashed()->where('slug', $slug)->where('id', '!=', $product->id)->exists()
+                ? $slug . '-' . uniqid()
+                : $slug;
         }
 
         $product->update(collect($data)->except(['sizes', 'topping_ids', 'images', 'delete_images'])->toArray());
@@ -92,9 +89,6 @@ class ProductController extends Controller
     {
         foreach ($product->images as $img) {
             Storage::disk('public')->delete($img->path);
-        }
-        if ($product->image) {
-            Storage::disk('public')->delete($product->image);
         }
         $product->delete();
         return response()->json(['message' => 'Đã xóa sản phẩm!']);

@@ -12,7 +12,7 @@ class Address extends Model
 
     protected $fillable = [
         'user_id', 'label', 'recipient_name', 'phone',
-        'address_line', 'ward', 'district', 'city', 'is_default',
+        'address_line', 'is_default',
     ];
 
     protected function casts(): array
@@ -29,8 +29,6 @@ class Address extends Model
 
     public function getFullAddressAttribute(): string
     {
-        return collect([$this->address_line, $this->ward, $this->district, $this->city])
-            ->filter()
-            ->implode(', ');
+        return $this->address_line ?? '';
     }
 }
