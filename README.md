@@ -18,6 +18,7 @@ Hệ thống quản lý quán cà phê trực tuyến, cho phép khách hàng đ
 | Inertia.js (server) | 2.0 | Cầu nối giữa Laravel và Vue.js, render SPA không cần API riêng |
 | Ziggy | 2.0 | Cho phép sử dụng Laravel named routes trong JavaScript |
 | MySQL | - | Hệ quản trị cơ sở dữ liệu quan hệ |
+| PayOS SDK | 2.0 | Cổng thanh toán trực tuyến qua VietQR |
 
 ### Frontend
 | Công nghệ | Phiên bản | Mô tả |
@@ -116,7 +117,7 @@ Hệ thống quản lý quán cà phê trực tuyến, cho phép khách hàng đ
 | Lưu địa chỉ | Tùy chọn lưu địa chỉ mới cho lần đặt sau |
 | Áp mã giảm giá | Nhập mã coupon, hệ thống tự tính giảm giá |
 | Dùng điểm thưởng | Đổi điểm tích lũy để giảm giá (tối đa 50% subtotal, 1 điểm = 1.000 VNĐ) |
-| Thanh toán | COD (tiền mặt khi nhận hàng) hoặc Chuyển khoản ngân hàng |
+| Thanh toán | COD (tiền mặt khi nhận hàng), Chuyển khoản ngân hàng, hoặc Thanh toán QR qua PayOS |
 | Mã đơn hàng | Tự sinh mã duy nhất dạng CFxxxxxx |
 
 ### 5. Quản lý đơn hàng (Khách hàng)
@@ -395,6 +396,11 @@ php artisan key:generate
 # DB_DATABASE=coffee_shop
 # DB_USERNAME=root
 # DB_PASSWORD=
+
+# 3b. Cấu hình PayOS (thanh toán QR) trong .env
+# PAYOS_CLIENT_ID=your_client_id
+# PAYOS_API_KEY=your_api_key
+# PAYOS_CHECKSUM_KEY=your_checksum_key
 
 # 4. Chạy migration và seed dữ liệu mẫu
 php artisan migrate --seed

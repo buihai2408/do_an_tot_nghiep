@@ -7,6 +7,7 @@ use App\Http\Controllers\Web\CartPageController;
 use App\Http\Controllers\Web\CheckoutPageController;
 use App\Http\Controllers\Web\OrderPageController;
 use App\Http\Controllers\Web\LoyaltyController;
+use App\Http\Controllers\Api\PayOSController;
 use App\Http\Controllers\Web\Admin\DashboardController;
 use App\Http\Controllers\Web\Admin\CategoryController as AdminCategoryController;
 use App\Http\Controllers\Web\Admin\ProductController as AdminProductController;
@@ -25,6 +26,9 @@ Route::get('/menu/{slug}', [MenuController::class, 'show'])->name('menu.show');
 Route::get('/cart', CartPageController::class)->name('cart.index');
 Route::get('/about', fn () => inertia('About'))->name('about');
 Route::get('/contact', fn () => inertia('Contact'))->name('contact');
+
+Route::get('/checkout/payos-return', [PayOSController::class, 'return'])->name('checkout.payos.return');
+Route::get('/checkout/payos-cancel', [PayOSController::class, 'cancel'])->name('checkout.payos.cancel');
 
 Route::middleware('auth')->group(function () {
     Route::get('/checkout', CheckoutPageController::class)->name('checkout.index');

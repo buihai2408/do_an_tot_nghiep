@@ -12,7 +12,7 @@ class PlaceOrderRequest extends FormRequest
     {
         return [
             'order_type' => 'required|in:delivery,pickup',
-            'payment_method' => 'required|in:cod,bank_transfer',
+            'payment_method' => 'required|in:cod,payos',
             'customer_name' => 'required|string|max:255',
             'customer_phone' => 'required|string|max:20',
             'customer_email' => 'nullable|email|max:255',

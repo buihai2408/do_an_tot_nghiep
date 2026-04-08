@@ -8,20 +8,38 @@ use App\Http\Requests\Checkout\ApplyCouponRequest;
 use App\Services\CartService;
 use App\Services\CouponService;
 use App\Services\OrderService;
+use App\Services\PayOSService;
 
 class CheckoutController extends Controller
 {
-    public function store(PlaceOrderRequest $request, OrderService $orderService)
+    public function store(PlaceOrderRequest $request, OrderService $orderService, PayOSService $payOSService)
     {
         try {
             $order = $orderService->placeOrder($request->validated());
+
+            $redirect = route('orders.show', $order);
+
+            if ($order->payment_method->value === 'payos') {
+                try {
+                    $returnUrl = route('checkout.payos.return', ['orderCode' => $order->order_number]);
+                    $cancelUrl = route('checkout.payos.cancel', ['orderCode' => $order->order_number]);
+                    $redirect = $payOSService->createPaymentLink($order, $returnUrl, $cancelUrl);
+                } catch (\Exception $e) {
+                    return response()->json([
+                        'message' => 'Đặt hàng thành công nhưng không tạo được link thanh toán. Vui lòng thử lại.',
+                        'order' => ['id' => $order->id, 'order_number' => $order->order_number],
+                        'redirect' => route('orders.show', $order),
+                    ], 201);
+                }
+            }
+
             return response()->json([
                 'message' => 'Đặt hàng thành công!',
                 'order' => [
                     'id' => $order->id,
                     'order_number' => $order->order_number,
                 ],
-                'redirect' => route('orders.show', $order),
+                'redirect' => $redirect,
             ], 201);
         } catch (\Exception $e) {
             return response()->json(['message' => $e->getMessage()], 422);

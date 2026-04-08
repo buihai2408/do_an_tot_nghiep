@@ -68,10 +68,19 @@ const submit = async () => {
     errors.value = {};
     try {
         const res = await axios.post('/api/checkout', form.value);
-        router.visit(res.data.redirect || `/orders/${res.data.order.id}`);
+        const redirect = res.data.redirect || `/orders/${res.data.order.id}`;
+
+        if (redirect.startsWith('http') && !redirect.startsWith(window.location.origin)) {
+            window.location.href = redirect;
+        } else {
+            router.visit(redirect);
+        }
     } catch (e) {
         if (e.response?.status === 422) {
             errors.value = e.response.data.errors || {};
+            if (e.response.data.message && !e.response.data.errors) {
+                errors.value = { general: [e.response.data.message] };
+            }
         }
     } finally {
         submitting.value = false;
@@ -253,12 +262,14 @@ const submit = async () => {
                             </div>
                         </div>
 
+                        <p v-if="errors.general" class="text-red-500 text-sm mt-4">{{ errors.general[0] }}</p>
+
                         <button
                             @click="submit"
                             :disabled="submitting"
                             class="w-full bg-[#1a1a1a] text-white py-3.5 text-sm font-semibold tracking-wider uppercase text-center hover:bg-[#333] transition mt-8 disabled:opacity-50"
                         >
-                            {{ submitting ? 'Đang xử lý...' : 'Đặt hàng' }}
+                            {{ submitting ? 'Đang xử lý...' : (form.payment_method === 'payos' ? 'Thanh toán qua PayOS' : 'Đặt hàng') }}
                         </button>
                     </div>
                 </div>
