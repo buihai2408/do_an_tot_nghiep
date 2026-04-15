@@ -1,2 +1,17 @@
 @import "tailwindcss";
 @plugin "@tailwindcss/forms";
+
+/* Use one clean, readable font across the app. */
+:root {
+    --app-font-family: "Inter", system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+}
+
+html,
+body {
+    font-family: var(--app-font-family);
+}
+
+/* Override old inline heading styles that still reference Playfair Display. */
+[style*="Playfair Display"] {
+    font-family: var(--app-font-family) !important;
+}
