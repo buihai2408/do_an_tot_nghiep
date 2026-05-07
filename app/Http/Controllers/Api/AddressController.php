@@ -6,13 +6,24 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Address\StoreAddressRequest;
 use App\Http\Requests\Address\UpdateAddressRequest;
 use App\Models\Address;
+use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 
 class AddressController extends Controller
 {
+    protected function currentUser(): User
+    {
+        $user = Auth::user();
+        if (!$user instanceof User) {
+            abort(401);
+        }
+
+        return $user;
+    }
+
     public function index()
     {
-        return response()->json(Auth::user()->addresses()->orderByDesc('is_default')->get());
+        return response()->json($this->currentUser()->addresses()->orderByDesc('is_default')->get());
     }
 
     public function store(StoreAddressRequest $request)
@@ -20,10 +31,10 @@ class AddressController extends Controller
         $data = $request->validated();
 
         if (!empty($data['is_default'])) {
-            Auth::user()->addresses()->update(['is_default' => false]);
+            $this->currentUser()->addresses()->update(['is_default' => false]);
         }
 
-        $address = Auth::user()->addresses()->create($data);
+        $address = $this->currentUser()->addresses()->create($data);
         return response()->json(['message' => 'Đã thêm địa chỉ!', 'address' => $address], 201);
     }
 
@@ -33,7 +44,7 @@ class AddressController extends Controller
 
         $data = $request->validated();
         if (!empty($data['is_default'])) {
-            Auth::user()->addresses()->where('id', '!=', $address->id)->update(['is_default' => false]);
+            $this->currentUser()->addresses()->where('id', '!=', $address->id)->update(['is_default' => false]);
         }
 
         $address->update($data);

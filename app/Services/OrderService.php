@@ -10,6 +10,7 @@ use App\Models\Address;
 use App\Models\Order;
 use App\Models\OrderItem;
 use App\Models\OrderItemTopping;
+use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
@@ -56,6 +57,9 @@ class OrderService
                 : 0;
 
             $user = Auth::user();
+            if (!$user instanceof User) {
+                throw new \Exception('Người dùng chưa đăng nhập.');
+            }
 
             $pointsUsed = 0;
             $pointsDiscount = 0;
