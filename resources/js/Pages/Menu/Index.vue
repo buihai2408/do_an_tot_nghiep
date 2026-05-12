@@ -1,7 +1,7 @@
 <script setup>
 import AppLayout from '@/Layouts/AppLayout.vue';
 import { Link, router } from '@inertiajs/vue3';
-import { ref, watch } from 'vue';
+import { ref, watch, onMounted } from 'vue';
 import { useFormatters } from '@/Composables/useFormatters';
 
 const { formatCurrency } = useFormatters();
@@ -15,6 +15,7 @@ const props = defineProps({
 const search = ref(props.filters?.search || '');
 const selectedCategory = ref(props.filters?.category || '');
 const selectedSort = ref(props.filters?.sort || '');
+const isListening = ref(false);
 
 const applyFilters = () => {
     router.get('/menu', {
@@ -30,6 +31,39 @@ watch(search, () => {
     debounceTimer = setTimeout(applyFilters, 300);
 });
 watch([selectedCategory, selectedSort], applyFilters);
+
+const startVoiceSearch = () => {
+    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+    if (!SpeechRecognition) {
+        alert('Trình duyệt của bạn không hỗ trợ tìm kiếm bằng giọng nói.');
+        return;
+    }
+
+    const recognition = new SpeechRecognition();
+    recognition.lang = 'vi-VN';
+    recognition.interimResults = false;
+
+    recognition.onstart = () => {
+        isListening.value = true;
+    };
+
+    recognition.onresult = (event) => {
+        const transcript = event.results[0][0].transcript;
+        // Loại bỏ dấu chấm ở cuối nếu có (do Google Speech API thường tự thêm)
+        search.value = transcript.replace(/\.$/, '');
+    };
+
+    recognition.onerror = (event) => {
+        console.error('Speech recognition error:', event.error);
+        isListening.value = false;
+    };
+
+    recognition.onend = () => {
+        isListening.value = false;
+    };
+
+    recognition.start();
+};
 </script>
 
 <template>
@@ -50,17 +84,25 @@ watch([selectedCategory, selectedSort], applyFilters);
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
             <!-- Filters -->
             <div class="flex flex-col md:flex-row gap-4 mb-10 pb-8" style="border-bottom:1px solid #E8D9C5;">
-                <div class="flex-1 relative">
-                    <span class="absolute left-3 top-1/2 -translate-y-1/2 text-base">🔍</span>
+                <div class="flex-1 relative flex items-center">
+                    <span class="absolute left-3 text-base">🔍</span>
                     <input
                         v-model="search"
                         type="text"
-                        placeholder="Tìm kiếm sản phẩm..."
-                        class="w-full border py-3 pl-10 pr-4 text-sm focus:outline-none"
+                        placeholder="Tìm kiếm sản phẩm (nhập tên hoặc nhấn nút micro)..."
+                        class="w-full border py-3 pl-10 pr-12 text-sm focus:outline-none"
                         style="border-color:#E8D9C5; background:#FAF6F0; color:#2C1810; border-radius:4px;"
                         onfocus="this.style.borderColor='#D4A853'; this.style.boxShadow='0 0 0 3px rgba(212,168,83,0.12)'"
                         onblur="this.style.borderColor='#E8D9C5'; this.style.boxShadow='none'"
                     />
+                    <!-- Voice Search Button -->
+                    <button @click="startVoiceSearch" type="button" class="absolute right-3 p-1.5 rounded-full transition-colors duration-200"
+                        :class="isListening ? 'text-red-600 animate-pulse bg-red-100' : 'text-gray-400 hover:text-[#2C1810] hover:bg-[#E8D9C5]'"
+                        title="Tìm kiếm bằng giọng nói">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z"/>
+                        </svg>
+                    </button>
                 </div>
                 <select v-model="selectedCategory"
                     class="border py-3 px-4 text-sm min-w-[180px] focus:outline-none"
