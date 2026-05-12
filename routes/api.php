@@ -5,6 +5,7 @@ use App\Http\Controllers\Api\CheckoutController;
 use App\Http\Controllers\Api\OrderController;
 use App\Http\Controllers\Api\AddressController;
 use App\Http\Controllers\Api\PayOSController;
+use App\Http\Controllers\Api\ChatbotController;
 use App\Http\Controllers\Api\Admin\CategoryController as AdminCategoryController;
 use App\Http\Controllers\Api\Admin\ProductController as AdminProductController;
 use App\Http\Controllers\Api\Admin\OrderController as AdminOrderController;
@@ -18,6 +19,9 @@ use Illuminate\Support\Facades\Route;
 
 // PayOS webhook (public - called by PayOS server)
 Route::post('/payos/webhook', [PayOSController::class, 'webhook']);
+
+// Chatbot proxy (public - available to all users including guests)
+Route::post('/chatbot/message', [ChatbotController::class, 'sendMessage']);
 
 // Cart (public - works with session for guests)
 Route::post('/cart/items', [CartController::class, 'store']);

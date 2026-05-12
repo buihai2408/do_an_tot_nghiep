@@ -1,4 +1,4 @@
-<script setup>
+﻿<script setup>
 import AdminLayout from '@/Layouts/AdminLayout.vue';
 import { ref } from 'vue';
 import { router } from '@inertiajs/vue3';
@@ -44,13 +44,13 @@ const deleteCategory = async (id) => {
 <template>
     <AdminLayout>
         <div class="flex items-center justify-between mb-6">
-            <h1 class="text-2xl font-bold text-gray-800">Quản lý danh mục</h1>
-            <button @click="openCreate" class="px-4 py-2 bg-amber-700 text-white rounded-lg hover:bg-amber-600 transition">+ Thêm danh mục</button>
+            <h1 class="text-2xl font-bold text-[#1a1a1a] font-serif">Quản lý danh mục</h1>
+            <button @click="openCreate" class="px-4 py-2 bg-[#2C1810] text-white rounded hover:bg-[#5C3A1E] transition transition">+ Thêm danh mục</button>
         </div>
 
-        <div class="bg-white rounded-2xl shadow-md overflow-hidden">
+        <div class="bg-white rounded border border-[#E8D9C5] overflow-hidden shadow-sm">
             <table class="w-full text-sm">
-                <thead class="bg-gray-50">
+                <thead class="bg-[#FAF6F0]">
                     <tr>
                         <th class="px-6 py-3 text-left text-gray-500">Tên</th>
                         <th class="px-6 py-3 text-left text-gray-500">Slug</th>
@@ -60,7 +60,7 @@ const deleteCategory = async (id) => {
                     </tr>
                 </thead>
                 <tbody class="divide-y">
-                    <tr v-for="cat in categories.data" :key="cat.id" class="hover:bg-gray-50">
+                    <tr v-for="cat in categories.data" :key="cat.id" class="hover:bg-[#FAF6F0] transition">
                         <td class="px-6 py-4 font-medium">{{ cat.name }}</td>
                         <td class="px-6 py-4 text-gray-500">{{ cat.slug }}</td>
                         <td class="px-6 py-4 text-center">{{ cat.sort_order }}</td>
@@ -70,7 +70,7 @@ const deleteCategory = async (id) => {
                             </span>
                         </td>
                         <td class="px-6 py-4 text-right space-x-2">
-                            <button @click="openEdit(cat)" class="text-amber-600 hover:text-amber-800">Sửa</button>
+                            <button @click="openEdit(cat)" class="text-[#D4A853] hover:text-[#2C1810] transition font-medium">Sửa</button>
                             <button @click="deleteCategory(cat.id)" class="text-red-500 hover:text-red-700">Xóa</button>
                         </td>
                     </tr>
@@ -83,9 +83,9 @@ const deleteCategory = async (id) => {
             <div class="bg-white rounded-2xl p-6 max-w-md w-full mx-4">
                 <h3 class="text-lg font-bold mb-4">{{ editingCategory ? 'Sửa danh mục' : 'Thêm danh mục' }}</h3>
                 <div class="space-y-4">
-                    <div><label class="block text-sm font-medium mb-1">Tên</label><input v-model="form.name" class="w-full rounded-lg border-gray-300" /></div>
-                    <div><label class="block text-sm font-medium mb-1">Thứ tự</label><input v-model.number="form.sort_order" type="number" class="w-full rounded-lg border-gray-300" /></div>
-                    <label class="flex items-center"><input v-model="form.is_active" type="checkbox" class="rounded text-amber-600 mr-2" /> Hoạt động</label>
+                    <div><label class="block text-sm font-medium mb-1">Tên</label><input v-model="form.name" class="w-full rounded border-[#E8D9C5] focus:border-[#D4A853] focus:ring-[#D4A853]" /></div>
+                    <div><label class="block text-sm font-medium mb-1">Thứ tự</label><input v-model.number="form.sort_order" type="number" class="w-full rounded border-[#E8D9C5] focus:border-[#D4A853] focus:ring-[#D4A853]" /></div>
+                    <label class="flex items-center"><input v-model="form.is_active" type="checkbox" class="rounded text-[#D4A853] mr-2" /> Hoạt động</label>
                 </div>
                 <div class="flex space-x-3 mt-6">
                     <button @click="showForm = false" class="flex-1 px-4 py-2 border rounded-xl">Hủy</button>

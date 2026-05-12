@@ -90,6 +90,10 @@ function formatCurrency(val) {
     return Number(val).toLocaleString('vi-VN') + 'đ';
 }
 
+function isActive(href) {
+    return window.location.pathname === href || window.location.pathname.startsWith(href + '/');
+}
+
 onMounted(() => {
     lastKnownCount.value = -1;
     fetchNewOrders();
@@ -104,24 +108,48 @@ onUnmounted(() => {
 </script>
 
 <template>
-    <div class="min-h-screen bg-[#f4f1ec] flex">
-        <!-- Sidebar -->
-        <aside :class="sidebarOpen ? 'w-64' : 'w-16'" class="bg-[#1a1a1a] text-white transition-all duration-300 flex-shrink-0">
-            <div class="p-4">
-                <Link href="/admin" class="flex items-center space-x-2">
-                    <span class="text-2xl">☕</span>
-                    <span v-if="sidebarOpen" class="text-lg font-bold tracking-wide">Admin</span>
+    <div class="min-h-screen bg-[#FAF6F0] flex font-sans">
+        <!-- Sidebar - Dark Espresso -->
+        <aside :class="sidebarOpen ? 'w-64' : 'w-16'" class="bg-[#1C1208] text-white transition-all duration-300 flex-shrink-0 shadow-xl z-10 border-r border-[#2C1810]">
+            <!-- Logo Area -->
+            <div class="p-5 border-b border-[#D4A853]/20 flex items-center justify-between">
+                <Link href="/admin" class="flex items-center space-x-3 overflow-hidden">
+                    <div class="w-8 h-8 rounded-lg bg-[#D4A853] flex items-center justify-center flex-shrink-0 text-[#1C1208]">
+                        <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M2 21h18v-2H2v2zM20 8h-2V5h2v3zm2-4h-2V2a1 1 0 00-1-1H3a1 1 0 00-1 1v11a4 4 0 004 4h8a4 4 0 004-4v-1h2a2 2 0 002-2V6a2 2 0 00-2-2zm-4 9a2 2 0 01-2 2H6a2 2 0 01-2-2V3h14v10zm4-3h-2V6h2v4z"/>
+                        </svg>
+                    </div>
+                    <div v-if="sidebarOpen" class="flex flex-col">
+                        <span class="text-lg font-bold font-playfair tracking-wide text-white">Coffee Admin</span>
+                        <span class="text-[10px] tracking-widest uppercase text-[#D4A853]">Portal</span>
+                    </div>
                 </Link>
             </div>
-            <nav class="mt-4">
+            
+            <!-- Role Badge -->
+            <div v-if="sidebarOpen" class="px-5 py-3 border-b border-[#D4A853]/10">
+                <span class="text-[10px] font-bold tracking-widest uppercase px-2 py-1 rounded"
+                    :class="isAdmin ? 'bg-[#D4A853]/20 text-[#D4A853]' : 'bg-white/10 text-white/50'">
+                    {{ isAdmin ? '👑 Admin' : '🧑‍💼 Staff' }}
+                </span>
+            </div>
+
+            <!-- Navigation -->
+            <nav class="mt-4 px-2 overflow-hidden">
                 <Link
                     v-for="item in menuItems"
                     :key="item.name"
                     :href="item.href"
-                    class="flex items-center px-4 py-3 text-gray-400 hover:bg-[#2a2a2a] hover:text-white transition"
+                    class="flex items-center px-3 py-2.5 mb-1 rounded-lg text-gray-400 hover:bg-[#2C1810] hover:text-[#FAF6F0] transition group relative"
+                    :class="isActive(item.href) ? 'bg-[#2C1810] !text-[#D4A853]' : ''"
                 >
-                    <span class="text-lg">{{ item.icon }}</span>
-                    <span v-if="sidebarOpen" class="ml-3 text-sm">{{ item.name }}</span>
+                    <span class="text-lg w-8 text-center flex-shrink-0">{{ item.icon }}</span>
+                    <span v-if="sidebarOpen" class="ml-2 text-sm font-medium whitespace-nowrap">{{ item.name }}</span>
+                    
+                    <!-- Tooltip -->
+                    <div v-if="!sidebarOpen" class="absolute left-full ml-2 px-2 py-1 text-xs font-medium rounded bg-[#D4A853] text-[#1C1208] opacity-0 group-hover:opacity-100 pointer-events-none transition-opacity z-50 whitespace-nowrap">
+                        {{ item.name }}
+                    </div>
                 </Link>
             </nav>
         </aside>
@@ -129,25 +157,25 @@ onUnmounted(() => {
         <!-- Main area -->
         <div class="flex-1 flex flex-col min-w-0">
             <!-- Top bar -->
-            <header class="bg-white border-b border-gray-200 h-16 flex items-center justify-between px-6">
-                <button @click="sidebarOpen = !sidebarOpen" class="text-gray-500 hover:text-[#1a1a1a] transition">
+            <header class="bg-white border-b border-[#E8D9C5] h-16 flex items-center justify-between px-6 shadow-sm z-0">
+                <button @click="sidebarOpen = !sidebarOpen" class="text-[#8B7355] hover:text-[#2C1810] hover:bg-[#FAF6F0] p-1.5 rounded transition">
                     <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 6h16M4 12h16M4 18h16" />
                     </svg>
                 </button>
-                <div class="flex items-center space-x-4">
+                <div class="flex items-center gap-5">
                     <!-- Notification Bell -->
                     <div ref="notifPanelRef" class="relative">
                         <button
                             @click="toggleNotifPanel"
-                            class="relative p-2 text-gray-500 hover:text-[#1a1a1a] transition"
+                            class="relative p-2 text-[#8B7355] hover:text-[#2C1810] hover:bg-[#FAF6F0] rounded transition"
                         >
                             <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
                             </svg>
                             <span
                                 v-if="pendingCount > 0"
-                                class="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center font-bold animate-pulse"
+                                class="absolute top-1 right-1 bg-[#D4A853] text-[#1C1208] text-[10px] rounded-full h-4 w-4 flex items-center justify-center font-bold animate-pulse"
                             >
                                 {{ pendingCount > 9 ? '9+' : pendingCount }}
                             </span>
@@ -164,11 +192,11 @@ onUnmounted(() => {
                         >
                             <div
                                 v-show="showNotifPanel"
-                                class="absolute right-0 top-full mt-2 w-80 bg-white shadow-xl border border-gray-200 z-50 origin-top-right"
+                                class="absolute right-0 top-full mt-2 w-80 bg-white shadow-xl border border-[#E8D9C5] rounded-lg z-50 origin-top-right overflow-hidden"
                             >
-                                <div class="px-4 py-3 border-b bg-[#f8f5f0]">
-                                    <h3 class="font-semibold text-[#1a1a1a] text-sm">Đơn hàng chờ xử lý</h3>
-                                    <p class="text-xs text-gray-500 mt-0.5">{{ pendingCount }} đơn hàng đang chờ xác nhận</p>
+                                <div class="px-4 py-3 border-b border-[#E8D9C5] bg-[#FAF6F0]">
+                                    <h3 class="font-semibold text-[#2C1810] text-sm">📋 Đơn hàng chờ xử lý</h3>
+                                    <p class="text-xs text-[#8B7355] mt-0.5">{{ pendingCount }} đơn hàng đang chờ xác nhận</p>
                                 </div>
 
                                 <div v-if="pendingOrders.length > 0" class="max-h-72 overflow-y-auto">
@@ -176,27 +204,27 @@ onUnmounted(() => {
                                         v-for="order in pendingOrders"
                                         :key="order.id"
                                         @click="goToOrder(order.id)"
-                                        class="w-full text-left px-4 py-3 hover:bg-[#f8f5f0] border-b border-gray-100 last:border-b-0 transition"
+                                        class="w-full text-left px-4 py-3 hover:bg-[#FAF6F0] border-b border-[#F2EBE0] last:border-b-0 transition"
                                     >
                                         <div class="flex justify-between items-start">
                                             <div>
-                                                <p class="text-sm font-medium text-[#1a1a1a]">#{{ order.order_number }}</p>
-                                                <p class="text-xs text-gray-500 mt-0.5">{{ order.customer_name }}</p>
+                                                <p class="text-sm font-medium text-[#2C1810]">#{{ order.order_number }}</p>
+                                                <p class="text-xs text-[#8B7355] mt-0.5">{{ order.customer_name }}</p>
                                             </div>
                                             <div class="text-right">
-                                                <p class="text-sm font-semibold text-[#1a1a1a]">{{ formatCurrency(order.total) }}</p>
-                                                <p class="text-xs text-gray-400 mt-0.5">{{ formatTime(order.created_at) }}</p>
+                                                <p class="text-sm font-bold text-[#D4A853]">{{ formatCurrency(order.total) }}</p>
+                                                <p class="text-xs text-[#B5A089] mt-0.5">{{ formatTime(order.created_at) }}</p>
                                             </div>
                                         </div>
                                     </button>
                                 </div>
-                                <div v-else class="px-4 py-6 text-center text-sm text-gray-400">
+                                <div v-else class="px-4 py-6 text-center text-sm text-[#B5A089]">
                                     Không có đơn hàng mới
                                 </div>
 
                                 <button
                                     @click="goToOrders"
-                                    class="w-full px-4 py-2.5 text-center text-sm font-medium text-[#1a1a1a] hover:bg-[#f8f5f0] border-t transition"
+                                    class="w-full px-4 py-3 text-center text-sm font-semibold text-[#2C1810] hover:bg-[#FAF6F0] border-t border-[#E8D9C5] transition"
                                 >
                                     Xem tất cả đơn hàng →
                                 </button>
@@ -204,9 +232,20 @@ onUnmounted(() => {
                         </Transition>
                     </div>
 
-                    <Link href="/" class="text-sm text-gray-500 hover:text-[#1a1a1a] transition">← Về trang chủ</Link>
-                    <span class="text-sm text-[#1a1a1a] font-medium">{{ page.props.auth.user?.name }}</span>
-                    <Link href="/logout" method="post" as="button" class="text-sm text-red-500 hover:text-red-700">Đăng xuất</Link>
+                    <div class="w-px h-6 bg-[#E8D9C5]"></div>
+
+                    <Link href="/" class="text-sm text-[#8B7355] hover:text-[#D4A853] transition">← Về trang chủ</Link>
+                    
+                    <div class="flex items-center gap-2">
+                        <div class="w-8 h-8 rounded-full bg-[#D4A853] text-[#1C1208] flex items-center justify-center font-bold text-sm">
+                            {{ page.props.auth.user?.name?.charAt(0)?.toUpperCase() }}
+                        </div>
+                        <span class="text-sm text-[#2C1810] font-semibold hidden md:inline">{{ page.props.auth.user?.name }}</span>
+                    </div>
+
+                    <Link href="/logout" method="post" as="button" class="text-xs font-bold tracking-wider uppercase px-3 py-1.5 rounded border border-red-100 text-red-700 hover:bg-red-50 transition">
+                        Đăng xuất
+                    </Link>
                 </div>
             </header>
 

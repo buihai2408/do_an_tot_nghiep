@@ -41,4 +41,9 @@ return [
         'checksum_key' => env('PAYOS_CHECKSUM_KEY'),
     ],
 
+    'dify' => [
+        'api_key'  => env('DIFY_API_KEY'),
+        'base_url' => env('DIFY_BASE_URL', 'https://api.dify.ai/v1'),
+    ],
+
 ];

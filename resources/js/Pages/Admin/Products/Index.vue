@@ -1,4 +1,4 @@
-<script setup>
+﻿<script setup>
 import AdminLayout from '@/Layouts/AdminLayout.vue';
 import { Link, router } from '@inertiajs/vue3';
 import { ref } from 'vue';
@@ -24,17 +24,17 @@ const deleteProduct = async (id) => {
 <template>
     <AdminLayout>
         <div class="flex items-center justify-between mb-6">
-            <h1 class="text-2xl font-bold text-gray-800">Quản lý sản phẩm</h1>
-            <Link href="/admin/products/create" class="px-4 py-2 bg-amber-700 text-white rounded-lg hover:bg-amber-600 transition">+ Thêm sản phẩm</Link>
+            <h1 class="text-2xl font-bold text-[#1a1a1a] font-serif">Quản lý sản phẩm</h1>
+            <Link href="/admin/products/create" class="px-4 py-2 bg-[#2C1810] text-white rounded hover:bg-[#5C3A1E] transition transition">+ Thêm sản phẩm</Link>
         </div>
 
-        <div class="bg-white rounded-2xl shadow-md p-4 mb-6">
-            <input v-model="search" @keyup.enter="applySearch" type="text" placeholder="Tìm kiếm..." class="w-full rounded-lg border-gray-300" />
+        <div class="bg-white rounded border border-[#E8D9C5] p-4 mb-6 shadow-sm">
+            <input v-model="search" @keyup.enter="applySearch" type="text" placeholder="Tìm kiếm..." class="w-full rounded border-[#E8D9C5] focus:border-[#D4A853] focus:ring-[#D4A853]" />
         </div>
 
-        <div class="bg-white rounded-2xl shadow-md overflow-hidden">
+        <div class="bg-white rounded border border-[#E8D9C5] overflow-hidden shadow-sm">
             <table class="w-full text-sm">
-                <thead class="bg-gray-50">
+                <thead class="bg-[#FAF6F0]">
                     <tr>
                         <th class="px-6 py-3 text-left text-gray-500">Sản phẩm</th>
                         <th class="px-6 py-3 text-left text-gray-500">Danh mục</th>
@@ -44,7 +44,7 @@ const deleteProduct = async (id) => {
                     </tr>
                 </thead>
                 <tbody class="divide-y">
-                    <tr v-for="product in products.data" :key="product.id" class="hover:bg-gray-50">
+                    <tr v-for="product in products.data" :key="product.id" class="hover:bg-[#FAF6F0] transition">
                         <td class="px-6 py-4">
                             <div class="flex items-center space-x-3">
                                 <img
@@ -55,7 +55,7 @@ const deleteProduct = async (id) => {
                                 <div v-else class="w-10 h-10 bg-amber-100 rounded-lg flex items-center justify-center">☕</div>
                                 <div>
                                     <p class="font-medium">{{ product.name }}</p>
-                                    <p v-if="product.is_featured" class="text-xs text-amber-600">⭐ Nổi bật</p>
+                                    <p v-if="product.is_featured" class="text-xs text-[#D4A853]">⭐ Nổi bật</p>
                                 </div>
                             </div>
                         </td>
@@ -67,7 +67,7 @@ const deleteProduct = async (id) => {
                             </span>
                         </td>
                         <td class="px-6 py-4 text-right space-x-2">
-                            <Link :href="`/admin/products/${product.id}/edit`" class="text-amber-600 hover:text-amber-800">Sửa</Link>
+                            <Link :href="`/admin/products/${product.id}/edit`" class="text-[#D4A853] hover:text-[#2C1810] transition font-medium">Sửa</Link>
                             <button @click="deleteProduct(product.id)" class="text-red-500 hover:text-red-700">Xóa</button>
                         </td>
                     </tr>

@@ -1,4 +1,4 @@
-<script setup>
+﻿<script setup>
 import AdminLayout from '@/Layouts/AdminLayout.vue';
 import { Link, router } from '@inertiajs/vue3';
 import { useFormatters } from '@/Composables/useFormatters';
@@ -17,12 +17,12 @@ const deleteCoupon = async (id) => {
 <template>
     <AdminLayout>
         <div class="flex items-center justify-between mb-6">
-            <h1 class="text-2xl font-bold text-gray-800">Mã giảm giá</h1>
-            <Link href="/admin/coupons/create" class="px-4 py-2 bg-amber-700 text-white rounded-lg hover:bg-amber-600">+ Thêm mã</Link>
+            <h1 class="text-2xl font-bold text-[#1a1a1a] font-serif">Mã giảm giá</h1>
+            <Link href="/admin/coupons/create" class="px-4 py-2 bg-[#2C1810] text-white rounded hover:bg-[#5C3A1E] transition">+ Thêm mã</Link>
         </div>
-        <div class="bg-white rounded-2xl shadow-md overflow-hidden">
+        <div class="bg-white rounded border border-[#E8D9C5] overflow-hidden shadow-sm">
             <table class="w-full text-sm">
-                <thead class="bg-gray-50">
+                <thead class="bg-[#FAF6F0]">
                     <tr>
                         <th class="px-6 py-3 text-left text-gray-500">Mã</th>
                         <th class="px-6 py-3 text-left text-gray-500">Tên</th>
@@ -34,7 +34,7 @@ const deleteCoupon = async (id) => {
                     </tr>
                 </thead>
                 <tbody class="divide-y">
-                    <tr v-for="coupon in coupons.data" :key="coupon.id" class="hover:bg-gray-50">
+                    <tr v-for="coupon in coupons.data" :key="coupon.id" class="hover:bg-[#FAF6F0] transition">
                         <td class="px-6 py-4 font-mono font-bold">{{ coupon.code }}</td>
                         <td class="px-6 py-4">{{ coupon.name }}</td>
                         <td class="px-6 py-4 text-center">{{ coupon.type === 'percentage' ? '%' : 'VNĐ' }}</td>
@@ -46,7 +46,7 @@ const deleteCoupon = async (id) => {
                             </span>
                         </td>
                         <td class="px-6 py-4 text-right space-x-2">
-                            <Link :href="`/admin/coupons/${coupon.id}/edit`" class="text-amber-600 hover:text-amber-800">Sửa</Link>
+                            <Link :href="`/admin/coupons/${coupon.id}/edit`" class="text-[#D4A853] hover:text-[#2C1810] transition font-medium">Sửa</Link>
                             <button @click="deleteCoupon(coupon.id)" class="text-red-500 hover:text-red-700">Xóa</button>
                         </td>
                     </tr>

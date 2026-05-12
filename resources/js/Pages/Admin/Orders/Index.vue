@@ -1,4 +1,4 @@
-<script setup>
+﻿<script setup>
 import AdminLayout from '@/Layouts/AdminLayout.vue';
 import { Link, router } from '@inertiajs/vue3';
 import { ref } from 'vue';
@@ -23,21 +23,21 @@ const statusColors = {
 
 <template>
     <AdminLayout>
-        <h1 class="text-2xl font-bold text-gray-800 mb-6">Quản lý đơn hàng</h1>
+        <h1 class="text-2xl font-bold text-[#1a1a1a] font-serif mb-6">Quản lý đơn hàng</h1>
 
-        <div class="bg-white rounded-2xl shadow-md p-4 mb-6">
+        <div class="bg-white rounded border border-[#E8D9C5] p-4 mb-6 shadow-sm">
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <input v-model="search" @keyup.enter="applyFilters" placeholder="Tìm mã đơn, tên, SĐT..." class="rounded-lg border-gray-300" />
-                <select v-model="statusFilter" @change="applyFilters" class="rounded-lg border-gray-300">
+                <input v-model="search" @keyup.enter="applyFilters" placeholder="Tìm mã đơn, tên, SĐT..." class="rounded border-[#E8D9C5] focus:border-[#D4A853] focus:ring-[#D4A853]" />
+                <select v-model="statusFilter" @change="applyFilters" class="rounded border-[#E8D9C5] focus:border-[#D4A853] focus:ring-[#D4A853]">
                     <option value="">Tất cả trạng thái</option>
                     <option v-for="s in statuses" :key="s.value" :value="s.value">{{ s.label }}</option>
                 </select>
             </div>
         </div>
 
-        <div class="bg-white rounded-2xl shadow-md overflow-hidden">
+        <div class="bg-white rounded border border-[#E8D9C5] overflow-hidden shadow-sm">
             <table class="w-full text-sm">
-                <thead class="bg-gray-50">
+                <thead class="bg-[#FAF6F0]">
                     <tr>
                         <th class="px-6 py-3 text-left text-gray-500">Mã đơn</th>
                         <th class="px-6 py-3 text-left text-gray-500">Khách hàng</th>
@@ -48,7 +48,7 @@ const statusColors = {
                     </tr>
                 </thead>
                 <tbody class="divide-y">
-                    <tr v-for="order in orders.data" :key="order.id" class="hover:bg-gray-50">
+                    <tr v-for="order in orders.data" :key="order.id" class="hover:bg-[#FAF6F0] transition">
                         <td class="px-6 py-4 font-medium">#{{ order.order_number }}</td>
                         <td class="px-6 py-4">{{ order.customer_name }}</td>
                         <td class="px-6 py-4 text-center">
@@ -57,7 +57,7 @@ const statusColors = {
                         <td class="px-6 py-4 text-right font-medium">{{ formatCurrency(order.total) }}</td>
                         <td class="px-6 py-4 text-right text-gray-500">{{ order.created_at }}</td>
                         <td class="px-6 py-4 text-right">
-                            <Link :href="`/admin/orders/${order.id}`" class="text-amber-600 hover:text-amber-800">Xem</Link>
+                            <Link :href="`/admin/orders/${order.id}`" class="text-[#D4A853] hover:text-[#2C1810] transition font-medium">Xem</Link>
                         </td>
                     </tr>
                 </tbody>

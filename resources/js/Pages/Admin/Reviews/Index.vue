@@ -1,4 +1,4 @@
-<script setup>
+﻿<script setup>
 import AdminLayout from '@/Layouts/AdminLayout.vue';
 import { router } from '@inertiajs/vue3';
 import axios from 'axios';
@@ -11,12 +11,12 @@ const deleteReview = async (id) => { if (confirm('Xóa?')) { await axios.delete(
 
 <template>
     <AdminLayout>
-        <h1 class="text-2xl font-bold text-gray-800 mb-6">Đánh giá</h1>
-        <div class="bg-white rounded-2xl shadow-md overflow-hidden">
+        <h1 class="text-2xl font-bold text-[#1a1a1a] font-serif mb-6">Đánh giá</h1>
+        <div class="bg-white rounded border border-[#E8D9C5] overflow-hidden shadow-sm">
             <table class="w-full text-sm">
-                <thead class="bg-gray-50"><tr><th class="px-6 py-3 text-left">Khách</th><th class="px-6 py-3 text-left">Đơn hàng</th><th class="px-6 py-3 text-center">Sao</th><th class="px-6 py-3 text-left">Nhận xét</th><th class="px-6 py-3 text-center">Trạng thái</th><th class="px-6 py-3 text-right">Thao tác</th></tr></thead>
+                <thead class="bg-[#FAF6F0]"><tr><th class="px-6 py-3 text-left">Khách</th><th class="px-6 py-3 text-left">Đơn hàng</th><th class="px-6 py-3 text-center">Sao</th><th class="px-6 py-3 text-left">Nhận xét</th><th class="px-6 py-3 text-center">Trạng thái</th><th class="px-6 py-3 text-right">Thao tác</th></tr></thead>
                 <tbody class="divide-y">
-                    <tr v-for="review in reviews.data" :key="review.id" class="hover:bg-gray-50">
+                    <tr v-for="review in reviews.data" :key="review.id" class="hover:bg-[#FAF6F0] transition">
                         <td class="px-6 py-4">{{ review.user?.name }}</td>
                         <td class="px-6 py-4">#{{ review.order?.order_number }}</td>
                         <td class="px-6 py-4 text-center text-yellow-500">{{ '⭐'.repeat(review.rating) }}</td>

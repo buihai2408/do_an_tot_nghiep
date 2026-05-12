@@ -1,9 +1,5 @@
 <script setup>
 import GuestLayout from '@/Layouts/GuestLayout.vue';
-import InputError from '@/Components/InputError.vue';
-import InputLabel from '@/Components/InputLabel.vue';
-import PrimaryButton from '@/Components/PrimaryButton.vue';
-import TextInput from '@/Components/TextInput.vue';
 import { Head, useForm } from '@inertiajs/vue3';
 
 const props = defineProps({
@@ -33,69 +29,62 @@ const submit = () => {
 
 <template>
     <GuestLayout>
-        <Head title="Reset Password" />
+        <Head title="Đặt lại mật khẩu" />
 
-        <form @submit.prevent="submit">
-            <div>
-                <InputLabel for="email" value="Email" />
-
-                <TextInput
-                    id="email"
-                    type="email"
-                    class="mt-1 block w-full"
-                    v-model="form.email"
-                    required
-                    autofocus
-                    autocomplete="username"
-                />
-
-                <InputError class="mt-2" :message="form.errors.email" />
+        <div class="bg-white p-8 lg:p-10 border border-[#E8D9C5] rounded-lg shadow-[0_4px_20px_rgba(44,24,16,0.08)]">
+            <div class="mb-8">
+                <h2 class="text-2xl font-bold text-[#2C1810] font-playfair mb-1">Đặt lại mật khẩu</h2>
+                <p class="text-sm text-[#8B7355]">Nhập mật khẩu mới cho tài khoản của bạn.</p>
             </div>
 
-            <div class="mt-4">
-                <InputLabel for="password" value="Password" />
+            <form @submit.prevent="submit" class="space-y-5">
+                <div>
+                    <label class="block text-xs font-semibold tracking-widest uppercase text-[#8B7355] mb-2">Email</label>
+                    <input
+                        v-model="form.email"
+                        type="email"
+                        required
+                        autofocus
+                        autocomplete="username"
+                        class="w-full text-sm py-3 text-[#2C1810] border-[#E8D9C5] rounded focus:border-[#D4A853] focus:ring focus:ring-[#D4A853]/20 transition"
+                    />
+                    <p v-if="form.errors.email" class="text-red-500 text-xs mt-1.5">{{ form.errors.email }}</p>
+                </div>
 
-                <TextInput
-                    id="password"
-                    type="password"
-                    class="mt-1 block w-full"
-                    v-model="form.password"
-                    required
-                    autocomplete="new-password"
-                />
+                <div>
+                    <label class="block text-xs font-semibold tracking-widest uppercase text-[#8B7355] mb-2">Mật khẩu mới</label>
+                    <input
+                        v-model="form.password"
+                        type="password"
+                        required
+                        autocomplete="new-password"
+                        class="w-full text-sm py-3 text-[#2C1810] border-[#E8D9C5] rounded focus:border-[#D4A853] focus:ring focus:ring-[#D4A853]/20 transition"
+                        placeholder="Tối thiểu 8 ký tự"
+                    />
+                    <p v-if="form.errors.password" class="text-red-500 text-xs mt-1.5">{{ form.errors.password }}</p>
+                </div>
 
-                <InputError class="mt-2" :message="form.errors.password" />
-            </div>
+                <div>
+                    <label class="block text-xs font-semibold tracking-widest uppercase text-[#8B7355] mb-2">Xác nhận mật khẩu</label>
+                    <input
+                        v-model="form.password_confirmation"
+                        type="password"
+                        required
+                        autocomplete="new-password"
+                        class="w-full text-sm py-3 text-[#2C1810] border-[#E8D9C5] rounded focus:border-[#D4A853] focus:ring focus:ring-[#D4A853]/20 transition"
+                        placeholder="Nhập lại mật khẩu mới"
+                    />
+                    <p v-if="form.errors.password_confirmation" class="text-red-500 text-xs mt-1.5">{{ form.errors.password_confirmation }}</p>
+                </div>
 
-            <div class="mt-4">
-                <InputLabel
-                    for="password_confirmation"
-                    value="Confirm Password"
-                />
-
-                <TextInput
-                    id="password_confirmation"
-                    type="password"
-                    class="mt-1 block w-full"
-                    v-model="form.password_confirmation"
-                    required
-                    autocomplete="new-password"
-                />
-
-                <InputError
-                    class="mt-2"
-                    :message="form.errors.password_confirmation"
-                />
-            </div>
-
-            <div class="mt-4 flex items-center justify-end">
-                <PrimaryButton
-                    :class="{ 'opacity-25': form.processing }"
+                <button
+                    type="submit"
                     :disabled="form.processing"
+                    class="w-full py-3.5 bg-[#2C1810] text-white text-sm font-semibold tracking-wider uppercase rounded hover:bg-[#5C3A1E] transition disabled:opacity-50 shadow-[0_4px_15px_rgba(44,24,16,0.25)] hover:shadow-none"
                 >
-                    Reset Password
-                </PrimaryButton>
-            </div>
-        </form>
+                    {{ form.processing ? '⏳ Đang đặt lại...' : 'Đặt lại mật khẩu' }}
+                </button>
+            </form>
+        </div>
     </GuestLayout>
 </template>

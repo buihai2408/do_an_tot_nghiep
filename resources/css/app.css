@@ -1,17 +1,83 @@
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700;800&family=Inter:wght@300;400;500;600;700&display=swap');
 @import "tailwindcss";
 @plugin "@tailwindcss/forms";
 
-/* Use one clean, readable font across the app. */
 :root {
-    --app-font-family: "Inter", system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    /* Coffee Browns */
+    --coffee-dark:    #2C1810;   /* dark espresso  */
+    --coffee-mid:     #5C3A1E;   /* medium roast   */
+    --coffee-light:   #8B6347;   /* latte brown    */
+
+    /* Gold Accents */
+    --gold:           #D4A853;   /* coffee gold    */
+    --gold-light:     #E8C17A;   /* pale gold      */
+    --gold-dark:      #B8873A;   /* deep gold      */
+
+    /* Warm Surfaces */
+    --cream:          #FAF6F0;   /* warm white     */
+    --cream-dark:     #F2EBE0;   /* warm beige     */
+    --parchment:      #E8D9C5;   /* border/divider */
+
+    /* Text */
+    --text-primary:   #2C1810;
+    --text-muted:     #8B7355;
+    --text-light:     #B5A089;
+
+    /* Dark Surfaces */
+    --dark-bg:        #1C1208;   /* near-black brown */
+    --dark-surface:   #2C1810;
+
+    --app-font-heading: "Playfair Display", Georgia, serif;
+    --app-font-body:    "Inter", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
 }
 
-html,
-body {
-    font-family: var(--app-font-family);
+html, body {
+    font-family: var(--app-font-body);
+    color: var(--text-primary);
+    scroll-behavior: smooth;
 }
 
-/* Override old inline heading styles that still reference Playfair Display. */
-[style*="Playfair Display"] {
-    font-family: var(--app-font-family) !important;
+/* Headings: use Playfair Display for serif warmth */
+h1, h2, h3, .font-serif {
+    font-family: var(--app-font-heading);
 }
+
+/* Selection color */
+::selection {
+    background: var(--gold-light);
+    color: var(--coffee-dark);
+}
+
+/* Scrollbar styling */
+::-webkit-scrollbar       { width: 6px; height: 6px; }
+::-webkit-scrollbar-track { background: var(--cream); }
+::-webkit-scrollbar-thumb { background: var(--parchment); border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: var(--coffee-light); }
+
+/* ── Utility classes for coffee palette ──────────────────────── */
+.btn-coffee {
+    background: var(--coffee-dark);
+    color: #fff;
+    transition: background 0.2s, transform 0.15s;
+}
+.btn-coffee:hover {
+    background: var(--coffee-mid);
+}
+
+.btn-gold {
+    background: var(--gold);
+    color: var(--coffee-dark);
+    font-weight: 600;
+    transition: background 0.2s;
+}
+.btn-gold:hover {
+    background: var(--gold-dark);
+    color: #fff;
+}
+
+.text-coffee { color: var(--coffee-dark); }
+.text-gold   { color: var(--gold); }
+.text-muted  { color: var(--text-muted); }
+.bg-cream    { background: var(--cream); }
+.bg-coffee   { background: var(--coffee-dark); }
+.border-parchment { border-color: var(--parchment); }

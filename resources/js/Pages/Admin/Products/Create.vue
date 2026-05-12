@@ -1,4 +1,4 @@
-<script setup>
+﻿<script setup>
 import AdminLayout from '@/Layouts/AdminLayout.vue';
 import { ref } from 'vue';
 import { router } from '@inertiajs/vue3';
@@ -71,20 +71,20 @@ const submit = async () => {
 
 <template>
     <AdminLayout>
-        <h1 class="text-2xl font-bold text-gray-800 mb-6">Thêm sản phẩm</h1>
+        <h1 class="text-2xl font-bold text-[#1a1a1a] font-serif mb-6">Thêm sản phẩm</h1>
 
-        <div class="bg-white rounded-2xl shadow-md p-6 max-w-3xl">
+        <div class="bg-white rounded border border-[#E8D9C5] p-6 shadow-sm max-w-3xl">
             <div v-if="generalError" class="mb-4 p-3 bg-red-50 border border-red-200 text-red-700 rounded-lg text-sm">{{ generalError }}</div>
             <div class="space-y-6">
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div>
                         <label class="block text-sm font-medium mb-1">Tên sản phẩm *</label>
-                        <input v-model="form.name" class="w-full rounded-lg border-gray-300" />
+                        <input v-model="form.name" class="w-full rounded border-[#E8D9C5] focus:border-[#D4A853] focus:ring-[#D4A853]" />
                         <p v-if="errors.name" class="text-red-500 text-sm mt-1">{{ errors.name[0] }}</p>
                     </div>
                     <div>
                         <label class="block text-sm font-medium mb-1">Danh mục *</label>
-                        <select v-model="form.category_id" class="w-full rounded-lg border-gray-300">
+                        <select v-model="form.category_id" class="w-full rounded border-[#E8D9C5] focus:border-[#D4A853] focus:ring-[#D4A853]">
                             <option value="">Chọn danh mục</option>
                             <option v-for="cat in categories" :key="cat.id" :value="cat.id">{{ cat.name }}</option>
                         </select>
@@ -93,12 +93,12 @@ const submit = async () => {
 
                 <div>
                     <label class="block text-sm font-medium mb-1">Mô tả</label>
-                    <textarea v-model="form.description" rows="3" class="w-full rounded-lg border-gray-300"></textarea>
+                    <textarea v-model="form.description" rows="3" class="w-full rounded border-[#E8D9C5] focus:border-[#D4A853] focus:ring-[#D4A853]"></textarea>
                 </div>
 
                 <div>
                     <label class="block text-sm font-medium mb-1">Giá cơ bản *</label>
-                    <input v-model="form.base_price" type="number" class="w-full rounded-lg border-gray-300 max-w-xs" />
+                    <input v-model="form.base_price" type="number" class="w-full rounded border-[#E8D9C5] focus:border-[#D4A853] focus:ring-[#D4A853] max-w-xs" />
                 </div>
 
                 <!-- Images Upload -->
@@ -129,16 +129,16 @@ const submit = async () => {
                 </div>
 
                 <div class="flex space-x-6">
-                    <label class="flex items-center"><input v-model="form.is_active" type="checkbox" class="rounded text-amber-600 mr-2" /> Đang bán</label>
-                    <label class="flex items-center"><input v-model="form.is_featured" type="checkbox" class="rounded text-amber-600 mr-2" /> Nổi bật</label>
+                    <label class="flex items-center"><input v-model="form.is_active" type="checkbox" class="rounded text-[#D4A853] mr-2" /> Đang bán</label>
+                    <label class="flex items-center"><input v-model="form.is_featured" type="checkbox" class="rounded text-[#D4A853] mr-2" /> Nổi bật</label>
                 </div>
 
                 <!-- Sizes -->
                 <div>
                     <label class="block text-sm font-medium mb-2">Kích thước & Giá</label>
                     <div v-for="size in selectedSizes" :key="size.size_id" class="flex items-center space-x-4 mb-2">
-                        <label class="flex items-center"><input v-model="size.enabled" type="checkbox" class="rounded text-amber-600 mr-2" /> {{ size.name }}</label>
-                        <input v-if="size.enabled" v-model="size.price" type="number" :placeholder="`Giá size ${size.name}`" class="flex-1 rounded-lg border-gray-300" />
+                        <label class="flex items-center"><input v-model="size.enabled" type="checkbox" class="rounded text-[#D4A853] mr-2" /> {{ size.name }}</label>
+                        <input v-if="size.enabled" v-model="size.price" type="number" :placeholder="`Giá size ${size.name}`" class="flex-1 rounded border-[#E8D9C5] focus:border-[#D4A853] focus:ring-[#D4A853]" />
                     </div>
                 </div>
 
@@ -147,7 +147,7 @@ const submit = async () => {
                     <label class="block text-sm font-medium mb-2">Topping</label>
                     <div class="flex flex-wrap gap-2">
                         <label v-for="topping in toppings" :key="topping.id" class="flex items-center">
-                            <input v-model="selectedToppings" :value="topping.id" type="checkbox" class="rounded text-amber-600 mr-1" />
+                            <input v-model="selectedToppings" :value="topping.id" type="checkbox" class="rounded text-[#D4A853] mr-1" />
                             <span class="text-sm">{{ topping.name }}</span>
                         </label>
                     </div>
