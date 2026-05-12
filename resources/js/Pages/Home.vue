@@ -142,8 +142,8 @@ defineProps({
                         </div>
                     </div>
                     <div class="relative">
-                        <!-- Image framing -->
-                        <div class="absolute -inset-4 border-2 hidden lg:block" style="border-color:#5C3A1E; transform:translate(20px, 20px);"></div>
+                        <!-- Image framing perfectly centered -->
+                        <div class="absolute -inset-3 border-2 hidden lg:block" style="border-color:#5C3A1E;"></div>
                         <div class="aspect-[4/3] overflow-hidden relative z-10" style="box-shadow:0 20px 40px rgba(0,0,0,0.5);">
                             <img src="/images/background_home.jpg" class="w-full h-full object-cover transition duration-700 hover:scale-105" alt="Coffee shop interior" />
                         </div>
