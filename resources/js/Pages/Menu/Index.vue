@@ -12,16 +12,34 @@ const props = defineProps({
     filters: Object,
 });
 
+const sortOptions = [
+    { value: 'latest', label: 'Mới nhất' },
+    { value: 'price_asc', label: 'Giá tăng dần' },
+    { value: 'price_desc', label: 'Giá giảm dần' },
+    { value: 'name', label: 'Tên A-Z' }
+];
+
+const getInitialSort = () => {
+    const validSorts = sortOptions.map(o => o.value);
+    return validSorts.includes(props.filters?.sort) ? props.filters.sort : 'latest';
+};
+
 const search = ref(props.filters?.search || '');
 const selectedCategory = ref(props.filters?.category || '');
-const selectedSort = ref(props.filters?.sort || '');
+const selectedSort = ref(getInitialSort());
+
 const isListening = ref(false);
 
 const applyFilters = () => {
+    // Đảm bảo selectedSort luôn hợp lệ
+    if (!sortOptions.map(o => o.value).includes(selectedSort.value)) {
+        selectedSort.value = 'latest';
+    }
+    
     router.get('/menu', {
         search: search.value || undefined,
         category: selectedCategory.value || undefined,
-        sort: selectedSort.value || undefined,
+        sort: selectedSort.value === 'latest' ? undefined : selectedSort.value,
     }, { preserveState: true, preserveScroll: true });
 };
 
@@ -115,10 +133,9 @@ const startVoiceSearch = () => {
                     class="border py-3 px-4 text-sm min-w-[160px] focus:outline-none"
                     style="border-color:#E8D9C5; background:#FAF6F0; color:#2C1810; border-radius:4px;"
                     onfocus="this.style.borderColor='#D4A853'" onblur="this.style.borderColor='#E8D9C5'">
-                    <option value="">Mới nhất</option>
-                    <option value="price_asc">Giá tăng dần</option>
-                    <option value="price_desc">Giá giảm dần</option>
-                    <option value="name">Tên A-Z</option>
+                    <option v-for="opt in sortOptions" :key="opt.value" :value="opt.value">
+                        {{ opt.label }}
+                    </option>
                 </select>
             </div>
 
