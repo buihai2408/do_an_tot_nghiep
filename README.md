@@ -11,7 +11,7 @@ Hệ thống quản lý quán cà phê trực tuyến, cho phép khách hàng đ
 ### Backend
 | Công nghệ | Phiên bản | Mô tả |
 |------------|-----------|-------|
-| PHP | ^8.2 | Ngôn ngữ lập trình phía server |
+| PHP | 8.2 | Ngôn ngữ lập trình phía server |
 | Laravel | 12 | PHP Framework, xử lý routing, ORM, validation, authentication |
 | Laravel Sanctum | 4.0 | Xác thực API qua session (SPA authentication) |
 | Laravel Breeze | - | Scaffolding cho đăng ký, đăng nhập, quên mật khẩu |

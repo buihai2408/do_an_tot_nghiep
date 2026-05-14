@@ -97,7 +97,6 @@ class ChatbotController extends Controller
         $lines[] = 'Bạn là trợ lý AI của "The Coffee Shop". Hãy trả lời bằng tiếng Việt, thân thiện, ngắn gọn và chính xác dựa trên dữ liệu thực dưới đây.';
         $lines[] = '';
 
-        // ── 1. Thông tin khách hàng đang đăng nhập ──────────────────────
         if (auth()->check()) {
             $user = auth()->user()->load('orders');
             $tier = $user->loyaltyTier;
@@ -145,6 +144,39 @@ class ChatbotController extends Controller
         } else {
             $lines[] = '=== KHÁCH HÀNG ===';
             $lines[] = 'Khách chưa đăng nhập (khách vãng lai).';
+        }
+
+        // ── 1.5. Thông tin giỏ hàng hiện tại ────────────────────────────
+        try {
+            $cartService = app(\App\Services\CartService::class);
+            $cart = $cartService->getCartWithItems();
+            
+            $lines[] = '';
+            $lines[] = '=== GIỎ HÀNG HIỆN TẠI ===';
+            
+            if ($cart && $cart->items->isNotEmpty()) {
+                $summary = $cartService->getCartSummary();
+                foreach ($cart->items as $item) {
+                    $productName = $item->product ? $item->product->name : 'Sản phẩm';
+                    $sizeInfo = $item->size ? " (Size {$item->size->name})" : "";
+                    $priceStr = number_format((float) $item->unit_price, 0, ',', '.') . ' VNĐ';
+                    
+                    $toppingStr = '';
+                    if ($item->toppings->isNotEmpty()) {
+                        $toppingNames = $item->toppings->pluck('name')->implode(', ');
+                        $toppingStr = " + Topping: {$toppingNames}";
+                    }
+                    
+                    $lines[] = "- {$productName}{$sizeInfo} x{$item->quantity} ({$priceStr}/sp){$toppingStr}";
+                }
+                $lines[] = "Tổng phụ: " . number_format((float) $summary['subtotal'], 0, ',', '.') . " VNĐ";
+                $lines[] = "Phí ship: " . number_format((float) $summary['shipping_fee'], 0, ',', '.') . " VNĐ";
+                $lines[] = "Tổng cộng: " . number_format((float) $summary['total'], 0, ',', '.') . " VNĐ";
+            } else {
+                $lines[] = 'Giỏ hàng đang trống.';
+            }
+        } catch (\Exception $e) {
+            // Không làm sập chatbot nếu lỗi lấy giỏ hàng
         }
 
         // ── 2. Menu sản phẩm thực từ database ───────────────────────────

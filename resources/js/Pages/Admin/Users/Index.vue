@@ -1,4 +1,4 @@
-﻿<script setup>
+<script setup>
 import AdminLayout from '@/Layouts/AdminLayout.vue';
 import { router } from '@inertiajs/vue3';
 import { ref } from 'vue';
@@ -23,12 +23,13 @@ const updateRole = async (user, role) => {
         </div>
         <div class="bg-white rounded border border-[#E8D9C5] overflow-hidden shadow-sm">
             <table class="w-full text-sm">
-                <thead class="bg-[#FAF6F0]"><tr><th class="px-6 py-3 text-left">Tên</th><th class="px-6 py-3 text-left">Email</th><th class="px-6 py-3 text-left">SĐT</th><th class="px-6 py-3 text-center">Vai trò</th><th class="px-6 py-3 text-right">Ngày tạo</th></tr></thead>
+                <thead class="bg-[#FAF6F0]"><tr><th class="px-6 py-3 text-left">Tên</th><th class="px-6 py-3 text-left">Email</th><th class="px-6 py-3 text-left">SĐT</th><th class="px-6 py-3 text-center">Điểm</th><th class="px-6 py-3 text-center">Vai trò</th><th class="px-6 py-3 text-right">Ngày tạo</th></tr></thead>
                 <tbody class="divide-y">
                     <tr v-for="user in users.data" :key="user.id" class="hover:bg-[#FAF6F0] transition">
                         <td class="px-6 py-4 font-medium">{{ user.name }}</td>
                         <td class="px-6 py-4 text-gray-500">{{ user.email }}</td>
-                        <td class="px-6 py-4">{{ user.phone }}</td>
+                        <td class="px-6 py-4">{{ user.phone || '—' }}</td>
+                        <td class="px-6 py-4 text-center font-semibold text-[#D4A853]">{{ user.loyalty_points || 0 }}</td>
                         <td class="px-6 py-4 text-center">
                             <select :value="user.role" @change="updateRole(user, $event.target.value)" class="rounded border-[#E8D9C5] focus:border-[#D4A853] focus:ring-[#D4A853] text-sm">
                                 <option value="customer">Khách hàng</option>

@@ -1,15 +1,82 @@
 <script setup>
 import AdminLayout from '@/Layouts/AdminLayout.vue';
 import { useFormatters } from '@/Composables/useFormatters';
+import { computed } from 'vue';
+import { Bar, Doughnut } from 'vue-chartjs';
+import { Chart as ChartJS, Title, Tooltip, Legend, BarElement, CategoryScale, LinearScale, ArcElement } from 'chart.js';
+
+ChartJS.register(Title, Tooltip, Legend, BarElement, CategoryScale, LinearScale, ArcElement);
 
 const { formatCurrency } = useFormatters();
 
-defineProps({
+const props = defineProps({
     stats: Object,
     revenueChart: Object,
     topProducts: Array,
     ordersByStatus: Object,
 });
+
+const revenueChartData = computed(() => {
+    return {
+        labels: props.revenueChart?.labels || [],
+        datasets: [
+            {
+                label: 'Doanh thu (VNĐ)',
+                backgroundColor: '#D4A853',
+                borderRadius: 4,
+                data: props.revenueChart?.revenue || []
+            }
+        ]
+    };
+});
+
+const revenueChartOptions = {
+    responsive: true,
+    maintainAspectRatio: false,
+    plugins: {
+        legend: { display: false }
+    },
+    scales: {
+        y: {
+            beginAtZero: true,
+            ticks: {
+                callback: (value) => new Intl.NumberFormat('vi-VN').format(value)
+            }
+        }
+    }
+};
+
+const getStatusLabel = (status) => {
+    const map = {
+        'pending': 'Chờ xác nhận',
+        'processing': 'Đang chuẩn bị',
+        'delivering': 'Đang giao',
+        'completed': 'Hoàn thành',
+        'cancelled': 'Đã hủy',
+    };
+    return map[status] || status;
+};
+
+const orderStatusChartData = computed(() => {
+    const keys = Object.keys(props.ordersByStatus || {});
+    return {
+        labels: keys.map(k => getStatusLabel(k)),
+        datasets: [
+            {
+                backgroundColor: ['#F59E0B', '#3B82F6', '#8B5CF6', '#10B981', '#EF4444'],
+                data: Object.values(props.ordersByStatus || {})
+            }
+        ]
+    };
+});
+
+const orderStatusChartOptions = {
+    responsive: true,
+    maintainAspectRatio: false,
+    plugins: {
+        legend: { position: 'right' }
+    }
+};
 </script>
 
 <template>
@@ -44,26 +111,28 @@ defineProps({
             </div>
         </div>
 
-        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-            <!-- Revenue summary -->
-            <div class="bg-white p-6 rounded-lg border border-[#E8D9C5] shadow-sm">
-                <h2 class="text-xs font-bold tracking-widest uppercase mb-5 pb-3 text-[#2C1810] border-b border-[#F2EBE0]">📊 Tổng quan</h2>
-                <div class="space-y-4">
-                    <div class="flex justify-between items-center py-2 border-b border-[#F9F5F0]">
-                        <span class="text-sm text-[#8B7355]">Tổng doanh thu</span>
-                        <span class="font-bold text-sm text-[#2C1810]">{{ formatCurrency(stats.total_revenue) }}</span>
-                    </div>
-                    <div class="flex justify-between items-center py-2 border-b border-[#F9F5F0]">
-                        <span class="text-sm text-[#8B7355]">Tổng đơn hàng</span>
-                        <span class="font-bold text-sm text-[#2C1810]">{{ stats.total_orders }}</span>
-                    </div>
-                    <div class="flex justify-between items-center py-2">
-                        <span class="text-sm text-[#8B7355]">Tổng sản phẩm</span>
-                        <span class="font-bold text-sm text-[#2C1810]">{{ stats.total_products }}</span>
-                    </div>
+        <!-- Charts Row -->
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
+            <!-- Revenue Chart -->
+            <div class="bg-white p-6 rounded-lg border border-[#E8D9C5] shadow-sm lg:col-span-2">
+                <h2 class="text-xs font-bold tracking-widest uppercase mb-5 pb-3 text-[#2C1810] border-b border-[#F2EBE0]">📈 Doanh thu 7 ngày gần nhất</h2>
+                <div class="h-72 w-full relative">
+                    <Bar v-if="revenueChartData.labels.length" :data="revenueChartData" :options="revenueChartOptions" />
+                    <div v-else class="absolute inset-0 flex items-center justify-center text-[#B5A089]">Chưa có dữ liệu</div>
                 </div>
             </div>
 
+            <!-- Order Status Chart -->
+            <div class="bg-white p-6 rounded-lg border border-[#E8D9C5] shadow-sm">
+                <h2 class="text-xs font-bold tracking-widest uppercase mb-5 pb-3 text-[#2C1810] border-b border-[#F2EBE0]">📊 Trạng thái đơn hàng</h2>
+                <div class="h-72 w-full relative">
+                    <Doughnut v-if="orderStatusChartData.labels.length" :data="orderStatusChartData" :options="orderStatusChartOptions" />
+                    <div v-else class="absolute inset-0 flex items-center justify-center text-[#B5A089]">Chưa có dữ liệu</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
             <!-- Top products -->
             <div class="bg-white p-6 rounded-lg border border-[#E8D9C5] shadow-sm">
                 <h2 class="text-xs font-bold tracking-widest uppercase mb-5 pb-3 text-[#2C1810] border-b border-[#F2EBE0]">☕ Sản phẩm bán chạy</h2>
@@ -78,6 +147,25 @@ defineProps({
                             <span class="text-sm font-medium text-[#2C1810]">{{ product.product_name }}</span>
                         </div>
                         <span class="text-sm font-semibold text-[#D4A853]">{{ product.total_sold }} ly</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Revenue summary -->
+            <div class="bg-white p-6 rounded-lg border border-[#E8D9C5] shadow-sm">
+                <h2 class="text-xs font-bold tracking-widest uppercase mb-5 pb-3 text-[#2C1810] border-b border-[#F2EBE0]">📋 Tổng kết hoạt động</h2>
+                <div class="space-y-4">
+                    <div class="flex justify-between items-center py-3 border-b border-[#F9F5F0]">
+                        <span class="text-sm text-[#8B7355]">Tổng doanh thu tích lũy</span>
+                        <span class="font-bold text-sm text-[#2C1810]">{{ formatCurrency(stats.total_revenue) }}</span>
+                    </div>
+                    <div class="flex justify-between items-center py-3 border-b border-[#F9F5F0]">
+                        <span class="text-sm text-[#8B7355]">Tổng đơn hàng đã xử lý</span>
+                        <span class="font-bold text-sm text-[#2C1810]">{{ stats.total_orders }}</span>
+                    </div>
+                    <div class="flex justify-between items-center py-3">
+                        <span class="text-sm text-[#8B7355]">Tổng số sản phẩm trong Menu</span>
+                        <span class="font-bold text-sm text-[#2C1810]">{{ stats.total_products }}</span>
                     </div>
                 </div>
             </div>

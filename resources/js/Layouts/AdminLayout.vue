@@ -15,9 +15,8 @@ const allMenuItems = [
     { name: 'Mã giảm giá', href: '/admin/coupons', icon: '🎫' },
     { name: 'Topping', href: '/admin/toppings', icon: '🧋' },
     { name: 'Kích thước', href: '/admin/sizes', icon: '📏' },
-    { name: 'Người dùng', href: '/admin/users', icon: '👥', adminOnly: true },
+    { name: 'Người dùng & Điểm', href: '/admin/users', icon: '👥', adminOnly: true },
     { name: 'Đánh giá', href: '/admin/reviews', icon: '⭐' },
-    { name: 'Điểm thưởng', href: '/admin/users', icon: '💎', adminOnly: true },
     { name: 'Báo cáo', href: '/admin/reports', icon: '📈' },
 ];
 
@@ -91,7 +90,11 @@ function formatCurrency(val) {
 }
 
 function isActive(href) {
-    return window.location.pathname === href || window.location.pathname.startsWith(href + '/');
+    const path = window.location.pathname;
+    if (href === '/admin') {
+        return path === '/admin' || path === '/admin/';
+    }
+    return path === href || path.startsWith(href + '/');
 }
 
 onMounted(() => {
