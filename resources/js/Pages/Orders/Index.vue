@@ -1,11 +1,12 @@
 <script setup>
 import AppLayout from '@/Layouts/AppLayout.vue';
-import { Link } from '@inertiajs/vue3';
+import { Link, router } from '@inertiajs/vue3';
 import { useFormatters } from '@/Composables/useFormatters';
+import { onMounted, onUnmounted } from 'vue';
 
 const { formatCurrency } = useFormatters();
 
-defineProps({ orders: Object });
+const props = defineProps({ orders: Object });
 
 const statusColors = {
     yellow: 'bg-yellow-100 text-yellow-800',
@@ -16,6 +17,25 @@ const statusColors = {
     green: 'bg-green-100 text-green-800',
     red: 'bg-red-100 text-red-800',
 };
+
+onMounted(() => {
+    if (window.Echo && props.orders?.data) {
+        props.orders.data.forEach(order => {
+            window.Echo.private(`orders.${order.id}`)
+                .listen('.OrderStatusUpdated', () => {
+                    router.reload({ only: ['orders'] });
+                });
+        });
+    }
+});
+
+onUnmounted(() => {
+    if (window.Echo && props.orders?.data) {
+        props.orders.data.forEach(order => {
+            window.Echo.leave(`orders.${order.id}`);
+        });
+    }
+});
 </script>
 
 <template>

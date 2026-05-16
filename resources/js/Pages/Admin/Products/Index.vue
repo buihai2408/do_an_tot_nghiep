@@ -1,5 +1,6 @@
-﻿<script setup>
+<script setup>
 import AdminLayout from '@/Layouts/AdminLayout.vue';
+import Pagination from '@/Components/Pagination.vue';
 import { Link, router } from '@inertiajs/vue3';
 import { ref } from 'vue';
 import { useFormatters } from '@/Composables/useFormatters';
@@ -74,5 +75,8 @@ const deleteProduct = async (id) => {
                 </tbody>
             </table>
         </div>
+
+        <!-- Pagination -->
+        <Pagination :links="products.links" />
     </AdminLayout>
 </template>

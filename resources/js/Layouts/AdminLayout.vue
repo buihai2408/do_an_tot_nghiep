@@ -2,8 +2,11 @@
 import { ref, computed, onMounted, onUnmounted } from 'vue';
 import { Link, usePage, router } from '@inertiajs/vue3';
 import axios from 'axios';
+import ToastNotification from '@/Components/ToastNotification.vue';
+import { useToast } from '@/Composables/useToast';
 
 const page = usePage();
+const { success, info } = useToast();
 const sidebarOpen = ref(true);
 const isAdmin = computed(() => page.props.auth.user?.role === 'admin');
 
@@ -27,8 +30,6 @@ const menuItems = computed(() =>
 const pendingCount = ref(0);
 const pendingOrders = ref([]);
 const showNotifPanel = ref(false);
-const lastKnownCount = ref(0);
-let pollInterval = null;
 const notifPanelRef = ref(null);
 
 function playNotifSound() {
@@ -52,11 +53,6 @@ async function fetchNewOrders() {
         const { data } = await axios.get('/api/admin/orders/new');
         pendingOrders.value = data.orders;
         pendingCount.value = data.count;
-
-        if (data.count > lastKnownCount.value && lastKnownCount.value >= 0) {
-            playNotifSound();
-        }
-        lastKnownCount.value = data.count;
     } catch {}
 }
 
@@ -98,20 +94,45 @@ function isActive(href) {
 }
 
 onMounted(() => {
-    lastKnownCount.value = -1;
     fetchNewOrders();
-    pollInterval = setInterval(fetchNewOrders, 15000);
     document.addEventListener('click', handleClickOutside);
+
+    if (window.Echo) {
+        window.Echo.private('admin.orders')
+            .listen('.NewOrderPlaced', (e) => {
+                playNotifSound();
+                info(`Đơn hàng mới: #${e.order.order_number}`);
+                
+                // Cập nhật list pending orders
+                pendingOrders.value.unshift({
+                    id: e.order.id,
+                    order_number: e.order.order_number,
+                    customer_name: e.order.customer_name,
+                    total: e.order.total,
+                    created_at: e.order.created_at,
+                });
+                
+                // Giữ lại tối đa 10 đơn trong popup
+                if (pendingOrders.value.length > 10) {
+                    pendingOrders.value.pop();
+                }
+                
+                pendingCount.value++;
+            });
+    }
 });
 
 onUnmounted(() => {
-    clearInterval(pollInterval);
     document.removeEventListener('click', handleClickOutside);
+    if (window.Echo) {
+        window.Echo.leave('admin.orders');
+    }
 });
 </script>
 
 <template>
     <div class="min-h-screen bg-[#FAF6F0] flex font-sans">
+        <ToastNotification />
         <!-- Sidebar - Dark Espresso -->
         <aside :class="sidebarOpen ? 'w-64' : 'w-16'" class="bg-[#1C1208] text-white transition-all duration-300 flex-shrink-0 shadow-xl z-10 border-r border-[#2C1810]">
             <!-- Logo Area -->

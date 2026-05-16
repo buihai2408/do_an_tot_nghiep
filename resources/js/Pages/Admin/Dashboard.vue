@@ -1,7 +1,8 @@
 <script setup>
 import AdminLayout from '@/Layouts/AdminLayout.vue';
 import { useFormatters } from '@/Composables/useFormatters';
-import { computed } from 'vue';
+import { computed, onMounted, onUnmounted } from 'vue';
+import { router } from '@inertiajs/vue3';
 import { Bar, Doughnut } from 'vue-chartjs';
 import { Chart as ChartJS, Title, Tooltip, Legend, BarElement, CategoryScale, LinearScale, ArcElement } from 'chart.js';
 
@@ -77,6 +78,21 @@ const orderStatusChartOptions = {
         legend: { position: 'right' }
     }
 };
+
+onMounted(() => {
+    if (window.Echo) {
+        window.Echo.private('admin.orders')
+            .listen('.NewOrderPlaced', () => {
+                router.reload({ only: ['stats', 'revenueChart', 'ordersByStatus'] });
+            });
+    }
+});
+
+onUnmounted(() => {
+    if (window.Echo) {
+        // Not leaving channel to allow AdminLayout to keep listening
+    }
+});
 </script>
 
 <template>

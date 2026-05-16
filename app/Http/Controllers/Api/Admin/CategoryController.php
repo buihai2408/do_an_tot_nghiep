@@ -15,6 +15,11 @@ class CategoryController extends Controller
         $data = $request->validated();
         $data['slug'] = Str::slug($data['name']);
 
+        // Tự động gán thứ tự nếu không nhập
+        if (empty($data['sort_order'])) {
+            $data['sort_order'] = (Category::max('sort_order') ?? 0) + 1;
+        }
+
         $category = Category::create($data);
         return response()->json(['message' => 'Đã tạo danh mục!', 'category' => $category], 201);
     }

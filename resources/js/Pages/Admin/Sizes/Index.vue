@@ -1,4 +1,4 @@
-﻿<script setup>
+<script setup>
 import AdminLayout from '@/Layouts/AdminLayout.vue';
 import { ref } from 'vue';
 import { router } from '@inertiajs/vue3';
@@ -10,7 +10,7 @@ const showForm = ref(false);
 const editingSize = ref(null);
 const form = ref({ name: '', label: '', sort_order: 0 });
 
-const openCreate = () => { editingSize.value = null; form.value = { name: '', label: '', sort_order: 0 }; showForm.value = true; };
+const openCreate = () => { editingSize.value = null; form.value = { name: '', label: '', sort_order: '' }; showForm.value = true; };
 const openEdit = (s) => { editingSize.value = s; form.value = { name: s.name, label: s.label, sort_order: s.sort_order }; showForm.value = true; };
 
 const submit = async () => {
@@ -46,7 +46,7 @@ const deleteSize = async (id) => { if (confirm('Xóa?')) { await axios.delete(`/
                 <div class="space-y-3">
                     <div><label class="block text-sm font-medium mb-1">Tên (S/M/L)</label><input v-model="form.name" class="w-full rounded border-[#E8D9C5] focus:border-[#D4A853] focus:ring-[#D4A853]" /></div>
                     <div><label class="block text-sm font-medium mb-1">Nhãn</label><input v-model="form.label" class="w-full rounded border-[#E8D9C5] focus:border-[#D4A853] focus:ring-[#D4A853]" /></div>
-                    <div><label class="block text-sm font-medium mb-1">Thứ tự</label><input v-model.number="form.sort_order" type="number" class="w-full rounded border-[#E8D9C5] focus:border-[#D4A853] focus:ring-[#D4A853]" /></div>
+                    <div><label class="block text-sm font-medium mb-1">Thứ tự</label><input v-model.number="form.sort_order" type="number" placeholder="Để trống để tự động gán" class="w-full rounded border-[#E8D9C5] focus:border-[#D4A853] focus:ring-[#D4A853]" /></div>
                 </div>
                 <div class="flex space-x-3 mt-4"><button @click="showForm = false" class="flex-1 px-4 py-2 border rounded-xl">Hủy</button><button @click="submit" class="flex-1 px-4 py-2 bg-amber-700 text-white rounded-xl">Lưu</button></div>
             </div>

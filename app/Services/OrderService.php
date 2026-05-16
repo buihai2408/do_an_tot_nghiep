@@ -11,6 +11,8 @@ use App\Models\Order;
 use App\Models\OrderItem;
 use App\Models\OrderItemTopping;
 use App\Models\User;
+use App\Events\NewOrderPlaced;
+use App\Events\OrderStatusUpdated;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
@@ -137,8 +139,13 @@ class OrderService
             }
 
             $this->cartService->clearCart();
+            
+            $loadedOrder = $order->load(['items.toppings']);
+            
+            // Dispatch event for admin real-time notification
+            broadcast(new NewOrderPlaced($loadedOrder));
 
-            return $order->load(['items.toppings']);
+            return $loadedOrder;
         });
     }
 
@@ -157,15 +164,20 @@ class OrderService
             $updateData['payment_status'] = PaymentStatus::Paid;
             $order->update($updateData);
             $this->loyaltyService->earnPoints($order->user, $order->fresh());
-            return $order->fresh();
+            
+            $freshOrder = $order->fresh();
+            broadcast(new OrderStatusUpdated($freshOrder));
+            return $freshOrder;
         } elseif ($newStatus === OrderStatus::Cancelled) {
             $updateData['cancelled_at'] = now();
             $updateData['cancel_reason'] = $reason;
         }
 
         $order->update($updateData);
-
-        return $order->fresh();
+        
+        $freshOrder = $order->fresh();
+        broadcast(new OrderStatusUpdated($freshOrder));
+        return $freshOrder;
     }
 
     public function cancel(Order $order, string $reason): Order

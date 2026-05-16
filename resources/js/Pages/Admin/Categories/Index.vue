@@ -1,5 +1,6 @@
-﻿<script setup>
+<script setup>
 import AdminLayout from '@/Layouts/AdminLayout.vue';
+import Pagination from '@/Components/Pagination.vue';
 import { ref } from 'vue';
 import { router } from '@inertiajs/vue3';
 import axios from 'axios';
@@ -10,7 +11,7 @@ const showForm = ref(false);
 const editingCategory = ref(null);
 const form = ref({ name: '', sort_order: 0, is_active: true });
 
-const openCreate = () => { editingCategory.value = null; form.value = { name: '', sort_order: 0, is_active: true }; showForm.value = true; };
+const openCreate = () => { editingCategory.value = null; form.value = { name: '', sort_order: '', is_active: true }; showForm.value = true; };
 const openEdit = (cat) => { editingCategory.value = cat; form.value = { name: cat.name, sort_order: cat.sort_order, is_active: cat.is_active }; showForm.value = true; };
 
 const submit = async () => {
@@ -78,13 +79,16 @@ const deleteCategory = async (id) => {
             </table>
         </div>
 
+        <!-- Pagination -->
+        <Pagination :links="categories.links" />
+
         <!-- Modal -->
         <div v-if="showForm" class="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
             <div class="bg-white rounded-2xl p-6 max-w-md w-full mx-4">
                 <h3 class="text-lg font-bold mb-4">{{ editingCategory ? 'Sửa danh mục' : 'Thêm danh mục' }}</h3>
                 <div class="space-y-4">
                     <div><label class="block text-sm font-medium mb-1">Tên</label><input v-model="form.name" class="w-full rounded border-[#E8D9C5] focus:border-[#D4A853] focus:ring-[#D4A853]" /></div>
-                    <div><label class="block text-sm font-medium mb-1">Thứ tự</label><input v-model.number="form.sort_order" type="number" class="w-full rounded border-[#E8D9C5] focus:border-[#D4A853] focus:ring-[#D4A853]" /></div>
+                    <div><label class="block text-sm font-medium mb-1">Thứ tự</label><input v-model.number="form.sort_order" type="number" placeholder="Để trống để tự động gán" class="w-full rounded border-[#E8D9C5] focus:border-[#D4A853] focus:ring-[#D4A853]" /></div>
                     <label class="flex items-center"><input v-model="form.is_active" type="checkbox" class="rounded text-[#D4A853] mr-2" /> Hoạt động</label>
                 </div>
                 <div class="flex space-x-3 mt-6">

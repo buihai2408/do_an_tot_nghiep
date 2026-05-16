@@ -1,5 +1,6 @@
 <script setup>
 import AdminLayout from '@/Layouts/AdminLayout.vue';
+import Pagination from '@/Components/Pagination.vue';
 import { router } from '@inertiajs/vue3';
 import { ref } from 'vue';
 import axios from 'axios';
@@ -42,5 +43,8 @@ const updateRole = async (user, role) => {
                 </tbody>
             </table>
         </div>
+
+        <!-- Pagination -->
+        <Pagination :links="users.links" />
     </AdminLayout>
 </template>

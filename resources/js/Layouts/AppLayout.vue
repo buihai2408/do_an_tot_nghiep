@@ -2,6 +2,7 @@
 import { ref } from 'vue';
 import { Link, usePage } from '@inertiajs/vue3';
 import ChatBot from '@/Components/ChatBot.vue';
+import ToastNotification from '@/Components/ToastNotification.vue';
 
 const page = usePage();
 const mobileMenuOpen = ref(false);
@@ -29,6 +30,7 @@ const navigation = [
 
 <template>
     <div class="min-h-screen overflow-x-hidden" style="background:#FAF6F0; font-family:'Inter',sans-serif;">
+        <ToastNotification />
 
         <!-- ── NAVBAR ──────────────────────────────────────────────── -->
         <nav style="background:#2C1810; border-bottom:1px solid #5C3A1E;" class="sticky top-0 z-50">

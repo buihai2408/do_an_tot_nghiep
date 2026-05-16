@@ -1,7 +1,8 @@
-﻿<script setup>
+<script setup>
 import AdminLayout from '@/Layouts/AdminLayout.vue';
+import Pagination from '@/Components/Pagination.vue';
 import { Link, router } from '@inertiajs/vue3';
-import { ref } from 'vue';
+import { ref, onMounted, onUnmounted } from 'vue';
 import { useFormatters } from '@/Composables/useFormatters';
 
 const { formatCurrency } = useFormatters();
@@ -19,6 +20,22 @@ const statusColors = {
     indigo: 'bg-indigo-100 text-indigo-800', purple: 'bg-purple-100 text-purple-800',
     orange: 'bg-orange-100 text-orange-800', green: 'bg-green-100 text-green-800', red: 'bg-red-100 text-red-800',
 };
+
+onMounted(() => {
+    if (window.Echo) {
+        window.Echo.private('admin.orders')
+            .listen('.NewOrderPlaced', () => {
+                router.reload({ only: ['orders'] });
+            });
+    }
+});
+
+onUnmounted(() => {
+    if (window.Echo) {
+        // Not leaving the channel here because AdminLayout is also listening
+        // and we want AdminLayout to keep receiving notifications
+    }
+});
 </script>
 
 <template>
@@ -63,5 +80,8 @@ const statusColors = {
                 </tbody>
             </table>
         </div>
+
+        <!-- Pagination -->
+        <Pagination :links="orders.links" />
     </AdminLayout>
 </template>

@@ -10,7 +10,14 @@ class SizeController extends Controller
 {
     public function store(StoreSizeRequest $request)
     {
-        $size = Size::create($request->validated());
+        $data = $request->validated();
+
+        // Tự động gán thứ tự nếu không nhập
+        if (empty($data['sort_order'])) {
+            $data['sort_order'] = (Size::max('sort_order') ?? 0) + 1;
+        }
+
+        $size = Size::create($data);
         return response()->json(['message' => 'Đã tạo kích thước!', 'size' => $size], 201);
     }
 

@@ -1,11 +1,13 @@
 <script setup>
 import AppLayout from '@/Layouts/AppLayout.vue';
-import { ref } from 'vue';
+import { ref, onMounted, onUnmounted } from 'vue';
 import { useFormatters } from '@/Composables/useFormatters';
 import axios from 'axios';
 import { router } from '@inertiajs/vue3';
+import { useToast } from '@/Composables/useToast';
 
 const { formatCurrency } = useFormatters();
+const { info } = useToast();
 
 const props = defineProps({ order: Object });
 
@@ -63,6 +65,22 @@ const statusColors = {
     green: 'bg-green-100 text-green-800',
     red: 'bg-red-100 text-red-800',
 };
+
+onMounted(() => {
+    if (window.Echo) {
+        window.Echo.private(`orders.${props.order.id}`)
+            .listen('.OrderStatusUpdated', (e) => {
+                info(`Trạng thái đơn hàng: ${e.orderData.status_label}`);
+                router.reload({ only: ['order'] });
+            });
+    }
+});
+
+onUnmounted(() => {
+    if (window.Echo) {
+        window.Echo.leave(`orders.${props.order.id}`);
+    }
+});
 </script>
 
 <template>
