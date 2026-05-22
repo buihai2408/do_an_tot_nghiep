@@ -75,6 +75,8 @@ class MenuController extends Controller
                 'name' => $product->name,
                 'slug' => $product->slug,
                 'description' => $product->description,
+                'has_ice_level' => $product->has_ice_level,
+                'has_sugar_level' => $product->has_sugar_level,
                 'image' => $product->primaryImage?->path,
                 'images' => $product->images->map(fn($img) => [
                     'id' => $img->id,

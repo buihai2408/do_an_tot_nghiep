@@ -140,6 +140,8 @@ CREATE TABLE `products` (
     `base_price` DECIMAL(12,0) NOT NULL COMMENT 'Giá cơ bản (VNĐ)',
     `is_active` TINYINT(1) NOT NULL DEFAULT 1,
     `is_featured` TINYINT(1) NOT NULL DEFAULT 0 COMMENT 'Sản phẩm nổi bật trên trang chủ',
+    `has_ice_level` TINYINT(1) NOT NULL DEFAULT 1 COMMENT 'Cho phép chọn mức đá',
+    `has_sugar_level` TINYINT(1) NOT NULL DEFAULT 1 COMMENT 'Cho phép chọn mức đường',
     `created_at` TIMESTAMP NULL DEFAULT NULL,
     `updated_at` TIMESTAMP NULL DEFAULT NULL,
     `deleted_at` TIMESTAMP NULL DEFAULT NULL COMMENT 'Soft delete',

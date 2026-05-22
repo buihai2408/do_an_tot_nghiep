@@ -1,4 +1,4 @@
-﻿<script setup>
+<script setup>
 import AdminLayout from '@/Layouts/AdminLayout.vue';
 import { ref } from 'vue';
 import { router } from '@inertiajs/vue3';
@@ -13,6 +13,8 @@ const form = ref({
     base_price: props.product.base_price,
     is_active: props.product.is_active,
     is_featured: props.product.is_featured,
+    has_ice_level: props.product.has_ice_level ?? true,
+    has_sugar_level: props.product.has_sugar_level ?? true,
 });
 const newImageFiles = ref([]);
 const newPreviews = ref([]);
@@ -148,9 +150,11 @@ const submit = async () => {
                     <p class="text-xs text-gray-400 mt-1">Click vào ảnh để đặt làm ảnh chính. Tối đa 10 ảnh, mỗi ảnh ≤ 2MB.</p>
                 </div>
 
-                <div class="flex space-x-6">
+                <div class="flex flex-wrap gap-6">
                     <label class="flex items-center"><input v-model="form.is_active" type="checkbox" class="rounded text-[#D4A853] mr-2" /> Đang bán</label>
                     <label class="flex items-center"><input v-model="form.is_featured" type="checkbox" class="rounded text-[#D4A853] mr-2" /> Nổi bật</label>
+                    <label class="flex items-center"><input v-model="form.has_ice_level" type="checkbox" class="rounded text-[#D4A853] mr-2" /> Chọn Mức đá</label>
+                    <label class="flex items-center"><input v-model="form.has_sugar_level" type="checkbox" class="rounded text-[#D4A853] mr-2" /> Chọn Mức đường</label>
                 </div>
                 <div>
                     <label class="block text-sm font-medium mb-2">Kích thước & Giá</label>

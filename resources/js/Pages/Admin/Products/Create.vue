@@ -1,4 +1,4 @@
-﻿<script setup>
+<script setup>
 import AdminLayout from '@/Layouts/AdminLayout.vue';
 import { ref } from 'vue';
 import { router } from '@inertiajs/vue3';
@@ -12,6 +12,7 @@ const props = defineProps({ categories: Array, sizes: Array, toppings: Array });
 const form = ref({
     category_id: '', name: '', description: '', base_price: '',
     is_active: true, is_featured: false,
+    has_ice_level: true, has_sugar_level: true,
 });
 const imageFiles = ref([]);
 const imagePreviews = ref([]);
@@ -128,9 +129,11 @@ const submit = async () => {
                     <p v-if="errors.images" class="text-red-500 text-sm mt-1">{{ errors.images[0] }}</p>
                 </div>
 
-                <div class="flex space-x-6">
+                <div class="flex flex-wrap gap-6">
                     <label class="flex items-center"><input v-model="form.is_active" type="checkbox" class="rounded text-[#D4A853] mr-2" /> Đang bán</label>
                     <label class="flex items-center"><input v-model="form.is_featured" type="checkbox" class="rounded text-[#D4A853] mr-2" /> Nổi bật</label>
+                    <label class="flex items-center"><input v-model="form.has_ice_level" type="checkbox" class="rounded text-[#D4A853] mr-2" /> Chọn Mức đá</label>
+                    <label class="flex items-center"><input v-model="form.has_sugar_level" type="checkbox" class="rounded text-[#D4A853] mr-2" /> Chọn Mức đường</label>
                 </div>
 
                 <!-- Sizes -->

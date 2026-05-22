@@ -47,8 +47,8 @@ const handleAddToCart = async () => {
         await addToCart({
             product_id: props.product.id,
             size_id: selectedSize.value,
-            ice_level: selectedIce.value,
-            sugar_level: selectedSugar.value,
+            ice_level: props.product.has_ice_level ? selectedIce.value : null,
+            sugar_level: props.product.has_sugar_level ? selectedSugar.value : null,
             topping_ids: selectedToppings.value,
             quantity: quantity.value,
         });
@@ -168,7 +168,7 @@ const toggleTopping = (id) => {
 
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
                             <!-- Ice Level -->
-                            <div>
+                            <div v-if="product.has_ice_level">
                                 <h3 class="text-sm font-bold tracking-widest uppercase flex items-center gap-2 mb-4" style="color:#2C1810;">
                                     <span class="text-xl">🧊</span> Mức đá
                                 </h3>
@@ -188,7 +188,7 @@ const toggleTopping = (id) => {
                             </div>
 
                             <!-- Sugar Level -->
-                            <div>
+                            <div v-if="product.has_sugar_level">
                                 <h3 class="text-sm font-bold tracking-widest uppercase flex items-center gap-2 mb-4" style="color:#2C1810;">
                                     <span class="text-xl">🍯</span> Mức đường
                                 </h3>

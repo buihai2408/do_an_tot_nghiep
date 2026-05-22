@@ -16,6 +16,7 @@ class Product extends Model
     protected $fillable = [
         'category_id', 'name', 'slug', 'description',
         'base_price', 'is_active', 'is_featured',
+        'has_ice_level', 'has_sugar_level',
     ];
 
     protected function casts(): array
@@ -24,6 +25,8 @@ class Product extends Model
             'base_price' => 'decimal:0',
             'is_active' => 'boolean',
             'is_featured' => 'boolean',
+            'has_ice_level' => 'boolean',
+            'has_sugar_level' => 'boolean',
         ];
     }
 

@@ -19,6 +19,8 @@ class StoreProductRequest extends FormRequest
             'base_price' => 'required|numeric|min:0',
             'is_active' => 'nullable|boolean',
             'is_featured' => 'nullable|boolean',
+            'has_ice_level' => 'nullable|boolean',
+            'has_sugar_level' => 'nullable|boolean',
             'sizes' => 'nullable|array',
             'sizes.*.size_id' => 'required|exists:sizes,id',
             'sizes.*.price' => 'required|numeric|min:0',
