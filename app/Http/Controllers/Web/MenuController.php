@@ -30,10 +30,11 @@ class MenuController extends Controller
                 'price_asc' => $query->orderBy('base_price', 'asc'),
                 'price_desc' => $query->orderBy('base_price', 'desc'),
                 'name' => $query->orderBy('name', 'asc'),
-                default => $query->latest(),
+                'latest' => $query->latest(),
+                default => $query->orderBy('is_featured', 'desc')->latest(),
             };
         } else {
-            $query->latest();
+            $query->orderBy('is_featured', 'desc')->latest();
         }
 
         $products = $query->paginate(12)->through(fn($p) => [

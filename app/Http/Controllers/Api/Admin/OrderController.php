@@ -7,6 +7,7 @@ use App\Enums\OrderStatus;
 use App\Http\Requests\Admin\UpdateOrderStatusRequest;
 use App\Models\Order;
 use App\Services\OrderService;
+use Illuminate\Http\Request;
 
 class OrderController extends Controller
 {
@@ -36,5 +37,41 @@ class OrderController extends Controller
         } catch (\Exception $e) {
             return response()->json(['message' => $e->getMessage()], 409);
         }
+    }
+
+    public function bulkUpdateStatus(Request $request, OrderService $orderService)
+    {
+        $request->validate([
+            'order_ids' => 'required|array|min:1',
+            'order_ids.*' => 'integer|exists:orders,id',
+            'status' => 'required|string',
+        ]);
+
+        $newStatus = OrderStatus::from($request->status);
+        $results = ['success' => 0, 'failed' => 0, 'errors' => []];
+
+        foreach ($request->order_ids as $orderId) {
+            try {
+                $order = Order::findOrFail($orderId);
+                $orderService->transition($order, $newStatus);
+                $results['success']++;
+            } catch (\Exception $e) {
+                $results['failed']++;
+                $results['errors'][] = [
+                    'order_id' => $orderId,
+                    'message' => $e->getMessage(),
+                ];
+            }
+        }
+
+        $message = "Đã cập nhật {$results['success']} đơn hàng.";
+        if ($results['failed'] > 0) {
+            $message .= " {$results['failed']} đơn không thể cập nhật.";
+        }
+
+        return response()->json([
+            'message' => $message,
+            'results' => $results,
+        ], $results['failed'] > 0 && $results['success'] === 0 ? 422 : 200);
     }
 }

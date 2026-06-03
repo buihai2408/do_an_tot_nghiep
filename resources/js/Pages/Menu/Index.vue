@@ -13,6 +13,7 @@ const props = defineProps({
 });
 
 const sortOptions = [
+    { value: 'featured', label: 'Nổi bật' },
     { value: 'latest', label: 'Mới nhất' },
     { value: 'price_asc', label: 'Giá tăng dần' },
     { value: 'price_desc', label: 'Giá giảm dần' },
@@ -21,7 +22,7 @@ const sortOptions = [
 
 const getInitialSort = () => {
     const validSorts = sortOptions.map(o => o.value);
-    return validSorts.includes(props.filters?.sort) ? props.filters.sort : 'latest';
+    return validSorts.includes(props.filters?.sort) ? props.filters.sort : 'featured';
 };
 
 const search = ref(props.filters?.search || '');
@@ -33,13 +34,13 @@ const isListening = ref(false);
 const applyFilters = () => {
     // Đảm bảo selectedSort luôn hợp lệ
     if (!sortOptions.map(o => o.value).includes(selectedSort.value)) {
-        selectedSort.value = 'latest';
+        selectedSort.value = 'featured';
     }
     
     router.get('/menu', {
         search: search.value || undefined,
         category: selectedCategory.value || undefined,
-        sort: selectedSort.value === 'latest' ? undefined : selectedSort.value,
+        sort: selectedSort.value === 'featured' ? undefined : selectedSort.value,
     }, { preserveState: true, preserveScroll: true });
 };
 

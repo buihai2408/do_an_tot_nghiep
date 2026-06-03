@@ -1,6 +1,6 @@
 <script setup>
 import AppLayout from '@/Layouts/AppLayout.vue';
-import { ref, computed } from 'vue';
+import { ref, computed, watch } from 'vue';
 import { usePage, router } from '@inertiajs/vue3';
 import { useFormatters } from '@/Composables/useFormatters';
 import axios from 'axios';
@@ -37,13 +37,122 @@ const discount = ref(0);
 const submitting = ref(false);
 const errors = ref({});
 
+// ── Address Management ────────────────────────────────────
+const addressList = ref([...(props.addresses || [])]);
+const showAddressModal = ref(false);
+const editingAddress = ref(null);
+const addressLoading = ref(false);
+const addressErrors = ref({});
+const addressForm = ref({
+    label: '',
+    recipient_name: page.props.auth.user?.name || '',
+    phone: page.props.auth.user?.phone || '',
+    address_line: '',
+    is_default: false,
+});
+
+const resetAddressForm = () => {
+    addressForm.value = {
+        label: '',
+        recipient_name: page.props.auth.user?.name || '',
+        phone: page.props.auth.user?.phone || '',
+        address_line: '',
+        is_default: false,
+    };
+    editingAddress.value = null;
+    addressErrors.value = {};
+};
+
+const openAddAddress = () => {
+    resetAddressForm();
+    showAddressModal.value = true;
+};
+
+const openEditAddress = (addr) => {
+    editingAddress.value = addr.id;
+    addressForm.value = {
+        label: addr.label || '',
+        recipient_name: addr.recipient_name,
+        phone: addr.phone,
+        address_line: addr.address_line,
+        is_default: addr.is_default,
+    };
+    addressErrors.value = {};
+    showAddressModal.value = true;
+};
+
+const saveAddress = async () => {
+    addressLoading.value = true;
+    addressErrors.value = {};
+    try {
+        let res;
+        if (editingAddress.value) {
+            res = await axios.put(`/api/addresses/${editingAddress.value}`, addressForm.value);
+            const idx = addressList.value.findIndex(a => a.id === editingAddress.value);
+            if (idx !== -1) {
+                // Nếu set default, reset các địa chỉ khác
+                if (addressForm.value.is_default) {
+                    addressList.value.forEach(a => a.is_default = false);
+                }
+                addressList.value[idx] = res.data.address;
+            }
+        } else {
+            res = await axios.post('/api/addresses', addressForm.value);
+            if (addressForm.value.is_default) {
+                addressList.value.forEach(a => a.is_default = false);
+            }
+            addressList.value.unshift(res.data.address);
+        }
+        // Sắp xếp lại: default lên trước
+        addressList.value.sort((a, b) => (b.is_default ? 1 : 0) - (a.is_default ? 1 : 0));
+        showAddressModal.value = false;
+        resetAddressForm();
+    } catch (e) {
+        if (e.response?.status === 422) {
+            addressErrors.value = e.response.data.errors || {};
+        }
+    } finally {
+        addressLoading.value = false;
+    }
+};
+
+const deleteAddress = async (addr) => {
+    if (!confirm(`Xóa địa chỉ "${addr.label || addr.address_line}"?`)) return;
+    try {
+        await axios.delete(`/api/addresses/${addr.id}`);
+        addressList.value = addressList.value.filter(a => a.id !== addr.id);
+        if (selectedAddress.value === addr.id) {
+            selectedAddress.value = null;
+            form.value.shipping_address = '';
+        }
+    } catch (e) {
+        alert('Không thể xóa địa chỉ');
+    }
+};
+
+// ── Select Address ────────────────────────────────────────
 const selectAddress = (address) => {
     selectedAddress.value = address.id;
     form.value.shipping_address = address.full_address || address.address_line;
     form.value.customer_name = address.recipient_name;
     form.value.customer_phone = address.phone;
+    form.value.save_address = false;
 };
 
+const deselectAddress = () => {
+    selectedAddress.value = null;
+    form.value.shipping_address = '';
+    form.value.customer_name = page.props.auth.user?.name || '';
+    form.value.customer_phone = page.props.auth.user?.phone || '';
+};
+
+// Auto-select default address
+const defaultAddr = addressList.value.find(a => a.is_default);
+if (defaultAddr) {
+    selectAddress(defaultAddr);
+}
+
+// ── Coupon & Points ───────────────────────────────────────
 const pointsDiscount = computed(() => form.value.points_used * 1000);
 const POINTS_VALUE = 1000;
 
@@ -117,29 +226,96 @@ const submit = async () => {
                         </div>
                     </div>
 
-                    <!-- Customer Info -->
+                    <!-- Customer Info & Address -->
                     <div>
                         <h2 class="text-xs font-semibold tracking-widest uppercase text-[#1a1a1a] mb-4">Thông tin người nhận</h2>
 
-                        <div v-if="addresses.length > 0 && form.order_type === 'delivery'" class="mb-6">
-                            <p class="text-sm text-gray-500 mb-3">Chọn địa chỉ đã lưu:</p>
-                            <div class="space-y-2">
+                        <!-- ── Address Book Section ─────────────────────── -->
+                        <div v-if="form.order_type === 'delivery'" class="mb-6">
+                            <div class="flex items-center justify-between mb-3">
+                                <p class="text-sm font-medium text-gray-700">📍 Sổ địa chỉ</p>
                                 <button
-                                    v-for="addr in addresses"
-                                    :key="addr.id"
-                                    @click="selectAddress(addr)"
-                                    :class="selectedAddress === addr.id ? 'border-[#1a1a1a] bg-[#f8f5f0]' : 'border-gray-200'"
-                                    class="w-full text-left p-4 border transition"
+                                    @click="openAddAddress"
+                                    class="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold bg-[#1a1a1a] text-white hover:bg-[#333] transition"
                                 >
-                                    <p class="font-medium text-sm">
-                                        <span v-if="addr.label" class="text-amber-600 mr-1">[{{ addr.label }}]</span>
-                                        {{ addr.recipient_name }} — {{ addr.phone }}
-                                    </p>
-                                    <p class="text-sm text-gray-500 mt-0.5">{{ addr.address_line }}</p>
+                                    <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
+                                    Thêm địa chỉ
+                                </button>
+                            </div>
+
+                            <!-- Saved addresses list -->
+                            <div v-if="addressList.length > 0" class="space-y-2">
+                                <div
+                                    v-for="addr in addressList"
+                                    :key="addr.id"
+                                    :class="selectedAddress === addr.id
+                                        ? 'border-[#1a1a1a] bg-[#f8f5f0] ring-1 ring-[#1a1a1a]'
+                                        : 'border-gray-200 hover:border-gray-400'"
+                                    class="relative p-4 border transition group cursor-pointer"
+                                    @click="selectAddress(addr)"
+                                >
+                                    <!-- Selection indicator -->
+                                    <div class="flex items-start justify-between">
+                                        <div class="flex items-start gap-3 flex-1 min-w-0">
+                                            <!-- Radio -->
+                                            <div class="mt-0.5 flex-shrink-0">
+                                                <div
+                                                    :class="selectedAddress === addr.id ? 'border-[#1a1a1a]' : 'border-gray-300'"
+                                                    class="w-5 h-5 rounded-full border-2 flex items-center justify-center transition"
+                                                >
+                                                    <div v-if="selectedAddress === addr.id" class="w-2.5 h-2.5 rounded-full bg-[#1a1a1a]"></div>
+                                                </div>
+                                            </div>
+                                            <!-- Content -->
+                                            <div class="flex-1 min-w-0">
+                                                <p class="font-medium text-sm text-[#1a1a1a]">
+                                                    <span v-if="addr.label" class="inline-block bg-amber-100 text-amber-700 text-[10px] font-bold uppercase tracking-wider px-1.5 py-0.5 mr-1.5">{{ addr.label }}</span>
+                                                    <span v-if="addr.is_default" class="inline-block bg-green-100 text-green-700 text-[10px] font-bold uppercase tracking-wider px-1.5 py-0.5 mr-1.5">Mặc định</span>
+                                                    {{ addr.recipient_name }}
+                                                </p>
+                                                <p class="text-sm text-gray-500 mt-0.5">{{ addr.phone }}</p>
+                                                <p class="text-sm text-gray-500 mt-0.5 truncate">{{ addr.address_line }}</p>
+                                            </div>
+                                        </div>
+
+                                        <!-- Action buttons -->
+                                        <div class="flex-shrink-0 flex items-center gap-1 opacity-0 group-hover:opacity-100 transition ml-2">
+                                            <button
+                                                @click.stop="openEditAddress(addr)"
+                                                class="p-1.5 text-gray-400 hover:text-[#1a1a1a] hover:bg-gray-100 rounded transition"
+                                                title="Sửa địa chỉ"
+                                            >
+                                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg>
+                                            </button>
+                                            <button
+                                                @click.stop="deleteAddress(addr)"
+                                                class="p-1.5 text-gray-400 hover:text-red-600 hover:bg-red-50 rounded transition"
+                                                title="Xóa địa chỉ"
+                                            >
+                                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Deselect / use new address -->
+                                <button
+                                    v-if="selectedAddress"
+                                    @click="deselectAddress"
+                                    class="w-full text-center text-xs text-gray-500 hover:text-[#1a1a1a] py-2 transition underline"
+                                >
+                                    Nhập địa chỉ mới thay vì dùng địa chỉ đã lưu
+                                </button>
+                            </div>
+                            <div v-else class="text-center py-6 border border-dashed border-gray-300">
+                                <p class="text-sm text-gray-400 mb-2">Bạn chưa có địa chỉ nào được lưu</p>
+                                <button @click="openAddAddress" class="text-sm text-[#D4A853] hover:text-[#1a1a1a] font-medium transition">
+                                    + Thêm địa chỉ đầu tiên
                                 </button>
                             </div>
                         </div>
 
+                        <!-- Customer fields -->
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                             <div>
                                 <label class="block text-xs font-semibold tracking-widest uppercase text-gray-500 mb-2">Tên người nhận *</label>
@@ -155,9 +331,10 @@ const submit = async () => {
 
                         <div v-if="form.order_type === 'delivery'" class="mt-4">
                             <label class="block text-xs font-semibold tracking-widest uppercase text-gray-500 mb-2">Địa chỉ giao hàng *</label>
-                            <textarea v-model="form.shipping_address" rows="2" class="w-full border-gray-300 focus:border-[#1a1a1a] focus:ring-[#1a1a1a] text-sm"></textarea>
+                            <textarea v-model="form.shipping_address" rows="2" class="w-full border-gray-300 focus:border-[#1a1a1a] focus:ring-[#1a1a1a] text-sm" :placeholder="selectedAddress ? '' : 'Nhập địa chỉ giao hàng...'"></textarea>
                             <p v-if="errors.shipping_address" class="text-red-500 text-xs mt-1">{{ errors.shipping_address[0] }}</p>
 
+                            <!-- Save new address checkbox -->
                             <div v-if="!selectedAddress" class="mt-3">
                                 <label class="flex items-center cursor-pointer">
                                     <input v-model="form.save_address" type="checkbox" class="rounded-sm text-[#1a1a1a] focus:ring-[#1a1a1a] border-gray-400" />
@@ -275,5 +452,97 @@ const submit = async () => {
                 </div>
             </div>
         </div>
+
+        <!-- ── Address Modal ───────────────────────────────────── -->
+        <teleport to="body">
+            <transition
+                enter-active-class="transition duration-200 ease-out"
+                enter-from-class="opacity-0"
+                enter-to-class="opacity-100"
+                leave-active-class="transition duration-150 ease-in"
+                leave-from-class="opacity-100"
+                leave-to-class="opacity-0"
+            >
+                <div v-if="showAddressModal" class="fixed inset-0 z-50 flex items-center justify-center p-4">
+                    <!-- Backdrop -->
+                    <div class="absolute inset-0 bg-black/50" @click="showAddressModal = false"></div>
+
+                    <!-- Modal content -->
+                    <div class="relative bg-white w-full max-w-lg shadow-2xl" style="max-height: 90vh; overflow-y: auto;">
+                        <!-- Header -->
+                        <div class="flex items-center justify-between p-6 border-b">
+                            <h3 class="text-lg font-bold text-[#1a1a1a]" style="font-family: 'Playfair Display', serif;">
+                                {{ editingAddress ? 'Sửa địa chỉ' : 'Thêm địa chỉ mới' }}
+                            </h3>
+                            <button @click="showAddressModal = false" class="p-1 text-gray-400 hover:text-[#1a1a1a] transition">
+                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+                            </button>
+                        </div>
+
+                        <!-- Form -->
+                        <div class="p-6 space-y-4">
+                            <div>
+                                <label class="block text-xs font-semibold tracking-widest uppercase text-gray-500 mb-2">Nhãn địa chỉ</label>
+                                <div class="flex gap-2 flex-wrap">
+                                    <button
+                                        v-for="lbl in ['Nhà', 'Công ty', 'Khác']"
+                                        :key="lbl"
+                                        @click="addressForm.label = lbl"
+                                        :class="addressForm.label === lbl ? 'bg-[#1a1a1a] text-white' : 'bg-gray-100 text-gray-600 hover:bg-gray-200'"
+                                        class="px-3 py-1.5 text-xs font-medium transition"
+                                        type="button"
+                                    >{{ lbl }}</button>
+                                </div>
+                                <input v-model="addressForm.label" type="text" placeholder="Hoặc nhập tên khác..." class="w-full border-gray-300 focus:border-[#1a1a1a] focus:ring-[#1a1a1a] text-sm py-2 mt-2" />
+                                <p v-if="addressErrors.label" class="text-red-500 text-xs mt-1">{{ addressErrors.label[0] }}</p>
+                            </div>
+
+                            <div class="grid grid-cols-2 gap-4">
+                                <div>
+                                    <label class="block text-xs font-semibold tracking-widest uppercase text-gray-500 mb-2">Tên người nhận *</label>
+                                    <input v-model="addressForm.recipient_name" type="text" class="w-full border-gray-300 focus:border-[#1a1a1a] focus:ring-[#1a1a1a] py-2.5 text-sm" />
+                                    <p v-if="addressErrors.recipient_name" class="text-red-500 text-xs mt-1">{{ addressErrors.recipient_name[0] }}</p>
+                                </div>
+                                <div>
+                                    <label class="block text-xs font-semibold tracking-widest uppercase text-gray-500 mb-2">Số điện thoại *</label>
+                                    <input v-model="addressForm.phone" type="text" class="w-full border-gray-300 focus:border-[#1a1a1a] focus:ring-[#1a1a1a] py-2.5 text-sm" />
+                                    <p v-if="addressErrors.phone" class="text-red-500 text-xs mt-1">{{ addressErrors.phone[0] }}</p>
+                                </div>
+                            </div>
+
+                            <div>
+                                <label class="block text-xs font-semibold tracking-widest uppercase text-gray-500 mb-2">Địa chỉ chi tiết *</label>
+                                <textarea v-model="addressForm.address_line" rows="3" placeholder="Số nhà, tên đường, phường/xã, quận/huyện, tỉnh/thành phố" class="w-full border-gray-300 focus:border-[#1a1a1a] focus:ring-[#1a1a1a] text-sm"></textarea>
+                                <p v-if="addressErrors.address_line" class="text-red-500 text-xs mt-1">{{ addressErrors.address_line[0] }}</p>
+                            </div>
+
+                            <div>
+                                <label class="flex items-center cursor-pointer">
+                                    <input v-model="addressForm.is_default" type="checkbox" class="rounded-sm text-[#1a1a1a] focus:ring-[#1a1a1a] border-gray-400" />
+                                    <span class="ml-2 text-sm text-gray-600">Đặt làm địa chỉ mặc định</span>
+                                </label>
+                            </div>
+                        </div>
+
+                        <!-- Footer -->
+                        <div class="flex items-center justify-end gap-3 p-6 border-t bg-gray-50">
+                            <button
+                                @click="showAddressModal = false"
+                                class="px-5 py-2.5 text-sm font-medium text-gray-600 hover:text-[#1a1a1a] transition"
+                                type="button"
+                            >Hủy</button>
+                            <button
+                                @click="saveAddress"
+                                :disabled="addressLoading"
+                                class="px-6 py-2.5 bg-[#1a1a1a] text-white text-sm font-semibold tracking-wider uppercase hover:bg-[#333] transition disabled:opacity-50"
+                                type="button"
+                            >
+                                {{ addressLoading ? 'Đang lưu...' : (editingAddress ? 'Cập nhật' : 'Thêm địa chỉ') }}
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </transition>
+        </teleport>
     </AppLayout>
 </template>

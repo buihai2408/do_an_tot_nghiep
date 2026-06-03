@@ -57,6 +57,7 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::post('/products/{product}', [AdminProductController::class, 'update']);
         Route::delete('/products/{product}', [AdminProductController::class, 'destroy']);
 
+        Route::post('/orders/bulk-status', [AdminOrderController::class, 'bulkUpdateStatus']);
         Route::put('/orders/{order}/status', [AdminOrderController::class, 'updateStatus']);
 
         Route::post('/coupons', [AdminCouponController::class, 'store']);
