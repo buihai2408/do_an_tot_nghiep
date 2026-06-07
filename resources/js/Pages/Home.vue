@@ -9,6 +9,19 @@ defineProps({
     featuredProducts: Array,
     categories: Array,
 });
+
+// Ảnh tĩnh cho danh mục (theo slug)
+const categoryImage = (slug) => {
+    const map = {
+        'ca-phe':       '/images/categories/ca-phe.png',
+        'tra':          '/images/categories/tra.png',
+        'banh-ngot':    '/images/categories/banh-ngot.png',
+        'frappe':       '/images/categories/frappe.png',
+        'freeze-da-xay':'/images/categories/freeze-da-xay.png',
+        'sinh-to':      '/images/categories/sinh-to.png',
+    };
+    return map[slug] || '/images/categories/ca-phe.png';
+};
 </script>
 
 <template>
@@ -77,11 +90,8 @@ defineProps({
                             <!-- Image Container -->
                             <div class="aspect-[4/3] mb-6 overflow-hidden relative" style="border-radius:4px; box-shadow:0 10px 20px rgba(44,24,16,0.05);">
                                 <div class="absolute inset-0 bg-[#2C1810]/10 group-hover:bg-transparent transition-all duration-500 z-10"></div>
-                                <img v-if="cat.featured_image" :src="`/storage/${cat.featured_image}`"
+                                <img :src="categoryImage(cat.slug)"
                                     class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" />
-                                <div v-else class="w-full h-full flex items-center justify-center bg-[#E8D9C5] group-hover:scale-110 transition-transform duration-700">
-                                    <svg class="w-16 h-16 opacity-50" style="color:#A16A38;" fill="currentColor" viewBox="0 0 24 24"><path d="M2 21h18v-2H2v2zM20 8h-2V5h2v3zm2-4h-2V2a1 1 0 00-1-1H3a1 1 0 00-1 1v11a4 4 0 004 4h8a4 4 0 004-4v-1h2a2 2 0 002-2V6a2 2 0 00-2-2zm-4 9a2 2 0 01-2 2H6a2 2 0 01-2-2V3h14v10zm4-3h-2V6h2v4z"/></svg>
-                                </div>
                             </div>
 
                             <!-- Content -->

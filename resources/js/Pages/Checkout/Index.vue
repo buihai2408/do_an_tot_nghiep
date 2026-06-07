@@ -15,6 +15,7 @@ const props = defineProps({
     order_types: Array,
     payment_methods: Array,
     loyalty: Object,
+    available_coupons: Array,
 });
 
 const form = ref({
@@ -161,7 +162,11 @@ const total = computed(() => {
     return Number(props.summary.subtotal) - discount.value - pointsDiscount.value + shippingFee;
 });
 
-const applyCoupon = async () => {
+const applyCoupon = async (code = null) => {
+    if (code) form.value.coupon_code = code;
+    
+    if (!form.value.coupon_code) return;
+
     try {
         const res = await axios.post('/api/checkout/apply-coupon', { code: form.value.coupon_code });
         couponResult.value = res.data;
@@ -382,9 +387,36 @@ const submit = async () => {
 
                         <!-- Coupon -->
                         <div class="mb-6">
-                            <div class="flex gap-2">
-                                <input v-model="form.coupon_code" type="text" placeholder="Mã giảm giá" class="flex-1 border-gray-300 focus:border-[#1a1a1a] focus:ring-[#1a1a1a] text-sm py-2" />
-                                <button @click="applyCoupon" class="px-4 py-2 bg-[#1a1a1a] text-white text-xs font-semibold tracking-wider uppercase hover:bg-[#333] transition">Áp dụng</button>
+                            <!-- Danh sách mã giảm giá có sẵn -->
+                            <div v-if="available_coupons && available_coupons.length > 0" class="mb-3 space-y-2">
+                                <span class="text-xs font-semibold text-[#1a1a1a] uppercase tracking-wider block mb-2">Mã giảm giá khả dụng</span>
+                                <div 
+                                    v-for="coupon in available_coupons" 
+                                    :key="coupon.code" 
+                                    @click="applyCoupon(coupon.code)"
+                                    class="border border-gray-200 rounded-md p-3 cursor-pointer hover:border-[#1a1a1a] hover:bg-gray-50 transition flex items-center justify-between"
+                                    :class="{'border-[#1a1a1a] bg-gray-50': form.coupon_code === coupon.code}"
+                                >
+                                    <div class="flex flex-col">
+                                        <div class="flex items-center gap-2">
+                                            <span class="text-sm font-bold text-[#1a1a1a] px-1.5 py-0.5 bg-gray-100 rounded tracking-wider">{{ coupon.code }}</span>
+                                            <span class="text-xs text-gray-500">{{ coupon.name }}</span>
+                                        </div>
+                                        <span class="text-xs text-gray-400 mt-1">Đơn tối thiểu: {{ formatCurrency(coupon.min_order_amount) }}</span>
+                                    </div>
+                                    <button 
+                                        type="button" 
+                                        class="text-xs px-3 py-1 rounded border border-[#1a1a1a] text-[#1a1a1a] hover:bg-[#1a1a1a] hover:text-white transition font-medium"
+                                        :class="{'bg-[#1a1a1a] text-white': form.coupon_code === coupon.code}"
+                                    >
+                                        {{ form.coupon_code === coupon.code ? 'Đang dùng' : 'Áp dụng' }}
+                                    </button>
+                                </div>
+                            </div>
+
+                            <div class="flex gap-2 mt-2">
+                                <input v-model="form.coupon_code" type="text" placeholder="Nhập mã khác" class="flex-1 border-gray-300 focus:border-[#1a1a1a] focus:ring-[#1a1a1a] text-sm py-2 rounded" />
+                                <button @click="applyCoupon()" class="px-4 py-2 bg-[#1a1a1a] text-white text-xs font-semibold tracking-wider uppercase hover:bg-[#333] transition rounded">Áp dụng</button>
                             </div>
                             <p v-if="couponResult" :class="couponResult.valid ? 'text-green-600' : 'text-red-500'" class="text-xs mt-1.5">{{ couponResult.message }}</p>
                         </div>

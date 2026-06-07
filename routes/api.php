@@ -8,6 +8,7 @@ use App\Http\Controllers\Api\PayOSController;
 use App\Http\Controllers\Api\ChatbotController;
 use App\Http\Controllers\Api\Admin\CategoryController as AdminCategoryController;
 use App\Http\Controllers\Api\Admin\ProductController as AdminProductController;
+use App\Http\Controllers\Api\Admin\AiController as AdminAiController;
 use App\Http\Controllers\Api\Admin\OrderController as AdminOrderController;
 use App\Http\Controllers\Api\Admin\CouponController as AdminCouponController;
 use App\Http\Controllers\Api\Admin\SizeController as AdminSizeController;
@@ -52,6 +53,9 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::post('/categories', [AdminCategoryController::class, 'store']);
         Route::post('/categories/{category}', [AdminCategoryController::class, 'update']);
         Route::delete('/categories/{category}', [AdminCategoryController::class, 'destroy']);
+
+        // AI tools
+        Route::post('/ai/generate-description', [AdminAiController::class, 'generateDescription']);
 
         Route::post('/products', [AdminProductController::class, 'store']);
         Route::post('/products/{product}', [AdminProductController::class, 'update']);

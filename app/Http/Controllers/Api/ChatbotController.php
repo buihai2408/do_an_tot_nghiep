@@ -5,11 +5,15 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Models\Product;
 use App\Models\Category;
+use App\Services\DifyService;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Http;
 
 class ChatbotController extends Controller
 {
+    public function __construct(
+        private DifyService $difyService
+    ) {}
+
     /**
      * Proxy gửi tin nhắn đến Dify Chat API
      * POST /api/chatbot/message
@@ -21,9 +25,6 @@ class ChatbotController extends Controller
             'conversation_id' => 'nullable|string|max:100',
         ]);
 
-        $apiKey  = config('services.dify.api_key');
-        $baseUrl = config('services.dify.base_url');
-
         // ── User identification ───────────────────────────────────────────
         $userId = auth()->check()
             ? 'user-' . auth()->id()
@@ -33,7 +34,6 @@ class ChatbotController extends Controller
         $context = $this->buildContext();
 
         // ── Ghép context vào query (chỉ cho lần đầu của mỗi conversation) ─
-        // Dify không hỗ trợ system-prompt override qua API nên ta prepend vào query
         $conversationId = $request->input('conversation_id');
         $isNewConversation = empty($conversationId);
 
@@ -41,49 +41,28 @@ class ChatbotController extends Controller
             ? $context . "\n\n---\nCâu hỏi của khách hàng: " . $request->input('query')
             : $request->input('query');
 
-        // ── Payload gửi Dify ──────────────────────────────────────────────
-        $payload = [
-            'inputs'        => new \stdClass(), // object rỗng, không phải array
-            'query'         => $finalQuery,
-            'response_mode' => 'blocking',
-            'user'          => $userId,
-        ];
-
-        // Chỉ thêm conversation_id nếu có giá trị thực (không gửi chuỗi rỗng)
-        if (!empty($conversationId)) {
-            $payload['conversation_id'] = $conversationId;
-        }
-
         try {
-            $response = Http::withToken($apiKey)
-                ->timeout(60)
-                ->post("{$baseUrl}/chat-messages", $payload);
-
-            if ($response->failed()) {
-                // Log lỗi chi tiết để debug
-                \Log::error('Dify API error', [
-                    'status' => $response->status(),
-                    'body'   => $response->body(),
-                ]);
-
-                $errorBody = $response->json();
-                $errorMsg  = $errorBody['message'] ?? ('Lỗi từ AI service: HTTP ' . $response->status());
-
-                return response()->json(['error' => $errorMsg], 502);
-            }
-
-            $data = $response->json();
+            $result = $this->difyService->sendMessage(
+                $finalQuery,
+                $userId,
+                $conversationId,
+                60
+            );
 
             return response()->json([
-                'answer'          => $data['answer'] ?? '',
-                'conversation_id' => $data['conversation_id'] ?? '',
-                'message_id'      => $data['id'] ?? '',
+                'answer'          => $result['answer'],
+                'conversation_id' => $result['conversation_id'],
+                'message_id'      => $result['message_id'],
             ]);
 
         } catch (\Illuminate\Http\Client\ConnectionException $e) {
             return response()->json([
                 'error' => 'Không thể kết nối đến dịch vụ AI. Vui lòng thử lại sau.',
             ], 503);
+        } catch (\RuntimeException $e) {
+            return response()->json([
+                'error' => $e->getMessage(),
+            ], 502);
         }
     }
 

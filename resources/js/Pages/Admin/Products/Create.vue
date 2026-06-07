@@ -21,6 +21,30 @@ const selectedToppings = ref([]);
 const errors = ref({});
 const generalError = ref('');
 const submitting = ref(false);
+const generatingDesc = ref(false);
+
+const generateDescription = async () => {
+    if (!form.value.name) {
+        alert('Vui lòng nhập tên sản phẩm trước khi tạo mô tả AI.');
+        return;
+    }
+    generatingDesc.value = true;
+    try {
+        const categoryName = props.categories.find(c => c.id == form.value.category_id)?.name || '';
+        const { data } = await axios.post('/api/admin/ai/generate-description', {
+            name: form.value.name,
+            category: categoryName,
+        });
+        if (data.description) {
+            form.value.description = data.description;
+        }
+    } catch (e) {
+        const msg = e.response?.data?.error || 'Không thể tạo mô tả AI. Vui lòng thử lại.';
+        alert(msg);
+    } finally {
+        generatingDesc.value = false;
+    }
+};
 
 const handleImageSelect = (e) => {
     const files = Array.from(e.target.files);
@@ -94,7 +118,36 @@ const submit = async () => {
 
                 <div>
                     <label class="block text-sm font-medium mb-1">Mô tả</label>
-                    <textarea v-model="form.description" rows="3" class="w-full rounded border-[#E8D9C5] focus:border-[#D4A853] focus:ring-[#D4A853]"></textarea>
+                    <div class="relative group">
+                        <textarea
+                            v-model="form.description"
+                            rows="4"
+                            class="w-full rounded-xl border-[#E8D9C5] focus:border-[#D4A853] focus:ring-[#D4A853] transition-all duration-300 pb-12 shadow-sm"
+                            :class="generatingDesc ? 'ring-2 ring-purple-400 border-purple-400 bg-purple-50/30' : ''"
+                            :placeholder="generatingDesc ? 'AI đang viết mô tả...' : 'Nhập mô tả món nước hấp dẫn hoặc dùng AI hỗ trợ...'"
+                        ></textarea>
+                        
+                        <div class="absolute bottom-3 right-3 flex items-center opacity-80 group-focus-within:opacity-100 hover:opacity-100 transition-opacity">
+                            <button
+                                type="button"
+                                @click="generateDescription"
+                                :disabled="generatingDesc"
+                                class="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold rounded-lg transition-all duration-300"
+                                :class="generatingDesc
+                                    ? 'bg-purple-100 text-purple-400 cursor-wait'
+                                    : 'bg-gradient-to-r from-purple-500 to-indigo-500 text-white hover:from-purple-600 hover:to-indigo-600 shadow-md transform hover:-translate-y-0.5'"
+                            >
+                                <svg v-if="!generatingDesc" class="w-4 h-4 animate-pulse" fill="currentColor" viewBox="0 0 24 24">
+                                    <path d="M12 2L9.19 8.63 2 9.24l5.46 4.73L5.82 21 12 17.27 18.18 21l-1.64-7.03L22 9.24l-7.19-.61z"/>
+                                </svg>
+                                <svg v-else class="w-4 h-4 animate-spin" fill="none" viewBox="0 0 24 24">
+                                    <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"/>
+                                    <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"/>
+                                </svg>
+                                {{ generatingDesc ? 'Đang viết...' : (form.description ? '✨ Viết lại' : '✨ AI Viết') }}
+                            </button>
+                        </div>
+                    </div>
                 </div>
 
                 <div>

@@ -56,6 +56,7 @@ class ProductController extends Controller
                 $imagesToDelete = ProductImage::whereIn('id', $deleteIds)
                     ->where('product_id', $product->id)
                     ->get();
+                /** @var \App\Models\ProductImage $img */
                 foreach ($imagesToDelete as $img) {
                     Storage::disk('public')->delete($img->path);
                     $img->delete();
@@ -113,4 +114,5 @@ class ProductController extends Controller
             if ($i === 0 && !$hasPrimary) $hasPrimary = true;
         }
     }
+
 }

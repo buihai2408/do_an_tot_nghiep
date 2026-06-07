@@ -21,6 +21,33 @@ class CheckoutPageController extends Controller
         $user = Auth::user();
         $addresses = $user->addresses()->orderByDesc('is_default')->get();
 
+        $coupons = \App\Models\Coupon::where('is_active', true)
+            ->where(function ($query) {
+                $query->whereNull('starts_at')
+                      ->orWhere('starts_at', '<=', now());
+            })
+            ->where(function ($query) {
+                $query->whereNull('expires_at')
+                      ->orWhere('expires_at', '>=', now());
+            })
+            ->where(function ($query) {
+                $query->whereNull('usage_limit')
+                      ->orWhereColumn('used_count', '<', 'usage_limit');
+            })
+            ->orderBy('min_order_amount', 'asc')
+            ->get()
+            ->map(function ($coupon) {
+                return [
+                    'code' => $coupon->code,
+                    'name' => $coupon->name,
+                    'type' => $coupon->type,
+                    'value' => $coupon->value,
+                    'min_order_amount' => $coupon->min_order_amount,
+                    'max_discount' => $coupon->max_discount,
+                    'expires_at' => $coupon->expires_at?->format('d/m/Y'),
+                ];
+            });
+
         return Inertia::render('Checkout/Index', [
             'cart' => [
                 'items' => $cart->items->map(fn($item) => [
@@ -41,6 +68,7 @@ class CheckoutPageController extends Controller
                 'max_redeemable' => $loyaltyService->getMaxRedeemable($user, $summary['subtotal']),
                 'tier' => $loyaltyService->getLoyaltySummary($user),
             ],
+            'available_coupons' => $coupons,
         ]);
     }
 }
