@@ -17,7 +17,6 @@ use App\Http\Controllers\Web\Admin\ToppingController as AdminToppingController;
 use App\Http\Controllers\Web\Admin\SizeController as AdminSizeController;
 use App\Http\Controllers\Web\Admin\UserController as AdminUserController;
 use App\Http\Controllers\Web\Admin\ReviewController as AdminReviewController;
-use App\Http\Controllers\Web\Admin\ReportController as AdminReportController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', HomeController::class)->name('home');
@@ -55,7 +54,6 @@ Route::middleware(['auth', \App\Http\Middleware\EnsureIsAdminOrStaff::class])->p
     Route::get('/toppings', [AdminToppingController::class, 'index'])->name('toppings.index');
     Route::get('/sizes', [AdminSizeController::class, 'index'])->name('sizes.index');
     Route::get('/reviews', [AdminReviewController::class, 'index'])->name('reviews.index');
-    Route::get('/reports', AdminReportController::class)->name('reports.index');
 
     // Admin-only
     Route::middleware(\App\Http\Middleware\EnsureIsAdmin::class)->group(function () {

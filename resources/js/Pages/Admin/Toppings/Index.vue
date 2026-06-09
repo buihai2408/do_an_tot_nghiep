@@ -1,4 +1,4 @@
-﻿<script setup>
+<script setup>
 import AdminLayout from '@/Layouts/AdminLayout.vue';
 import { ref } from 'vue';
 import { router } from '@inertiajs/vue3';
@@ -11,19 +11,29 @@ defineProps({ toppings: Object });
 const showForm = ref(false);
 const editingTopping = ref(null);
 const form = ref({ name: '', price: '', is_active: true });
+const errors = ref({});
 
-const openCreate = () => { editingTopping.value = null; form.value = { name: '', price: '', is_active: true }; showForm.value = true; };
-const openEdit = (t) => { editingTopping.value = t; form.value = { name: t.name, price: t.price, is_active: t.is_active }; showForm.value = true; };
+const openCreate = () => { editingTopping.value = null; form.value = { name: '', price: '', is_active: true }; errors.value = {}; showForm.value = true; };
+const openEdit = (t) => { editingTopping.value = t; form.value = { name: t.name, price: t.price, is_active: t.is_active }; errors.value = {}; showForm.value = true; };
 
 const submit = async () => {
     const data = { ...form.value, is_active: form.value.is_active ? 1 : 0 };
-    if (editingTopping.value) {
-        await axios.put(`/api/admin/toppings/${editingTopping.value.id}`, data);
-    } else {
-        await axios.post('/api/admin/toppings', data);
+    try {
+        errors.value = {};
+        if (editingTopping.value) {
+            await axios.put(`/api/admin/toppings/${editingTopping.value.id}`, data);
+        } else {
+            await axios.post('/api/admin/toppings', data);
+        }
+        showForm.value = false;
+        router.reload();
+    } catch (e) {
+        if (e.response?.status === 422) {
+            errors.value = e.response.data.errors || {};
+        } else {
+            alert(e.response?.data?.message || 'Có lỗi xảy ra');
+        }
     }
-    showForm.value = false;
-    router.reload();
 };
 
 const deleteTopping = async (id) => { if (confirm('Xóa?')) { await axios.delete(`/api/admin/toppings/${id}`); router.reload(); } };
@@ -52,8 +62,16 @@ const deleteTopping = async (id) => { if (confirm('Xóa?')) { await axios.delete
             <div class="bg-white rounded-2xl p-6 max-w-sm w-full mx-4">
                 <h3 class="text-lg font-bold mb-4">{{ editingTopping ? 'Sửa topping' : 'Thêm topping' }}</h3>
                 <div class="space-y-3">
-                    <div><label class="block text-sm font-medium mb-1">Tên</label><input v-model="form.name" class="w-full rounded border-[#E8D9C5] focus:border-[#D4A853] focus:ring-[#D4A853]" /></div>
-                    <div><label class="block text-sm font-medium mb-1">Giá</label><input v-model="form.price" type="number" class="w-full rounded border-[#E8D9C5] focus:border-[#D4A853] focus:ring-[#D4A853]" /></div>
+                    <div>
+                        <label class="block text-sm font-medium mb-1">Tên</label>
+                        <input v-model="form.name" :class="errors.name ? 'border-red-500 focus:ring-red-500 focus:border-red-500' : 'border-[#E8D9C5] focus:border-[#D4A853] focus:ring-[#D4A853]'" class="w-full rounded" />
+                        <p v-if="errors.name" class="text-red-500 text-xs mt-1">{{ errors.name[0] }}</p>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium mb-1">Giá</label>
+                        <input v-model="form.price" type="number" :class="errors.price ? 'border-red-500 focus:ring-red-500 focus:border-red-500' : 'border-[#E8D9C5] focus:border-[#D4A853] focus:ring-[#D4A853]'" class="w-full rounded" />
+                        <p v-if="errors.price" class="text-red-500 text-xs mt-1">{{ errors.price[0] }}</p>
+                    </div>
                     <label class="flex items-center"><input v-model="form.is_active" type="checkbox" class="rounded text-[#D4A853] mr-2" /> Hoạt động</label>
                 </div>
                 <div class="flex space-x-3 mt-4"><button @click="showForm = false" class="flex-1 px-4 py-2 border rounded-xl">Hủy</button><button @click="submit" class="flex-1 px-4 py-2 bg-amber-700 text-white rounded-xl">Lưu</button></div>

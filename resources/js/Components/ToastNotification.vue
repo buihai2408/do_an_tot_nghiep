@@ -23,7 +23,7 @@ const getIcon = (type) => {
 </script>
 
 <template>
-    <div class="fixed top-4 right-4 z-[9999] flex flex-col gap-2 pointer-events-none">
+    <div class="fixed top-24 right-4 z-[9999] flex flex-col gap-2 pointer-events-none">
         <TransitionGroup
             enter-active-class="transition duration-300 ease-out"
             enter-from-class="transform translate-x-full opacity-0"

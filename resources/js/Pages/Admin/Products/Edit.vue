@@ -121,11 +121,17 @@ const submit = async () => {
         <div class="bg-white rounded border border-[#E8D9C5] p-6 shadow-sm max-w-3xl">
             <div class="space-y-6">
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div><label class="block text-sm font-medium mb-1">Tên *</label><input v-model="form.name" class="w-full rounded border-[#E8D9C5] focus:border-[#D4A853] focus:ring-[#D4A853]" /></div>
-                    <div><label class="block text-sm font-medium mb-1">Danh mục *</label>
-                        <select v-model="form.category_id" class="w-full rounded border-[#E8D9C5] focus:border-[#D4A853] focus:ring-[#D4A853]">
+                    <div>
+                        <label class="block text-sm font-medium mb-1">Tên *</label>
+                        <input v-model="form.name" :class="errors.name ? 'border-red-500 focus:ring-red-500 focus:border-red-500' : 'border-[#E8D9C5] focus:border-[#D4A853] focus:ring-[#D4A853]'" class="w-full rounded" />
+                        <p v-if="errors.name" class="text-red-500 text-sm mt-1">{{ errors.name[0] }}</p>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium mb-1">Danh mục *</label>
+                        <select v-model="form.category_id" :class="errors.category_id ? 'border-red-500 focus:ring-red-500 focus:border-red-500' : 'border-[#E8D9C5] focus:border-[#D4A853] focus:ring-[#D4A853]'" class="w-full rounded">
                             <option v-for="cat in categories" :key="cat.id" :value="cat.id">{{ cat.name }}</option>
                         </select>
+                        <p v-if="errors.category_id" class="text-red-500 text-sm mt-1">{{ errors.category_id[0] }}</p>
                     </div>
                 </div>
                 <div>
@@ -163,7 +169,8 @@ const submit = async () => {
                 </div>
                 <div>
                     <label class="block text-sm font-medium mb-1">Giá cơ bản *</label>
-                    <input v-model="form.base_price" type="number" class="w-full rounded border-[#E8D9C5] focus:border-[#D4A853] focus:ring-[#D4A853] max-w-xs" />
+                    <input v-model="form.base_price" type="number" :class="errors.base_price ? 'border-red-500 focus:ring-red-500 focus:border-red-500' : 'border-[#E8D9C5] focus:border-[#D4A853] focus:ring-[#D4A853]'" class="w-full rounded max-w-xs" />
+                    <p v-if="errors.base_price" class="text-red-500 text-sm mt-1">{{ errors.base_price[0] }}</p>
                 </div>
 
                 <!-- Existing Images -->

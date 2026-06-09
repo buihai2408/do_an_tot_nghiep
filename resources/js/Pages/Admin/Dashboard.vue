@@ -14,8 +14,15 @@ const props = defineProps({
     stats: Object,
     revenueChart: Object,
     topProducts: Array,
+    topCustomers: Array,
     ordersByStatus: Object,
+    period: {
+        type: String,
+        default: 'week'
+    }
 });
+
+const changePeriod = (p) => router.get('/admin', { period: p }, { preserveState: true });
 
 const revenueChartData = computed(() => {
     return {
@@ -98,9 +105,20 @@ onUnmounted(() => {
 <template>
     <AdminLayout>
         <!-- Page header -->
-        <div class="mb-8">
-            <p class="text-xs font-semibold tracking-[0.2em] uppercase mb-1 text-[#D4A853]">Tổng quan</p>
-            <h1 class="text-2xl font-bold text-[#2C1810] font-playfair">Dashboard</h1>
+        <div class="mb-8 flex flex-col md:flex-row md:items-end justify-between gap-4">
+            <div>
+                <p class="text-xs font-semibold tracking-[0.2em] uppercase mb-1 text-[#D4A853]">Tổng quan</p>
+                <h1 class="text-2xl font-bold text-[#2C1810] font-playfair">Dashboard</h1>
+            </div>
+            
+            <!-- Period Selector -->
+            <div class="flex space-x-2 bg-white p-1 rounded-lg border border-[#E8D9C5] shadow-sm">
+                <button v-for="p in ['week', 'month', 'year']" :key="p" @click="changePeriod(p)"
+                    :class="period === p ? 'bg-[#D4A853] text-[#1C1208] shadow' : 'text-[#8B7355] hover:bg-[#FAF6F0]'"
+                    class="px-4 py-1.5 rounded-md text-sm font-semibold transition">
+                    {{ p === 'week' ? '7 ngày' : p === 'month' ? '30 ngày' : '1 năm' }}
+                </button>
+            </div>
         </div>
 
         <!-- KPIs -->
@@ -160,13 +178,39 @@ onUnmounted(() => {
                                 :class="index === 0 ? 'bg-[#D4A853] text-[#1C1208]' : index === 1 ? 'bg-[#E8D9C5] text-[#5C3A1E]' : index === 2 ? 'bg-[#F2EBE0] text-[#8B7355]' : 'bg-[#F9F5F0] text-[#B5A089]'">
                                 {{ index + 1 }}
                             </span>
-                            <span class="text-sm font-medium text-[#2C1810]">{{ product.product_name }}</span>
+                            <div>
+                                <p class="text-sm font-medium text-[#2C1810]">{{ product.product_name }}</p>
+                                <p class="text-xs text-[#8B7355]">{{ formatCurrency(product.total_revenue) }}</p>
+                            </div>
                         </div>
                         <span class="text-sm font-semibold text-[#D4A853]">{{ product.total_sold }} ly</span>
                     </div>
                 </div>
             </div>
 
+            <!-- Top customers -->
+            <div class="bg-white p-6 rounded-lg border border-[#E8D9C5] shadow-sm">
+                <h2 class="text-xs font-bold tracking-widest uppercase mb-5 pb-3 text-[#2C1810] border-b border-[#F2EBE0]">🌟 Top khách hàng</h2>
+                <div v-if="!topCustomers?.length" class="text-center py-8 text-[#B5A089]">Chưa có dữ liệu</div>
+                <div v-else class="space-y-3">
+                    <div v-for="(customer, index) in topCustomers" :key="index" class="flex items-center justify-between py-2 border-b border-[#F9F5F0] last:border-0">
+                        <div class="flex items-center gap-3">
+                            <span class="w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold flex-shrink-0"
+                                :class="index === 0 ? 'bg-[#D4A853] text-[#1C1208]' : index === 1 ? 'bg-[#E8D9C5] text-[#5C3A1E]' : index === 2 ? 'bg-[#F2EBE0] text-[#8B7355]' : 'bg-[#F9F5F0] text-[#B5A089]'">
+                                {{ index + 1 }}
+                            </span>
+                            <div>
+                                <p class="text-sm font-medium text-[#2C1810]">{{ customer.name }}</p>
+                                <p class="text-xs text-[#8B7355]">{{ customer.orders_count }} đơn hàng</p>
+                            </div>
+                        </div>
+                        <span class="text-sm font-semibold text-[#D4A853]">{{ formatCurrency(customer.total_spent) }}</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mt-8">
             <!-- Revenue summary -->
             <div class="bg-white p-6 rounded-lg border border-[#E8D9C5] shadow-sm">
                 <h2 class="text-xs font-bold tracking-widest uppercase mb-5 pb-3 text-[#2C1810] border-b border-[#F2EBE0]">📋 Tổng kết hoạt động</h2>
@@ -179,10 +223,34 @@ onUnmounted(() => {
                         <span class="text-sm text-[#8B7355]">Tổng đơn hàng đã xử lý</span>
                         <span class="font-bold text-sm text-[#2C1810]">{{ stats.total_orders }}</span>
                     </div>
-                    <div class="flex justify-between items-center py-3">
+                    <div class="flex justify-between items-center py-3 border-b border-[#F9F5F0]">
                         <span class="text-sm text-[#8B7355]">Tổng số sản phẩm trong Menu</span>
                         <span class="font-bold text-sm text-[#2C1810]">{{ stats.total_products }}</span>
                     </div>
+                </div>
+            </div>
+
+            <!-- Revenue Table -->
+            <div class="bg-white p-6 rounded-lg border border-[#E8D9C5] shadow-sm">
+                <h2 class="text-xs font-bold tracking-widest uppercase mb-5 pb-3 text-[#2C1810] border-b border-[#F2EBE0]">📅 Doanh thu theo ngày</h2>
+                <div v-if="!revenueChart?.labels?.length" class="text-center py-8 text-[#B5A089]">Chưa có dữ liệu</div>
+                <div v-else class="overflow-x-auto">
+                    <table class="w-full text-sm">
+                        <thead>
+                            <tr>
+                                <th class="text-left pb-3 font-semibold text-[#8B7355] border-b border-[#F9F5F0]">Ngày</th>
+                                <th class="text-right pb-3 font-semibold text-[#8B7355] border-b border-[#F9F5F0]">Đơn hàng</th>
+                                <th class="text-right pb-3 font-semibold text-[#8B7355] border-b border-[#F9F5F0]">Doanh thu</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr v-for="(label, i) in revenueChart.labels" :key="label" class="border-b border-[#F9F5F0] last:border-0 hover:bg-[#FAF6F0] transition">
+                                <td class="py-3 text-[#2C1810]">{{ label }}</td>
+                                <td class="py-3 text-right text-[#2C1810]">{{ revenueChart.orders[i] }}</td>
+                                <td class="py-3 text-right font-medium text-[#D4A853]">{{ formatCurrency(revenueChart.revenue[i]) }}</td>
+                            </tr>
+                        </tbody>
+                    </table>
                 </div>
             </div>
         </div>

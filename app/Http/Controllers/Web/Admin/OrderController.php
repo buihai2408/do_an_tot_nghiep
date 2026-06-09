@@ -47,7 +47,7 @@ class OrderController extends Controller
     {
         $order->load(['items.toppings', 'user', 'coupon']);
         $allowedTransitions = collect(OrderStatus::cases())
-            ->filter(fn($s) => $order->status->canTransitionTo($s))
+            ->filter(fn($s) => $order->status->canTransitionTo($s, $order->order_type))
             ->map(fn($s) => ['value' => $s->value, 'label' => $s->label()])
             ->values();
 

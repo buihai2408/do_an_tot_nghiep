@@ -20,7 +20,6 @@ const allMenuItems = [
     { name: 'Kích thước', href: '/admin/sizes', icon: '📏' },
     { name: 'Người dùng & Điểm', href: '/admin/users', icon: '👥', adminOnly: true },
     { name: 'Đánh giá', href: '/admin/reviews', icon: '⭐' },
-    { name: 'Báo cáo', href: '/admin/reports', icon: '📈' },
 ];
 
 const menuItems = computed(() =>

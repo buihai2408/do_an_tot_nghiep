@@ -38,14 +38,26 @@ enum OrderStatus: string
         };
     }
 
-    public function canTransitionTo(self $status): bool
+    /**
+     * Kiểm tra luồng chuyển trạng thái hợp lệ.
+     *
+     * Delivery (Giao hàng): Pending → Confirmed → Preparing → Delivering → Completed
+     * Pickup (Nhận tại quán): Pending → Confirmed → Preparing → Completed
+     *
+     * @param self $status Trạng thái đích
+     * @param OrderType|null $orderType Loại đơn hàng (delivery/pickup)
+     */
+    public function canTransitionTo(self $status, ?OrderType $orderType = null): bool
     {
         return match ($this) {
             self::Pending => in_array($status, [self::Confirmed, self::Cancelled]),
             self::Confirmed => in_array($status, [self::Preparing, self::Cancelled]),
-            self::Preparing => $status === self::Ready,
-            self::Ready => in_array($status, [self::Delivering, self::Completed]),
+            self::Preparing => match ($orderType) {
+                OrderType::Pickup => $status === self::Completed,       // Pickup: pha xong → hoàn thành
+                default          => $status === self::Delivering,       // Delivery: pha xong → giao hàng
+            },
             self::Delivering => $status === self::Completed,
+            self::Ready => in_array($status, [self::Delivering, self::Completed]), // Tương thích data cũ
             self::Completed, self::Cancelled => false,
         };
     }

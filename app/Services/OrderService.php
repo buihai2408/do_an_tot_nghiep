@@ -151,7 +151,7 @@ class OrderService
 
     public function transition(Order $order, OrderStatus $newStatus, ?string $reason = null): Order
     {
-        if (!$order->status->canTransitionTo($newStatus)) {
+        if (!$order->status->canTransitionTo($newStatus, $order->order_type)) {
             throw new \Exception("Không thể chuyển trạng thái từ {$order->status->label()} sang {$newStatus->label()}.");
         }
 
