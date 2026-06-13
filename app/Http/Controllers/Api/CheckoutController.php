@@ -21,8 +21,8 @@ class CheckoutController extends Controller
 
             if ($order->payment_method->value === 'payos') {
                 try {
-                    $returnUrl = route('checkout.payos.return', ['orderCode' => $order->order_number]);
-                    $cancelUrl = route('checkout.payos.cancel', ['orderCode' => $order->order_number]);
+                    $returnUrl = route('checkout.payos.return');
+                    $cancelUrl = route('checkout.payos.cancel');
                     $redirect = $payOSService->createPaymentLink($order, $returnUrl, $cancelUrl);
                 } catch (\Exception $e) {
                     return response()->json([

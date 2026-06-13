@@ -21,10 +21,8 @@ class PayOSService
 
     public function createPaymentLink(Order $order, string $returnUrl, string $cancelUrl): string
     {
-        $orderCode = (int) preg_replace('/\D/', '', $order->order_number);
-        if ($orderCode === 0) {
-            $orderCode = $order->id + 1000000;
-        }
+        // Dùng ID + 1000000 làm orderCode → dễ dàng reverse lookup
+        $orderCode = $order->id + 1000000;
 
         $description = mb_substr("DH {$order->order_number}", 0, 25);
 

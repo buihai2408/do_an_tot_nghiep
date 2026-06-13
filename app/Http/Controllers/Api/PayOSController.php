@@ -12,6 +12,25 @@ use Inertia\Inertia;
 
 class PayOSController extends Controller
 {
+    /**
+     * Tìm order từ orderCode PayOS trả về.
+     * orderCode = order->id + 1000000 (xem PayOSService::createPaymentLink)
+     */
+    private function findOrderByPayOSCode($orderCode): ?Order
+    {
+        if (!$orderCode || !is_numeric($orderCode)) {
+            return null;
+        }
+
+        $orderId = (int) $orderCode - 1000000;
+
+        if ($orderId <= 0) {
+            return null;
+        }
+
+        return Order::find($orderId);
+    }
+
     public function webhook(Request $request, PayOSService $payOSService)
     {
         try {
@@ -20,14 +39,19 @@ class PayOSController extends Controller
             if (isset($webhookData->code) && $webhookData->code === '00') {
                 $orderCode = $webhookData->data->orderCode ?? null;
 
-                if ($orderCode) {
-                    $order = Order::where('order_number', 'like', '%' . $orderCode . '%')
-                        ->orWhere('id', $orderCode - 1000000)
-                        ->first();
+                Log::info('PayOS Webhook received', [
+                    'orderCode' => $orderCode,
+                    'code' => $webhookData->code,
+                ]);
 
-                    if ($order && $order->payment_status->value === 'pending') {
-                        $order->update(['payment_status' => PaymentStatus::Paid]);
-                    }
+                $order = $this->findOrderByPayOSCode($orderCode);
+
+                if ($order && $order->payment_status->value === 'pending') {
+                    $order->update(['payment_status' => PaymentStatus::Paid]);
+                    Log::info('PayOS Webhook: Updated payment status to Paid', [
+                        'order_id' => $order->id,
+                        'order_number' => $order->order_number,
+                    ]);
                 }
             }
 
@@ -40,20 +64,25 @@ class PayOSController extends Controller
 
     public function return(Request $request)
     {
-        $orderNumber = $request->query('orderCode');
+        $orderCode = $request->query('orderCode');
         $status = $request->query('status');
         $code = $request->query('code');
 
-        $order = null;
-        if ($orderNumber) {
-            $order = Order::where('order_number', 'like', '%' . $orderNumber . '%')
-                ->orWhere('id', ((int) $orderNumber) - 1000000)
-                ->first();
-        }
+        Log::info('PayOS Return callback', [
+            'orderCode' => $orderCode,
+            'status' => $status,
+            'code' => $code,
+        ]);
+
+        $order = $this->findOrderByPayOSCode($orderCode);
 
         if ($order && ($code === '00' || $status === 'PAID')) {
             if ($order->payment_status->value === 'pending') {
                 $order->update(['payment_status' => PaymentStatus::Paid]);
+                Log::info('PayOS Return: Updated payment status to Paid', [
+                    'order_id' => $order->id,
+                    'order_number' => $order->order_number,
+                ]);
             }
 
             return Inertia::render('Checkout/Success', [
@@ -74,14 +103,9 @@ class PayOSController extends Controller
 
     public function cancel(Request $request)
     {
-        $orderNumber = $request->query('orderCode');
+        $orderCode = $request->query('orderCode');
 
-        $order = null;
-        if ($orderNumber) {
-            $order = Order::where('order_number', 'like', '%' . $orderNumber . '%')
-                ->orWhere('id', ((int) $orderNumber) - 1000000)
-                ->first();
-        }
+        $order = $this->findOrderByPayOSCode($orderCode);
 
         if ($order) {
             return redirect()->route('orders.show', $order)

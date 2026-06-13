@@ -29,7 +29,22 @@ class SizeController extends Controller
 
     public function destroy(Size $size)
     {
+        // Kiểm tra size có đang được gắn với sản phẩm nào không
+        if ($size->products()->count() > 0) {
+            return response()->json([
+                'message' => 'Không thể xóa kích thước đang được gắn với sản phẩm! Vui lòng gỡ kích thước khỏi tất cả sản phẩm trước.',
+            ], 422);
+        }
+
+        // Kiểm tra size có trong giỏ hàng không
+        $inCart = \App\Models\CartItem::where('size_id', $size->id)->exists();
+        if ($inCart) {
+            return response()->json([
+                'message' => 'Không thể xóa kích thước đang có trong giỏ hàng của khách!',
+            ], 422);
+        }
+
         $size->delete();
-        return response()->json(['message' => 'Đã xóa!']);
+        return response()->json(['message' => 'Đã xóa kích thước!']);
     }
 }
