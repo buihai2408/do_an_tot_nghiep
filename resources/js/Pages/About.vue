@@ -28,7 +28,7 @@ import AppLayout from '@/Layouts/AppLayout.vue';
                             Từ Đam Mê Đến<br>Tách Cà Phê Hoàn Hảo
                         </h2>
                         <div class="space-y-4 text-sm leading-relaxed" style="color:#8B7355;">
-                            <p>The Coffee Shop được thành lập với một ước mơ đơn giản: mang đến cho mọi người những tách cà phê ngon nhất, được pha chế từ những hạt cà phê chọn lọc kỹ lưỡng từ các vùng trồng nổi tiếng của Việt Nam.</p>
+                            <p>Trạm Cà Phê được thành lập với một ước mơ đơn giản: mang đến cho mọi người những tách cà phê ngon nhất, được pha chế từ những hạt cà phê chọn lọc kỹ lưỡng từ các vùng trồng nổi tiếng của Việt Nam.</p>
                             <p>Chúng tôi tin rằng một ly cà phê ngon không chỉ đến từ nguyên liệu tốt, mà còn từ sự tỉ mỉ trong từng công đoạn pha chế, từ tâm huyết của người barista và từ không gian mà bạn thưởng thức nó.</p>
                             <p>Mỗi ngày, đội ngũ của chúng tôi làm việc với niềm đam mê để đảm bảo rằng từng giọt cà phê đều mang lại trải nghiệm tuyệt vời nhất cho khách hàng.</p>
                         </div>

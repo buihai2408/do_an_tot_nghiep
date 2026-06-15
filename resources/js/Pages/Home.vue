@@ -115,7 +115,7 @@ const categoryImage = (slug) => {
                 <div class="p-10 lg:p-14 mr-8 lg:mr-24 max-w-sm" style="background:rgba(44,24,16,0.85); backdrop-filter:blur(8px); border-left:3px solid #D4A853;">
                     <p class="text-xs font-semibold tracking-widest uppercase mb-3" style="color:#D4A853;">Nghệ thuật pha chế</p>
                     <h2 class="text-3xl lg:text-4xl font-bold text-white leading-tight" style="font-family:'Playfair Display',serif;">
-                        THE BEST<br>COFFEE SHOP
+                        TRẠM CÀ PHÊ
                     </h2>
                 </div>
             </div>
@@ -227,10 +227,10 @@ const categoryImage = (slug) => {
             <div class="relative z-10 text-center px-4 max-w-3xl mx-auto">
                 <p class="text-xs font-semibold tracking-widest uppercase mb-4" style="color:#D4A853;">Specialty Coffee & More</p>
                 <h2 class="text-3xl lg:text-5xl font-bold text-white mb-6" style="font-family:'Playfair Display',serif;">
-                    VISIT OUR COFFEE SHOP
+                    TRẠM CÀ PHÊ
                 </h2>
                 <p class="mb-10 leading-relaxed" style="color:rgba(255,255,255,0.6);">
-                    Số 99, Đường Cà Phê, Quận 1, TP.HCM<br>
+                    175 Tây Sơn, Đống Đa, Hà Nội<br>
                     Mở cửa hàng ngày từ 07:00 đến 22:00
                 </p>
                 <Link href="/menu"

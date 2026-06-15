@@ -38,9 +38,9 @@ const suggestions = computed(() => {
 // ── Greeting cá nhân hóa ──────────────────────────────────────────────────
 const greetingText = computed(() => {
     if (authUser.value) {
-        return `Xin chào, **${authUser.value.name}**! 👋 Tôi là trợ lý AI của The Coffee Shop. Tôi có thể tra cứu đơn hàng, điểm thưởng, menu và nhiều thông tin khác cho bạn. Bạn cần hỗ trợ gì? ☕`;
+        return `Xin chào, **${authUser.value.name}**! 👋 Tôi là trợ lý AI của Trạm Cà Phê. Tôi có thể tra cứu đơn hàng, điểm thưởng, menu và nhiều thông tin khác cho bạn. Bạn cần hỗ trợ gì? ☕`;
     }
-    return 'Xin chào! 👋 Tôi là trợ lý AI của The Coffee Shop. Tôi có thể giúp bạn tìm hiểu về menu, giá cả, khuyến mãi, giờ mở cửa và nhiều thông tin khác. Bạn muốn hỏi gì nào? ☕';
+    return 'Xin chào! 👋 Tôi là trợ lý AI của Trạm Cà Phê. Tôi có thể giúp bạn tìm hiểu về menu, giá cả, khuyến mãi, giờ mở cửa và nhiều thông tin khác. Bạn muốn hỏi gì nào? ☕';
 });
 
 // ── Methods ────────────────────────────────────────────────────────────────
@@ -235,7 +235,7 @@ function formatText(text) {
                     <!-- Empty state with suggestions -->
                     <div v-if="messages.length === 0" class="flex flex-col items-center justify-center flex-1 py-6 px-2 text-center">
                         <div class="text-5xl mb-2.5 animate-bounce">☕</div>
-                        <p class="text-[13px] text-[#8B7355] mb-4 leading-relaxed">Hỏi tôi bất cứ điều gì về The Coffee Shop!</p>
+                        <p class="text-[13px] text-[#8B7355] mb-4 leading-relaxed">Hỏi tôi bất cứ điều gì về Trạm Cà Phê!</p>
                         <div class="flex flex-wrap justify-center gap-1.5">
                             <button
                                 v-for="s in suggestions"

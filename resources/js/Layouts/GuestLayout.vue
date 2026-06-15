@@ -22,7 +22,7 @@ import { Link } from '@inertiajs/vue3';
                                 <path d="M2 21h18v-2H2v2zM20 8h-2V5h2v3zm2-4h-2V2a1 1 0 00-1-1H3a1 1 0 00-1 1v11a4 4 0 004 4h8a4 4 0 004-4v-1h2a2 2 0 002-2V6a2 2 0 00-2-2zm-4 9a2 2 0 01-2 2H6a2 2 0 01-2-2V3h14v10zm4-3h-2V6h2v4z"/>
                             </svg>
                         </div>
-                        <span class="text-3xl font-bold text-white" style="font-family:'Playfair Display',serif;">The Coffee Shop</span>
+                        <span class="text-3xl font-bold text-white" style="font-family:'Playfair Display',serif;">Trạm Cà Phê</span>
                     </div>
                 </Link>
 
@@ -67,7 +67,7 @@ import { Link } from '@inertiajs/vue3';
                             <path d="M2 21h18v-2H2v2zM20 8h-2V5h2v3zm2-4h-2V2a1 1 0 00-1-1H3a1 1 0 00-1 1v11a4 4 0 004 4h8a4 4 0 004-4v-1h2a2 2 0 002-2V6a2 2 0 00-2-2zm-4 9a2 2 0 01-2 2H6a2 2 0 01-2-2V3h14v10zm4-3h-2V6h2v4z"/>
                         </svg>
                     </div>
-                    <span class="text-xl font-bold" style="color:#2C1810; font-family:'Playfair Display',serif;">The Coffee Shop</span>
+                    <span class="text-xl font-bold" style="color:#2C1810; font-family:'Playfair Display',serif;">Trạm Cà Phê</span>
                 </Link>
             </div>
             <div class="w-full max-w-md">

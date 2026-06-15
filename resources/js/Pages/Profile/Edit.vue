@@ -75,7 +75,7 @@ const deleteAccount = () => {
                     </div>
                     <div>
                         <label class="block text-xs font-semibold tracking-widest uppercase text-gray-500 mb-2">Số điện thoại</label>
-                        <input v-model="profileForm.phone" type="tel" class="w-full border-gray-300 focus:border-[#1a1a1a] focus:ring-[#1a1a1a] py-3 text-sm" placeholder="0901 234 567" />
+                        <input v-model="profileForm.phone" type="tel" class="w-full border-gray-300 focus:border-[#1a1a1a] focus:ring-[#1a1a1a] py-3 text-sm" placeholder="0966461728" />
                         <p v-if="profileForm.errors.phone" class="text-red-500 text-xs mt-1">{{ profileForm.errors.phone }}</p>
                     </div>
                     <div>

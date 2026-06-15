@@ -44,7 +44,7 @@ const submit = () => {
                         autofocus
                         autocomplete="username"
                         class="w-full text-sm py-3 text-[#2C1810] border-[#E8D9C5] rounded focus:border-[#D4A853] focus:ring focus:ring-[#D4A853]/20 transition"
-                        placeholder="email@example.com hoặc 0901234567"
+                        placeholder="email@example.com hoặc 0966461728"
                     />
                     <p v-if="form.errors.login" class="text-red-500 text-xs mt-1.5">{{ form.errors.login }}</p>
                 </div>

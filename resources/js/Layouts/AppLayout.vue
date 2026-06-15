@@ -45,7 +45,7 @@ const navigation = [
                                 <path d="M2 21h18v-2H2v2zM20 8h-2V5h2v3zm2-4h-2V2a1 1 0 00-1-1H3a1 1 0 00-1 1v11a4 4 0 004 4h8a4 4 0 004-4v-1h2a2 2 0 002-2V6a2 2 0 00-2-2zm-4 9a2 2 0 01-2 2H6a2 2 0 01-2-2V3h14v10zm4-3h-2V6h2v4z"/>
                             </svg>
                         </div>
-                        <span class="text-xl font-bold text-white tracking-wider" style="font-family:'Playfair Display',serif;">The Coffee Shop</span>
+                        <span class="text-xl font-bold text-white tracking-wider" style="font-family:'Playfair Display',serif;">Trạm Cà Phê</span>
                     </Link>
 
                     <!-- Desktop nav links -->
@@ -157,7 +157,7 @@ const navigation = [
                                     <path d="M2 21h18v-2H2v2zM20 8h-2V5h2v3zm2-4h-2V2a1 1 0 00-1-1H3a1 1 0 00-1 1v11a4 4 0 004 4h8a4 4 0 004-4v-1h2a2 2 0 002-2V6a2 2 0 00-2-2zm-4 9a2 2 0 01-2 2H6a2 2 0 01-2-2V3h14v10zm4-3h-2V6h2v4z"/>
                                 </svg>
                             </div>
-                            <h3 class="text-lg font-bold text-white" style="font-family:'Playfair Display',serif;">The Coffee Shop</h3>
+                            <h3 class="text-lg font-bold text-white" style="font-family:'Playfair Display',serif;">Trạm Cà Phê</h3>
                         </div>
                         <p class="text-sm leading-relaxed mb-5">Thưởng thức hương vị cà phê đích thực, pha chế từ những hạt cà phê được chọn lọc kỹ lưỡng.</p>
                         <!-- Social icons -->
@@ -194,8 +194,8 @@ const navigation = [
                     <div>
                         <h4 class="text-xs font-semibold tracking-widest uppercase mb-5" style="color:#D4A853;">Liên hệ</h4>
                         <ul class="space-y-3 text-sm">
-                            <li class="flex gap-2 items-start"><span style="color:#D4A853;">📍</span> Số 99, Đường Cà Phê, Quận 1, TP.HCM</li>
-                            <li class="flex gap-2 items-center"><span style="color:#D4A853;">📞</span> 0901 234 567</li>
+                            <li class="flex gap-2 items-start"><span style="color:#D4A853;">📍</span> 175 Tây Sơn, Đống Đa, Hà Nội</li>
+                            <li class="flex gap-2 items-center"><span style="color:#D4A853;">📞</span> 0966461728</li>
                             <li class="flex gap-2 items-center"><span style="color:#D4A853;">✉️</span> info@coffeeshop.vn</li>
                         </ul>
                     </div>
@@ -203,7 +203,7 @@ const navigation = [
 
                 <!-- Bottom bar -->
                 <div class="mt-12 pt-8 flex flex-col md:flex-row justify-between items-center text-xs" style="border-top:1px solid #2C1810; color:#6B5340;">
-                    <p>© {{ new Date().getFullYear() }} The Coffee Shop. All rights reserved.</p>
+                    <p>© {{ new Date().getFullYear() }} Trạm Cà Phê. All rights reserved.</p>
                     <div class="flex space-x-6 mt-4 md:mt-0">
                         <a href="#" class="hover:text-white transition">Chính sách bảo mật</a>
                         <a href="#" class="hover:text-white transition">Điều khoản sử dụng</a>

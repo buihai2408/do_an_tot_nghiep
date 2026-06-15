@@ -18,7 +18,7 @@ class AppServiceProvider extends ServiceProvider
     public function boot(): void
     {
         Inertia::share([
-            'appName' => config('app.name', 'Coffee Shop'),
+            'appName' => config('app.name', 'Trạm Cà Phê'),
         ]);
 
         ResetPassword::toMailUsing(function (object $notifiable, string $token) {
@@ -32,7 +32,7 @@ class AppServiceProvider extends ServiceProvider
                 ], false)))
                 ->line('Đường dẫn khôi phục mật khẩu này sẽ hết hạn trong ' . Config::get('auth.passwords.'.Config::get('auth.defaults.passwords').'.expire') . ' phút.')
                 ->line('Nếu bạn không yêu cầu khôi phục mật khẩu, bạn không cần phải làm gì thêm.')
-                ->salutation('Trân trọng, ' . config('app.name', 'Coffee Shop'));
+                ->salutation('Trân trọng, ' . config('app.name', 'Trạm Cà Phê'));
         });
     }
 }

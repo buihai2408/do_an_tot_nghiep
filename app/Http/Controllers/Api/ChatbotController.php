@@ -73,7 +73,7 @@ class ChatbotController extends Controller
     {
         $lines = [];
         $lines[] = '[THÔNG TIN HỆ THỐNG - Chỉ dùng để trả lời, không hiển thị cho khách]';
-        $lines[] = 'Bạn là trợ lý AI của "The Coffee Shop". Hãy trả lời bằng tiếng Việt, thân thiện, ngắn gọn và chính xác dựa trên dữ liệu thực dưới đây.';
+        $lines[] = 'Bạn là trợ lý AI của "Trạm Cà Phê". Hãy trả lời bằng tiếng Việt, thân thiện, ngắn gọn và chính xác dựa trên dữ liệu thực dưới đây.';
         $lines[] = '';
 
         if (auth()->check()) {
@@ -195,9 +195,9 @@ class ChatbotController extends Controller
         // ── 3. Thông tin cửa hàng ─────────────────────────────────────────
         $lines[] = '';
         $lines[] = '=== THÔNG TIN CỬA HÀNG ===';
-        $lines[] = 'Tên: The Coffee Shop';
-        $lines[] = 'Địa chỉ: Số 99, Đường Cà Phê, Quận 1, TP.HCM';
-        $lines[] = 'Điện thoại: 0901 234 567';
+        $lines[] = 'Tên: Trạm Cà Phê';
+        $lines[] = 'Địa chỉ: 175 Tây Sơn, Đống Đa, Hà Nội';
+        $lines[] = 'Điện thoại: 0966461728';
         $lines[] = 'Email: info@coffeeshop.vn';
         $lines[] = 'Giờ mở cửa: Thứ 2 - Thứ 6: 07:00 - 22:00 | Thứ 7 - CN: 08:00 - 23:00';
         $lines[] = '';

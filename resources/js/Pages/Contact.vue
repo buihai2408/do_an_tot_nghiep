@@ -39,7 +39,7 @@ const submit = () => { submitted.value = true; };
                             </div>
                             <div>
                                 <h3 class="text-sm font-bold tracking-widest uppercase mb-1" style="color:#2C1810;">Địa chỉ</h3>
-                                <p class="text-sm leading-relaxed" style="color:#8B7355;">Số 99, Đường Cà Phê<br>Quận 1, TP. Hồ Chí Minh</p>
+                                <p class="text-sm leading-relaxed" style="color:#8B7355;">175 Tây Sơn<br>Đống Đa, Hà Nội</p>
                             </div>
                         </div>
                         <!-- Phone -->
@@ -50,7 +50,7 @@ const submit = () => { submitted.value = true; };
                             </div>
                             <div>
                                 <h3 class="text-sm font-bold tracking-widest uppercase mb-1" style="color:#2C1810;">Điện thoại</h3>
-                                <p class="text-sm" style="color:#8B7355;">0901 234 567</p>
+                                <p class="text-sm" style="color:#8B7355;">0966461728</p>
                             </div>
                         </div>
                         <!-- Email -->
@@ -121,7 +121,7 @@ const submit = () => { submitted.value = true; };
                                     <input v-model="form.phone" type="tel"
                                         class="w-full border py-3 text-sm bg-white"
                                         style="border-color:#E8D9C5; border-radius:4px; color:#2C1810;"
-                                        placeholder="0901234567"
+                                        placeholder="0966461728"
                                         onfocus="this.style.borderColor='#D4A853'; this.style.boxShadow='0 0 0 3px rgba(212,168,83,0.15)'"
                                         onblur="this.style.borderColor='#E8D9C5'; this.style.boxShadow='none'" />
                                 </div>
@@ -152,7 +152,7 @@ const submit = () => { submitted.value = true; };
                 <div class="flex items-center justify-center" style="background:#E8D9C5; height:250px; border-radius:4px; border:1px solid #D4B896;">
                     <div class="text-center">
                         <div class="text-4xl mb-3">📍</div>
-                        <p class="text-sm font-semibold" style="color:#2C1810;">Số 99, Đường Cà Phê, Quận 1, TP.HCM</p>
+                        <p class="text-sm font-semibold" style="color:#2C1810;">175 Tây Sơn, Đống Đa, Hà Nội</p>
                         <p class="text-xs mt-1" style="color:#8B7355;">Google Maps sẽ được tích hợp tại đây</p>
                     </div>
                 </div>

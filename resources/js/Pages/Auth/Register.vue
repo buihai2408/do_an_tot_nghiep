@@ -18,7 +18,7 @@ const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 watch(() => form.phone, (val) => {
     if (!val) { clientErrors.value.phone = ''; return; }
-    clientErrors.value.phone = phoneRegex.test(val) ? '' : 'Số điện thoại không đúng định dạng (VD: 0901234567).';
+    clientErrors.value.phone = phoneRegex.test(val) ? '' : 'Số điện thoại không đúng định dạng (VD: 0966461728).';
 });
 
 watch(() => form.email, (val) => {
@@ -68,7 +68,7 @@ const submit = () => {
                         autocomplete="tel"
                         :class="(clientErrors.phone || form.errors.phone) ? 'border-red-400 focus:border-red-500 focus:ring-red-500/20' : 'border-[#E8D9C5] focus:border-[#D4A853] focus:ring-[#D4A853]/20'"
                         class="w-full text-sm py-3 text-[#2C1810] rounded focus:ring transition"
-                        placeholder="0901234567"
+                        placeholder="0966461728"
                     />
                     <p v-if="clientErrors.phone" class="text-red-500 text-xs mt-1.5">{{ clientErrors.phone }}</p>
                     <p v-else-if="form.errors.phone" class="text-red-500 text-xs mt-1.5">{{ form.errors.phone }}</p>

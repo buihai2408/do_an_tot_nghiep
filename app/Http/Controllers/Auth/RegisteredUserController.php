@@ -36,7 +36,7 @@ class RegisteredUserController extends Controller
             'email' => 'nullable|string|lowercase|email|max:255|unique:'.User::class,
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
         ], [
-            'phone.regex' => 'Số điện thoại không đúng định dạng (VD: 0901234567).',
+            'phone.regex' => 'Số điện thoại không đúng định dạng (VD: 0966461728).',
             'phone.unique' => 'Số điện thoại này đã được sử dụng.',
             'email.email' => 'Email không đúng định dạng.',
             'email.unique' => 'Email này đã được sử dụng.',
