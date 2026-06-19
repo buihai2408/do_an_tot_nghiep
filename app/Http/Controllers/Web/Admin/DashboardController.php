@@ -11,15 +11,17 @@ class DashboardController extends Controller
 {
     public function __invoke(Request $request, ReportService $reportService)
     {
-        $period = $request->get('period', 'week');
+        $month = $request->get('month', date('n'));
+        $year = $request->get('year', date('Y'));
 
         return Inertia::render('Admin/Dashboard', [
-            'stats' => $reportService->getDashboardStats(),
-            'revenueChart' => $reportService->getRevenueReport($period),
-            'topProducts' => $reportService->getTopProducts(10),
-            'topCustomers' => $reportService->getTopCustomers(10),
-            'ordersByStatus' => $reportService->getOrdersByStatus(),
-            'period' => $period,
+            'stats' => $reportService->getDashboardStats($month, $year),
+            'revenueChart' => $reportService->getRevenueReport('month', $month, $year),
+            'topProducts' => $reportService->getTopProducts(10, $month, $year),
+            'topCustomers' => $reportService->getTopCustomers(10, $month, $year),
+            'ordersByStatus' => $reportService->getOrdersByStatus($month, $year),
+            'month' => (int)$month,
+            'year' => (int)$year,
         ]);
     }
 }

@@ -8,21 +8,28 @@ use App\Models\OrderItem;
 use App\Models\Product;
 use App\Models\User;
 use Illuminate\Support\Facades\DB;
+use Carbon\Carbon;
 
 class ReportService
 {
-    public function getDashboardStats(): array
+    public function getDashboardStats(?int $month = null, ?int $year = null): array
     {
-        $today = now()->startOfDay();
+        if ($month && $year) {
+            $start = Carbon::create($year, $month, 1)->startOfMonth();
+            $end = Carbon::create($year, $month, 1)->endOfMonth();
+        } else {
+            $start = now()->startOfDay();
+            $end = now()->endOfDay();
+        }
 
         return [
             'revenue_today' => Order::where('status', OrderStatus::Completed)
-                ->where('completed_at', '>=', $today)
+                ->whereBetween('completed_at', [$start, $end])
                 ->sum('total'),
-            'orders_today' => Order::where('created_at', '>=', $today)->count(),
+            'orders_today' => Order::whereBetween('created_at', [$start, $end])->count(),
             'new_customers' => User::where('role', 'customer')
-                ->where('created_at', '>=', $today)->count(),
-            'pending_orders' => Order::where('status', OrderStatus::Pending)->count(),
+                ->whereBetween('created_at', [$start, $end])->count(),
+            'pending_orders' => Order::where('status', OrderStatus::Pending)->count(), // Keep overall pending
             'total_revenue' => Order::where('status', OrderStatus::Completed)->sum('total'),
             'total_orders' => Order::count(),
             'total_customers' => User::where('role', 'customer')->count(),
@@ -30,19 +37,24 @@ class ReportService
         ];
     }
 
-    public function getRevenueReport(string $period = 'week'): array
+    public function getRevenueReport(string $period = 'week', ?int $month = null, ?int $year = null): array
     {
-        $days = match ($period) {
-            'week' => 7,
-            'month' => 30,
-            'year' => 365,
-            default => 7,
-        };
-
-        $startDate = now()->subDays($days)->startOfDay();
+        if ($month && $year) {
+            $startDate = Carbon::create($year, $month, 1)->startOfMonth();
+            $endDate = Carbon::create($year, $month, 1)->endOfMonth();
+        } else {
+            $days = match ($period) {
+                'week' => 7,
+                'month' => 30,
+                'year' => 365,
+                default => 7,
+            };
+            $startDate = now()->subDays($days)->startOfDay();
+            $endDate = now()->endOfDay();
+        }
 
         $data = Order::where('status', OrderStatus::Completed)
-            ->where('completed_at', '>=', $startDate)
+            ->whereBetween('completed_at', [$startDate, $endDate])
             ->select(
                 DB::raw('DATE(completed_at) as date'),
                 DB::raw('SUM(total) as revenue'),
@@ -59,14 +71,21 @@ class ReportService
         ];
     }
 
-    public function getTopProducts(int $limit = 10): array
+    public function getTopProducts(int $limit = 10, ?int $month = null, ?int $year = null): array
     {
         return OrderItem::select(
             'product_name',
             DB::raw('SUM(quantity) as total_sold'),
             DB::raw('SUM(subtotal) as total_revenue')
         )
-            ->whereHas('order', fn($q) => $q->where('status', OrderStatus::Completed))
+            ->whereHas('order', function ($q) use ($month, $year) {
+                $q->where('status', OrderStatus::Completed);
+                if ($month && $year) {
+                    $start = Carbon::create($year, $month, 1)->startOfMonth();
+                    $end = Carbon::create($year, $month, 1)->endOfMonth();
+                    $q->whereBetween('completed_at', [$start, $end]);
+                }
+            })
             ->groupBy('product_name')
             ->orderByDesc('total_sold')
             ->limit($limit)
@@ -74,20 +93,41 @@ class ReportService
             ->toArray();
     }
 
-    public function getOrdersByStatus(): array
+    public function getOrdersByStatus(?int $month = null, ?int $year = null): array
     {
-        return Order::select('status', DB::raw('COUNT(*) as count'))
+        $query = Order::query();
+        if ($month && $year) {
+            $start = Carbon::create($year, $month, 1)->startOfMonth();
+            $end = Carbon::create($year, $month, 1)->endOfMonth();
+            $query->whereBetween('created_at', [$start, $end]);
+        }
+
+        return $query->select('status', DB::raw('COUNT(*) as count'))
             ->groupBy('status')
             ->get()
             ->mapWithKeys(fn($item) => [$item->status->value => $item->count])
             ->toArray();
     }
 
-    public function getTopCustomers(int $limit = 10): array
+    public function getTopCustomers(int $limit = 10, ?int $month = null, ?int $year = null): array
     {
         return User::where('role', 'customer')
-            ->withCount(['orders' => fn($q) => $q->where('status', OrderStatus::Completed)])
-            ->withSum(['orders' => fn($q) => $q->where('status', OrderStatus::Completed)], 'total')
+            ->withCount(['orders' => function ($q) use ($month, $year) {
+                $q->where('status', OrderStatus::Completed);
+                if ($month && $year) {
+                    $start = Carbon::create($year, $month, 1)->startOfMonth();
+                    $end = Carbon::create($year, $month, 1)->endOfMonth();
+                    $q->whereBetween('completed_at', [$start, $end]);
+                }
+            }])
+            ->withSum(['orders' => function ($q) use ($month, $year) {
+                $q->where('status', OrderStatus::Completed);
+                if ($month && $year) {
+                    $start = Carbon::create($year, $month, 1)->startOfMonth();
+                    $end = Carbon::create($year, $month, 1)->endOfMonth();
+                    $q->whereBetween('completed_at', [$start, $end]);
+                }
+            }], 'total')
             ->orderByDesc('orders_sum_total')
             ->limit($limit)
             ->get()

@@ -1,7 +1,7 @@
 <script setup>
 import AdminLayout from '@/Layouts/AdminLayout.vue';
 import { useFormatters } from '@/Composables/useFormatters';
-import { computed, onMounted, onUnmounted } from 'vue';
+import { computed, onMounted, onUnmounted, ref } from 'vue';
 import { router } from '@inertiajs/vue3';
 import { Bar, Doughnut } from 'vue-chartjs';
 import { Chart as ChartJS, Title, Tooltip, Legend, BarElement, CategoryScale, LinearScale, ArcElement } from 'chart.js';
@@ -16,13 +16,17 @@ const props = defineProps({
     topProducts: Array,
     topCustomers: Array,
     ordersByStatus: Object,
-    period: {
-        type: String,
-        default: 'week'
-    }
+    month: Number,
+    year: Number,
 });
 
-const changePeriod = (p) => router.get('/admin', { period: p }, { preserveState: true });
+const selectedMonth = ref(props.month || new Date().getMonth() + 1);
+
+const changeMonth = () => {
+    if (selectedMonth.value) {
+        router.get('/admin', { month: selectedMonth.value }, { preserveState: true });
+    }
+};
 
 const revenueChartData = computed(() => {
     return {
@@ -111,26 +115,24 @@ onUnmounted(() => {
                 <h1 class="text-2xl font-bold text-[#2C1810] font-playfair">Dashboard</h1>
             </div>
             
-            <!-- Period Selector -->
-            <div class="flex space-x-2 bg-white p-1 rounded-lg border border-[#E8D9C5] shadow-sm">
-                <button v-for="p in ['week', 'month', 'year']" :key="p" @click="changePeriod(p)"
-                    :class="period === p ? 'bg-[#D4A853] text-[#1C1208] shadow' : 'text-[#8B7355] hover:bg-[#FAF6F0]'"
-                    class="px-4 py-1.5 rounded-md text-sm font-semibold transition">
-                    {{ p === 'week' ? '7 ngày' : p === 'month' ? '30 ngày' : '1 năm' }}
-                </button>
+            <!-- Month Selector -->
+            <div class="flex items-center bg-white p-1 rounded-lg border border-[#E8D9C5] shadow-sm">
+                <select v-model="selectedMonth" @change="changeMonth" class="border-0 bg-transparent text-sm font-semibold text-[#8B7355] focus:ring-0 cursor-pointer outline-none">
+                    <option v-for="m in 12" :key="m" :value="m">Tháng {{ m }}</option>
+                </select>
             </div>
         </div>
 
         <!-- KPIs -->
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5 mb-8">
-            <!-- Doanh thu hôm nay -->
+            <!-- Doanh thu tháng -->
             <div class="bg-white p-6 rounded-lg border border-[#E8D9C5] border-l-4 border-l-[#D4A853] shadow-sm transition hover:-translate-y-0.5">
-                <p class="text-xs font-semibold tracking-widest uppercase mb-2 text-[#8B7355]">💰 Doanh thu hôm nay</p>
+                <p class="text-xs font-semibold tracking-widest uppercase mb-2 text-[#8B7355]">💰 Doanh thu tháng {{ month }}</p>
                 <p class="text-2xl font-bold text-[#2C1810] font-playfair">{{ formatCurrency(stats.revenue_today) }}</p>
             </div>
-            <!-- Đơn hàng hôm nay -->
+            <!-- Đơn hàng tháng -->
             <div class="bg-white p-6 rounded-lg border border-[#E8D9C5] border-l-4 border-l-[#5C3A1E] shadow-sm transition hover:-translate-y-0.5">
-                <p class="text-xs font-semibold tracking-widest uppercase mb-2 text-[#8B7355]">📋 Đơn hàng hôm nay</p>
+                <p class="text-xs font-semibold tracking-widest uppercase mb-2 text-[#8B7355]">📋 Đơn hàng tháng {{ month }}</p>
                 <p class="text-2xl font-bold text-[#2C1810] font-playfair">{{ stats.orders_today }}</p>
             </div>
             <!-- Chờ xác nhận — nổi bật -->
@@ -149,7 +151,7 @@ onUnmounted(() => {
         <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
             <!-- Revenue Chart -->
             <div class="bg-white p-6 rounded-lg border border-[#E8D9C5] shadow-sm lg:col-span-2">
-                <h2 class="text-xs font-bold tracking-widest uppercase mb-5 pb-3 text-[#2C1810] border-b border-[#F2EBE0]">📈 Doanh thu 7 ngày gần nhất</h2>
+                <h2 class="text-xs font-bold tracking-widest uppercase mb-5 pb-3 text-[#2C1810] border-b border-[#F2EBE0]">📈 Doanh thu tháng {{ month }}</h2>
                 <div class="h-72 w-full relative">
                     <Bar v-if="revenueChartData.labels.length" :data="revenueChartData" :options="revenueChartOptions" />
                     <div v-else class="absolute inset-0 flex items-center justify-center text-[#B5A089]">Chưa có dữ liệu</div>
