@@ -1,4 +1,4 @@
-# Coffee Shop - Hệ thống quản lý quán cà phê
+# Trạm Cà Phê - Hệ thống quản lý quán cà phê
 
 ## Giới thiệu
 
@@ -166,7 +166,7 @@ Hệ thống quản lý quán cà phê trực tuyến, cho phép khách hàng đ
 | Thao tác | Mô tả |
 |----------|-------|
 | Danh sách | Xem tất cả đơn, lọc theo trạng thái, phân trang |
-| Cập nhật trạng thái | Chuyển trạng thái theo luồng: Chờ → Xác nhận → Đang pha → Sẵn sàng → Đang giao → Hoàn thành |
+| Cập nhật trạng thái | Giao hàng: Chờ → Xác nhận → Đang pha → Đang giao → Hoàn thành. Nhận tại quán: Chờ → Xác nhận → Đang pha → Hoàn thành |
 | Hủy đơn | Hủy đơn với lý do |
 | Thông báo đơn mới | Polling tự động kiểm tra đơn hàng mới |
 
@@ -375,7 +375,7 @@ doantotnghiep/
 
 | Vai trò | Email | Số điện thoại | Mật khẩu |
 |---------|-------|---------------|-----------|
-| Admin | admin@coffee.test | 0901234567 | password |
+| Admin | admin@coffee.test | 0966461728 | password |
 | Staff | staff@coffee.test | 0907654321 | password |
 | Customer | customer@coffee.test | 0912345678 | password |
 
