@@ -12,10 +12,10 @@ use Inertia\Inertia;
 
 class PayOSController extends Controller
 {
-    /**
-     * Tìm order từ orderCode PayOS trả về.
-     * orderCode = order->id + 1000000 (xem PayOSService::createPaymentLink)
-     */
+    
+
+
+
     private function findOrderByPayOSCode($orderCode): ?Order
     {
         if (!$orderCode || !is_numeric($orderCode)) {

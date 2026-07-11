@@ -22,14 +22,14 @@ class ToppingController extends Controller
 
     public function destroy(Topping $topping)
     {
-        // Kiểm tra topping có đang được sử dụng bởi sản phẩm nào không
+        
         if ($topping->products()->count() > 0) {
             return response()->json([
                 'message' => 'Không thể xóa topping đang được gắn với sản phẩm! Vui lòng gỡ topping khỏi tất cả sản phẩm trước.',
             ], 422);
         }
 
-        // Kiểm tra topping có trong giỏ hàng không
+        
         $inCart = \DB::table('cart_item_topping')
             ->where('topping_id', $topping->id)
             ->exists();
@@ -39,7 +39,7 @@ class ToppingController extends Controller
             ], 422);
         }
 
-        // Kiểm tra topping có trong đơn hàng không (qua tên)
+        
         $inOrder = \App\Models\OrderItemTopping::where('topping_name', $topping->name)->exists();
         if ($inOrder) {
             return response()->json([

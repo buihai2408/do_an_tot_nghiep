@@ -22,7 +22,7 @@ const statusColors = {
     orange: 'bg-orange-100 text-orange-800', green: 'bg-green-100 text-green-800', red: 'bg-red-100 text-red-800',
 };
 
-// ── Quick Action ──────────────────────────────────────────
+
 const quickLoading = ref({});
 
 const quickConfirm = async (order) => {
@@ -37,7 +37,7 @@ const quickConfirm = async (order) => {
     }
 };
 
-// ── Bulk Action ───────────────────────────────────────────
+
 const selectedIds = ref([]);
 const bulkLoading = ref(false);
 const bulkMessage = ref('');
@@ -91,8 +91,8 @@ onMounted(() => {
 
 onUnmounted(() => {
     if (window.Echo) {
-        // Not leaving the channel here because AdminLayout is also listening
-        // and we want AdminLayout to keep receiving notifications
+        
+        
     }
 });
 </script>
@@ -111,7 +111,7 @@ onUnmounted(() => {
             </div>
         </div>
 
-        <!-- ── Bulk Action Bar ─────────────────────────────────── -->
+        
         <transition
             enter-active-class="transition duration-200 ease-out"
             enter-from-class="opacity-0 -translate-y-2"
@@ -142,7 +142,7 @@ onUnmounted(() => {
             </div>
         </transition>
 
-        <!-- ── Bulk result message ─────────────────────────────── -->
+        
         <div v-if="bulkMessage" class="mb-4 p-3 rounded border text-sm font-medium"
             :class="bulkMessage.includes('lỗi') || bulkMessage.includes('không') ? 'bg-red-50 border-red-200 text-red-700' : 'bg-green-50 border-green-200 text-green-700'">
             {{ bulkMessage }}
@@ -192,7 +192,7 @@ onUnmounted(() => {
                         <td class="px-4 py-4 text-right text-gray-500">{{ order.created_at }}</td>
                         <td class="px-4 py-4 text-center">
                             <div class="flex items-center justify-center gap-2">
-                                <!-- Quick Confirm Button -->
+                                
                                 <button
                                     v-if="order.status === 'pending'"
                                     @click="quickConfirm(order)"
@@ -204,7 +204,7 @@ onUnmounted(() => {
                                     <svg v-else class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
                                     Xác nhận
                                 </button>
-                                <!-- View Detail Link -->
+                                
                                 <Link :href="`/admin/orders/${order.id}`" class="inline-flex items-center gap-1 px-3 py-1.5 border border-[#E8D9C5] hover:border-[#D4A853] text-[#2C1810] rounded text-xs font-medium transition">
                                     <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg>
                                     Chi tiết
@@ -216,7 +216,7 @@ onUnmounted(() => {
             </table>
         </div>
 
-        <!-- Pagination -->
+        
         <Pagination :links="orders.links" />
     </AdminLayout>
 </template>

@@ -4,13 +4,13 @@ import { Link } from '@inertiajs/vue3';
 
 <template>
     <div class="min-h-screen flex" style="font-family:'Inter',sans-serif;">
-        <!-- Left side - Branding (desktop only) -->
+        
         <div class="hidden lg:flex lg:w-1/2 relative overflow-hidden" style="background:#2C1810;">
             <div class="absolute inset-0 bg-cover bg-center" style="background-image:url('/images/background_home.jpg'); opacity:0.25;"></div>
-            <!-- Warm overlay gradient -->
+            
             <div class="absolute inset-0" style="background:linear-gradient(135deg, rgba(44,24,16,0.7) 0%, rgba(92,58,30,0.4) 100%);"></div>
 
-            <!-- Decorative coffee ring top-right -->
+            
             <div class="absolute top-10 right-10 w-32 h-32 rounded-full border-2 opacity-10" style="border-color:#D4A853;"></div>
             <div class="absolute top-14 right-14 w-24 h-24 rounded-full border opacity-10" style="border-color:#D4A853;"></div>
 
@@ -26,7 +26,7 @@ import { Link } from '@inertiajs/vue3';
                     </div>
                 </Link>
 
-                <!-- Quote -->
+                
                 <div class="relative">
                     <span class="absolute -top-4 -left-2 text-6xl leading-none opacity-20" style="color:#D4A853; font-family:Georgia,serif;">"</span>
                     <p class="text-lg leading-relaxed pl-4" style="color:rgba(255,255,255,0.75);">
@@ -39,7 +39,7 @@ import { Link } from '@inertiajs/vue3';
                     <p class="text-xs tracking-widest uppercase" style="color:#D4A853;">Great Coffee, Every Day</p>
                 </div>
 
-                <!-- Stats -->
+                
                 <div class="mt-12 grid grid-cols-3 gap-6">
                     <div class="text-center">
                         <p class="text-2xl font-bold text-white" style="font-family:'Playfair Display',serif;">10K+</p>
@@ -57,9 +57,9 @@ import { Link } from '@inertiajs/vue3';
             </div>
         </div>
 
-        <!-- Right side - Form -->
+        
         <div class="w-full lg:w-1/2 flex flex-col items-center justify-center px-6 py-12" style="background:#FAF6F0;">
-            <!-- Mobile logo -->
+            
             <div class="lg:hidden mb-8">
                 <Link href="/" class="flex items-center gap-2">
                     <div class="w-8 h-8 rounded-lg flex items-center justify-center" style="background:#2C1810;">

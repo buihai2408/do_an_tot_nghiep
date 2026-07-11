@@ -102,7 +102,7 @@ onMounted(() => {
                 playNotifSound();
                 info(`Đơn hàng mới: #${e.order.order_number}`);
                 
-                // Cập nhật list pending orders
+                
                 pendingOrders.value.unshift({
                     id: e.order.id,
                     order_number: e.order.order_number,
@@ -111,7 +111,7 @@ onMounted(() => {
                     created_at: e.order.created_at,
                 });
                 
-                // Giữ lại tối đa 10 đơn trong popup
+                
                 if (pendingOrders.value.length > 10) {
                     pendingOrders.value.pop();
                 }
@@ -132,9 +132,9 @@ onUnmounted(() => {
 <template>
     <div class="min-h-screen bg-[#FAF6F0] flex font-sans">
         <ToastNotification />
-        <!-- Sidebar - Dark Espresso -->
+        
         <aside :class="sidebarOpen ? 'w-64' : 'w-16'" class="bg-[#1C1208] text-white transition-all duration-300 flex-shrink-0 shadow-xl z-10 border-r border-[#2C1810]">
-            <!-- Logo Area -->
+            
             <div class="p-5 border-b border-[#D4A853]/20 flex items-center justify-between">
                 <Link href="/admin" class="flex items-center space-x-3 overflow-hidden">
                     <div class="w-8 h-8 rounded-lg bg-[#D4A853] flex items-center justify-center flex-shrink-0 text-[#1C1208]">
@@ -149,7 +149,7 @@ onUnmounted(() => {
                 </Link>
             </div>
             
-            <!-- Role Badge -->
+            
             <div v-if="sidebarOpen" class="px-5 py-3 border-b border-[#D4A853]/10">
                 <span class="text-[10px] font-bold tracking-widest uppercase px-2 py-1 rounded"
                     :class="isAdmin ? 'bg-[#D4A853]/20 text-[#D4A853]' : 'bg-white/10 text-white/50'">
@@ -157,7 +157,7 @@ onUnmounted(() => {
                 </span>
             </div>
 
-            <!-- Navigation -->
+            
             <nav class="mt-4 px-2 overflow-hidden">
                 <Link
                     v-for="item in menuItems"
@@ -169,7 +169,7 @@ onUnmounted(() => {
                     <span class="text-lg w-8 text-center flex-shrink-0">{{ item.icon }}</span>
                     <span v-if="sidebarOpen" class="ml-2 text-sm font-medium whitespace-nowrap">{{ item.name }}</span>
                     
-                    <!-- Tooltip -->
+                    
                     <div v-if="!sidebarOpen" class="absolute left-full ml-2 px-2 py-1 text-xs font-medium rounded bg-[#D4A853] text-[#1C1208] opacity-0 group-hover:opacity-100 pointer-events-none transition-opacity z-50 whitespace-nowrap">
                         {{ item.name }}
                     </div>
@@ -177,9 +177,9 @@ onUnmounted(() => {
             </nav>
         </aside>
 
-        <!-- Main area -->
+        
         <div class="flex-1 flex flex-col min-w-0">
-            <!-- Top bar -->
+            
             <header class="bg-white border-b border-[#E8D9C5] h-16 flex items-center justify-between px-6 shadow-sm z-0">
                 <button @click="sidebarOpen = !sidebarOpen" class="text-[#8B7355] hover:text-[#2C1810] hover:bg-[#FAF6F0] p-1.5 rounded transition">
                     <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -187,7 +187,7 @@ onUnmounted(() => {
                     </svg>
                 </button>
                 <div class="flex items-center gap-5">
-                    <!-- Notification Bell -->
+                    
                     <div ref="notifPanelRef" class="relative">
                         <button
                             @click="toggleNotifPanel"
@@ -204,7 +204,7 @@ onUnmounted(() => {
                             </span>
                         </button>
 
-                        <!-- Notification Panel -->
+                        
                         <Transition
                             enter-active-class="transition ease-out duration-200"
                             enter-from-class="opacity-0 scale-95"
@@ -272,7 +272,7 @@ onUnmounted(() => {
                 </div>
             </header>
 
-            <!-- Content -->
+            
             <main class="flex-1 p-6 overflow-auto">
                 <slot />
             </main>

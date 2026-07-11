@@ -38,7 +38,7 @@ const discount = ref(0);
 const submitting = ref(false);
 const errors = ref({});
 
-// ── Address Management ────────────────────────────────────
+
 const addressList = ref([...(props.addresses || [])]);
 const showAddressModal = ref(false);
 const editingAddress = ref(null);
@@ -91,7 +91,7 @@ const saveAddress = async () => {
             res = await axios.put(`/api/addresses/${editingAddress.value}`, addressForm.value);
             const idx = addressList.value.findIndex(a => a.id === editingAddress.value);
             if (idx !== -1) {
-                // Nếu set default, reset các địa chỉ khác
+                
                 if (addressForm.value.is_default) {
                     addressList.value.forEach(a => a.is_default = false);
                 }
@@ -104,7 +104,7 @@ const saveAddress = async () => {
             }
             addressList.value.unshift(res.data.address);
         }
-        // Sắp xếp lại: default lên trước
+        
         addressList.value.sort((a, b) => (b.is_default ? 1 : 0) - (a.is_default ? 1 : 0));
         showAddressModal.value = false;
         resetAddressForm();
@@ -131,7 +131,7 @@ const deleteAddress = async (addr) => {
     }
 };
 
-// ── Select Address ────────────────────────────────────────
+
 const selectAddress = (address) => {
     selectedAddress.value = address.id;
     form.value.shipping_address = address.full_address || address.address_line;
@@ -147,13 +147,13 @@ const deselectAddress = () => {
     form.value.customer_phone = page.props.auth.user?.phone || '';
 };
 
-// Auto-select default address
+
 const defaultAddr = addressList.value.find(a => a.is_default);
 if (defaultAddr) {
     selectAddress(defaultAddr);
 }
 
-// ── Coupon & Points ───────────────────────────────────────
+
 const pointsDiscount = computed(() => form.value.points_used * 1000);
 const POINTS_VALUE = 1000;
 
@@ -204,7 +204,7 @@ const submit = async () => {
 
 <template>
     <AppLayout>
-        <!-- Page Header -->
+        
         <section class="bg-[#1a1a1a] py-16 lg:py-20">
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
                 <h1 class="text-4xl lg:text-5xl font-bold text-white" style="font-family: 'Playfair Display', serif;">Thanh toán</h1>
@@ -213,9 +213,9 @@ const submit = async () => {
 
         <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
             <div class="grid grid-cols-1 lg:grid-cols-3 gap-10">
-                <!-- Form -->
+                
                 <div class="lg:col-span-2 space-y-8">
-                    <!-- Order Type -->
+                    
                     <div>
                         <h2 class="text-xs font-semibold tracking-widest uppercase text-[#1a1a1a] mb-4">Hình thức nhận hàng</h2>
                         <div class="flex gap-4">
@@ -231,11 +231,11 @@ const submit = async () => {
                         </div>
                     </div>
 
-                    <!-- Customer Info & Address -->
+                    
                     <div>
                         <h2 class="text-xs font-semibold tracking-widest uppercase text-[#1a1a1a] mb-4">Thông tin người nhận</h2>
 
-                        <!-- ── Address Book Section ─────────────────────── -->
+                        
                         <div v-if="form.order_type === 'delivery'" class="mb-6">
                             <div class="flex items-center justify-between mb-3">
                                 <p class="text-sm font-medium text-gray-700">📍 Sổ địa chỉ</p>
@@ -248,7 +248,7 @@ const submit = async () => {
                                 </button>
                             </div>
 
-                            <!-- Saved addresses list -->
+                            
                             <div v-if="addressList.length > 0" class="space-y-2">
                                 <div
                                     v-for="addr in addressList"
@@ -259,10 +259,10 @@ const submit = async () => {
                                     class="relative p-4 border transition group cursor-pointer"
                                     @click="selectAddress(addr)"
                                 >
-                                    <!-- Selection indicator -->
+                                    
                                     <div class="flex items-start justify-between">
                                         <div class="flex items-start gap-3 flex-1 min-w-0">
-                                            <!-- Radio -->
+                                            
                                             <div class="mt-0.5 flex-shrink-0">
                                                 <div
                                                     :class="selectedAddress === addr.id ? 'border-[#1a1a1a]' : 'border-gray-300'"
@@ -271,7 +271,7 @@ const submit = async () => {
                                                     <div v-if="selectedAddress === addr.id" class="w-2.5 h-2.5 rounded-full bg-[#1a1a1a]"></div>
                                                 </div>
                                             </div>
-                                            <!-- Content -->
+                                            
                                             <div class="flex-1 min-w-0">
                                                 <p class="font-medium text-sm text-[#1a1a1a]">
                                                     <span v-if="addr.label" class="inline-block bg-amber-100 text-amber-700 text-[10px] font-bold uppercase tracking-wider px-1.5 py-0.5 mr-1.5">{{ addr.label }}</span>
@@ -283,7 +283,7 @@ const submit = async () => {
                                             </div>
                                         </div>
 
-                                        <!-- Action buttons -->
+                                        
                                         <div class="flex-shrink-0 flex items-center gap-1 opacity-0 group-hover:opacity-100 transition ml-2">
                                             <button
                                                 @click.stop="openEditAddress(addr)"
@@ -303,7 +303,7 @@ const submit = async () => {
                                     </div>
                                 </div>
 
-                                <!-- Deselect / use new address -->
+                                
                                 <button
                                     v-if="selectedAddress"
                                     @click="deselectAddress"
@@ -320,7 +320,7 @@ const submit = async () => {
                             </div>
                         </div>
 
-                        <!-- Customer fields -->
+                        
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                             <div>
                                 <label class="block text-xs font-semibold tracking-widest uppercase text-gray-500 mb-2">Tên người nhận *</label>
@@ -339,7 +339,7 @@ const submit = async () => {
                             <textarea v-model="form.shipping_address" rows="2" class="w-full border-gray-300 focus:border-[#1a1a1a] focus:ring-[#1a1a1a] text-sm" :placeholder="selectedAddress ? '' : 'Nhập địa chỉ giao hàng...'"></textarea>
                             <p v-if="errors.shipping_address" class="text-red-500 text-xs mt-1">{{ errors.shipping_address[0] }}</p>
 
-                            <!-- Save new address checkbox -->
+                            
                             <div v-if="!selectedAddress" class="mt-3">
                                 <label class="flex items-center cursor-pointer">
                                     <input v-model="form.save_address" type="checkbox" class="rounded-sm text-[#1a1a1a] focus:ring-[#1a1a1a] border-gray-400" />
@@ -357,7 +357,7 @@ const submit = async () => {
                         </div>
                     </div>
 
-                    <!-- Payment -->
+                    
                     <div>
                         <h2 class="text-xs font-semibold tracking-widest uppercase text-[#1a1a1a] mb-4">Phương thức thanh toán</h2>
                         <div class="space-y-2">
@@ -374,7 +374,7 @@ const submit = async () => {
                     </div>
                 </div>
 
-                <!-- Order Summary -->
+                
                 <div>
                     <div class="bg-[#f8f5f0] p-8 sticky top-24">
                         <h2 class="text-xs font-semibold tracking-widest uppercase text-[#1a1a1a] mb-6">Đơn hàng</h2>
@@ -385,9 +385,9 @@ const submit = async () => {
                             </div>
                         </div>
 
-                        <!-- Coupon -->
+                        
                         <div class="mb-6">
-                            <!-- Danh sách mã giảm giá có sẵn -->
+                            
                             <div v-if="available_coupons && available_coupons.length > 0" class="mb-3 space-y-2">
                                 <span class="text-xs font-semibold text-[#1a1a1a] uppercase tracking-wider block mb-2">Mã giảm giá khả dụng</span>
                                 <div 
@@ -421,7 +421,7 @@ const submit = async () => {
                             <p v-if="couponResult" :class="couponResult.valid ? 'text-green-600' : 'text-red-500'" class="text-xs mt-1.5">{{ couponResult.message }}</p>
                         </div>
 
-                        <!-- Loyalty Points -->
+                        
                         <div v-if="loyalty && loyalty.points > 0" class="mb-6 p-4 bg-white border border-gray-200">
                             <div class="flex items-center justify-between mb-2">
                                 <span class="text-xs font-semibold text-[#1a1a1a]">
@@ -485,7 +485,7 @@ const submit = async () => {
             </div>
         </div>
 
-        <!-- ── Address Modal ───────────────────────────────────── -->
+        
         <teleport to="body">
             <transition
                 enter-active-class="transition duration-200 ease-out"
@@ -496,12 +496,12 @@ const submit = async () => {
                 leave-to-class="opacity-0"
             >
                 <div v-if="showAddressModal" class="fixed inset-0 z-50 flex items-center justify-center p-4">
-                    <!-- Backdrop -->
+                    
                     <div class="absolute inset-0 bg-black/50" @click="showAddressModal = false"></div>
 
-                    <!-- Modal content -->
+                    
                     <div class="relative bg-white w-full max-w-lg shadow-2xl" style="max-height: 90vh; overflow-y: auto;">
-                        <!-- Header -->
+                        
                         <div class="flex items-center justify-between p-6 border-b">
                             <h3 class="text-lg font-bold text-[#1a1a1a]" style="font-family: 'Playfair Display', serif;">
                                 {{ editingAddress ? 'Sửa địa chỉ' : 'Thêm địa chỉ mới' }}
@@ -511,7 +511,7 @@ const submit = async () => {
                             </button>
                         </div>
 
-                        <!-- Form -->
+                        
                         <div class="p-6 space-y-4">
                             <div>
                                 <label class="block text-xs font-semibold tracking-widest uppercase text-gray-500 mb-2">Nhãn địa chỉ</label>
@@ -556,7 +556,7 @@ const submit = async () => {
                             </div>
                         </div>
 
-                        <!-- Footer -->
+                        
                         <div class="flex items-center justify-end gap-3 p-6 border-t bg-gray-50">
                             <button
                                 @click="showAddressModal = false"

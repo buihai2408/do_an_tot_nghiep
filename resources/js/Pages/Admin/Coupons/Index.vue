@@ -1,4 +1,4 @@
-﻿<script setup>
+<script setup>
 import AdminLayout from '@/Layouts/AdminLayout.vue';
 import { Link, router } from '@inertiajs/vue3';
 import { useFormatters } from '@/Composables/useFormatters';
@@ -9,8 +9,12 @@ defineProps({ coupons: Object });
 
 const deleteCoupon = async (id) => {
     if (!confirm('Xác nhận xóa?')) return;
-    await axios.delete(`/api/admin/coupons/${id}`);
-    router.reload();
+    try {
+        await axios.delete(`/api/admin/coupons/${id}`);
+        router.reload();
+    } catch (e) {
+        alert(e.response?.data?.message || 'Xóa thất bại!');
+    }
 };
 </script>
 

@@ -10,7 +10,7 @@ defineProps({
     categories: Array,
 });
 
-// Ảnh tĩnh cho danh mục (theo slug)
+
 const categoryImage = (slug) => {
     const map = {
         'ca-phe':       '/images/categories/ca-phe.png',
@@ -26,13 +26,13 @@ const categoryImage = (slug) => {
 
 <template>
     <AppLayout>
-        <!-- ── HERO ───────────────────────────────────────────────── -->
+        
         <section class="relative flex items-center justify-center min-h-[90vh] bg-cover bg-center bg-no-repeat" style="background-image:url('/images/background_home.jpg')">
-            <!-- Overlay -->
+            
             <div class="absolute inset-0" style="background:linear-gradient(to right, rgba(28,18,8,0.85), rgba(44,24,16,0.6));"></div>
 
             <div class="relative z-10 text-center px-4 max-w-4xl mx-auto py-20">
-                <!-- Decorative Icon -->
+                
                 <div class="mb-8 flex justify-center">
                     <div style="background:#D4A853; border-radius:50%;" class="w-16 h-16 flex items-center justify-center shadow-lg shadow-black/20">
                         <svg class="w-8 h-8" style="color:#2C1810;" fill="currentColor" viewBox="0 0 24 24">
@@ -41,7 +41,7 @@ const categoryImage = (slug) => {
                     </div>
                 </div>
 
-                <!-- Headline -->
+                
                 <h1 class="text-4xl sm:text-5xl lg:text-7xl font-bold text-white mb-6 leading-tight tracking-wide" style="font-family:'Playfair Display',serif; text-shadow:0 4px 12px rgba(0,0,0,0.5);">
                     GREAT COFFEE,<br>EVERY DAY
                 </h1>
@@ -49,7 +49,7 @@ const categoryImage = (slug) => {
                     Thưởng thức hương vị cà phê đích thực, pha chế từ những hạt cà phê được chọn lọc kỹ lưỡng, mang đến trải nghiệm tuyệt vời mỗi ngày.
                 </p>
 
-                <!-- CTA Buttons -->
+                
                 <div class="flex flex-col sm:flex-row items-center justify-center gap-4">
                     <Link href="/menu"
                         class="px-8 py-3.5 text-sm font-semibold tracking-widest uppercase transition-all duration-200 hover:scale-105"
@@ -64,7 +64,7 @@ const categoryImage = (slug) => {
                 </div>
             </div>
 
-            <!-- Scroll Indicator -->
+            
             <div class="absolute bottom-8 left-1/2 -translate-x-1/2 animate-bounce">
                 <svg class="w-6 h-6" style="color:rgba(255,255,255,0.5);" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3" />
@@ -72,10 +72,10 @@ const categoryImage = (slug) => {
             </div>
         </section>
 
-        <!-- ── FEATURED CATEGORIES ───────────────────────────────── -->
+        
         <section class="py-20 lg:py-28" style="background:#F2EBE0;">
             <div class="max-w-screen-2xl mx-auto px-4 sm:px-6 lg:px-8">
-                <!-- Section Header -->
+                
                 <div class="max-w-2xl mb-16">
                     <p class="text-xs font-semibold tracking-widest uppercase mb-3" style="color:#A16A38;">Chất lượng hảo hạng</p>
                     <h2 class="text-3xl lg:text-4xl font-bold leading-tight" style="color:#2C1810; font-family:'Playfair Display',serif;">
@@ -83,18 +83,18 @@ const categoryImage = (slug) => {
                     </h2>
                 </div>
 
-                <!-- Category Grid -->
+                
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-10">
                     <div v-for="(cat, index) in categories?.slice(0, 3)" :key="cat.id" class="group block cursor-pointer">
                         <Link :href="`/menu?category=${cat.slug}`" class="block h-full">
-                            <!-- Image Container -->
+                            
                             <div class="aspect-[4/3] mb-6 overflow-hidden relative" style="border-radius:4px; box-shadow:0 10px 20px rgba(44,24,16,0.05);">
                                 <div class="absolute inset-0 bg-[#2C1810]/10 group-hover:bg-transparent transition-all duration-500 z-10"></div>
                                 <img :src="categoryImage(cat.slug)"
                                     class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" />
                             </div>
 
-                            <!-- Content -->
+                            
                             <h3 class="text-base font-bold tracking-widest uppercase mb-3" style="color:#2C1810;">{{ cat.name }}</h3>
                             <p class="text-sm leading-relaxed mb-5" style="color:#5C3A1E;">
                                 Khám phá các sản phẩm {{ cat.name.toLowerCase() }} được pha chế tỉ mỉ từ nguyên liệu chất lượng cao, mang lại trải nghiệm đáng nhớ.
@@ -108,7 +108,7 @@ const categoryImage = (slug) => {
             </div>
         </section>
 
-        <!-- ── PARALLAX BANNER ───────────────────────────────────── -->
+        
         <section class="relative h-[55vh] bg-fixed bg-cover bg-center" style="background-image:url('/images/background_home.jpg')">
             <div class="absolute inset-0" style="background:rgba(28,18,8,0.7);"></div>
             <div class="relative z-10 h-full flex items-center justify-end">
@@ -121,7 +121,7 @@ const categoryImage = (slug) => {
             </div>
         </section>
 
-        <!-- ── OPENING HOURS ─────────────────────────────────────── -->
+        
         <section class="relative py-20 lg:py-28" style="background:#2C1810;">
             <div class="max-w-screen-2xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
@@ -133,7 +133,7 @@ const categoryImage = (slug) => {
                         <p class="leading-relaxed max-w-lg mb-8" style="color:rgba(255,255,255,0.65);">
                             Ghé thăm chúng tôi để thưởng thức những ly cà phê thơm ngon nhất. Không gian ấm cúng, phục vụ tận tâm, mang đến cho bạn những giây phút thư giãn tuyệt vời sau những giờ làm việc mệt mỏi.
                         </p>
-                        <!-- Info Card -->
+                        
                         <div class="p-6 inline-block" style="background:#1C1208; border:1px solid #5C3A1E; border-radius:4px;">
                             <div class="flex items-center gap-4 mb-3">
                                 <span class="text-2xl">☕</span>
@@ -152,7 +152,7 @@ const categoryImage = (slug) => {
                         </div>
                     </div>
                     <div class="relative">
-                        <!-- Image framing perfectly centered -->
+                        
                         <div class="absolute -inset-3 border-2 hidden lg:block" style="border-color:#5C3A1E;"></div>
                         <div class="aspect-[4/3] overflow-hidden relative z-10" style="box-shadow:0 20px 40px rgba(0,0,0,0.5);">
                             <img src="/images/background_home.jpg" class="w-full h-full object-cover transition duration-700 hover:scale-105" alt="Coffee shop interior" />
@@ -162,10 +162,10 @@ const categoryImage = (slug) => {
             </div>
         </section>
 
-        <!-- ── FEATURED PRODUCTS ─────────────────────────────────── -->
+        
         <section class="py-20 lg:py-28" style="background:#FAF6F0;">
             <div class="max-w-screen-2xl mx-auto px-4 sm:px-6 lg:px-8">
-                <!-- Section Header -->
+                
                 <div class="text-center mb-16">
                     <p class="text-xs font-semibold tracking-widest uppercase mb-3" style="color:#A16A38;">Sản phẩm nổi bật</p>
                     <h2 class="text-3xl lg:text-4xl font-bold" style="color:#2C1810; font-family:'Playfair Display',serif;">
@@ -174,7 +174,7 @@ const categoryImage = (slug) => {
                     <div class="w-16 h-1 mx-auto mt-6" style="background:#D4A853;"></div>
                 </div>
 
-                <!-- Products Grid -->
+                
                 <div class="grid grid-cols-2 md:grid-cols-4 gap-6 lg:gap-8">
                     <Link
                         v-for="product in featuredProducts"
@@ -191,7 +191,7 @@ const categoryImage = (slug) => {
                             <div v-else class="w-full h-full flex items-center justify-center">
                                 <svg class="w-12 h-12 opacity-20" style="color:#2C1810;" fill="currentColor" viewBox="0 0 24 24"><path d="M2 21h18v-2H2v2zM20 8h-2V5h2v3zm2-4h-2V2a1 1 0 00-1-1H3a1 1 0 00-1 1v11a4 4 0 004 4h8a4 4 0 004-4v-1h2a2 2 0 002-2V6a2 2 0 00-2-2zm-4 9a2 2 0 01-2 2H6a2 2 0 01-2-2V3h14v10zm4-3h-2V6h2v4z"/></svg>
                             </div>
-                            <!-- Price Tag -->
+                            
                             <div class="absolute top-3 right-3 px-2.5 py-1 text-xs font-bold" style="background:#2C1810; color:#D4A853; border-radius:2px;">
                                 {{ formatCurrency(product.base_price) }}
                             </div>
@@ -208,7 +208,7 @@ const categoryImage = (slug) => {
                     </Link>
                 </div>
 
-                <!-- View All Button -->
+                
                 <div class="text-center mt-16">
                     <Link href="/menu"
                         class="inline-block px-10 py-3.5 text-sm font-semibold tracking-widest uppercase transition-all duration-200"
@@ -221,7 +221,7 @@ const categoryImage = (slug) => {
             </div>
         </section>
 
-        <!-- ── CTA SECTION ───────────────────────────────────────── -->
+        
         <section class="relative py-20 lg:py-24 bg-cover bg-center" style="background-image:url('/images/background_home.jpg')">
             <div class="absolute inset-0" style="background:rgba(28,18,8,0.9);"></div>
             <div class="relative z-10 text-center px-4 max-w-3xl mx-auto">

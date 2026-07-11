@@ -56,7 +56,7 @@ class ProductController extends Controller
                 $imagesToDelete = ProductImage::whereIn('id', $deleteIds)
                     ->where('product_id', $product->id)
                     ->get();
-                /** @var \App\Models\ProductImage $img */
+                
                 foreach ($imagesToDelete as $img) {
                     Storage::disk('public')->delete($img->path);
                     $img->delete();
@@ -88,14 +88,14 @@ class ProductController extends Controller
 
     public function destroy(Product $product)
     {
-        // Kiểm tra sản phẩm có trong đơn hàng không
+        
         if ($product->orderItems()->count() > 0) {
             return response()->json([
                 'message' => 'Không thể xóa sản phẩm đã có trong đơn hàng!',
             ], 422);
         }
 
-        // Kiểm tra sản phẩm có trong giỏ hàng không
+        
         $inCart = \App\Models\CartItem::where('product_id', $product->id)->exists();
         if ($inCart) {
             return response()->json([
@@ -103,14 +103,14 @@ class ProductController extends Controller
             ], 422);
         }
 
-        // Kiểm tra sản phẩm có đánh giá không
+        
         if ($product->reviews()->count() > 0) {
             return response()->json([
                 'message' => 'Không thể xóa sản phẩm đã có đánh giá!',
             ], 422);
         }
 
-        // Xóa ảnh
+        
         foreach ($product->images as $img) {
             Storage::disk('public')->delete($img->path);
         }

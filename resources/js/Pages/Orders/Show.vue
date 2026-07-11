@@ -85,7 +85,7 @@ onUnmounted(() => {
 
 <template>
     <AppLayout>
-        <!-- Page Header -->
+        
         <section class="bg-[#1a1a1a] py-16 lg:py-20">
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
                 <h1 class="text-4xl lg:text-5xl font-bold text-white" style="font-family: 'Playfair Display', serif;">Chi tiết đơn hàng</h1>
@@ -99,7 +99,7 @@ onUnmounted(() => {
                     <span :class="statusColors[order.status_color]" class="px-4 py-1.5 text-xs font-semibold">{{ order.status_label }}</span>
                 </div>
 
-                <!-- Timeline -->
+                
                 <div class="mb-8 text-sm text-gray-500 space-y-1.5">
                     <p>Đặt hàng: {{ order.created_at }}</p>
                     <p v-if="order.confirmed_at">Xác nhận: {{ order.confirmed_at }}</p>
@@ -108,7 +108,7 @@ onUnmounted(() => {
                     <p v-if="order.cancel_reason" class="text-red-500">Lý do: {{ order.cancel_reason }}</p>
                 </div>
 
-                <!-- Customer info -->
+                
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
                     <div class="bg-[#f8f5f0] p-5">
                         <h3 class="text-xs font-semibold tracking-widest uppercase text-[#1a1a1a] mb-3">Thông tin giao hàng</h3>
@@ -123,7 +123,7 @@ onUnmounted(() => {
                     </div>
                 </div>
 
-                <!-- Items -->
+                
                 <h3 class="text-xs font-semibold tracking-widest uppercase text-[#1a1a1a] mb-4">Sản phẩm</h3>
                 <div class="space-y-3 mb-8">
                     <div v-for="item in order.items" :key="item.id" class="flex justify-between items-start p-4 bg-[#f8f5f0]">
@@ -145,7 +145,7 @@ onUnmounted(() => {
                     </div>
                 </div>
 
-                <!-- Totals -->
+                
                 <div class="border-t border-gray-200 pt-6 space-y-3 text-sm">
                     <div class="flex justify-between"><span class="text-gray-500">Tạm tính</span><span>{{ formatCurrency(order.subtotal) }}</span></div>
                     <div v-if="order.discount_amount > 0" class="flex justify-between text-green-600"><span>Giảm giá (coupon)</span><span>-{{ formatCurrency(order.discount_amount) }}</span></div>
@@ -162,7 +162,7 @@ onUnmounted(() => {
 
                 <p v-if="order.note" class="mt-4 text-sm text-gray-500 bg-[#f8f5f0] p-4">Ghi chú: {{ order.note }}</p>
 
-                <!-- Actions -->
+                
                 <div class="mt-8 flex gap-4">
                     <button v-if="order.can_cancel" @click="showCancelModal = true" class="px-6 py-2.5 border border-red-300 text-red-600 text-sm font-medium hover:bg-red-50 transition">
                         Hủy đơn hàng
@@ -174,7 +174,7 @@ onUnmounted(() => {
             </div>
         </div>
 
-        <!-- Cancel Modal -->
+        
         <div v-if="showCancelModal" class="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
             <div class="bg-white p-8 max-w-md w-full mx-4">
                 <h3 class="text-lg font-bold text-[#1a1a1a] mb-4" style="font-family: 'Playfair Display', serif;">Hủy đơn hàng</h3>
@@ -186,7 +186,7 @@ onUnmounted(() => {
             </div>
         </div>
 
-        <!-- Review Modal -->
+        
         <div v-if="showReviewModal" class="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
             <div class="bg-white p-8 max-w-md w-full mx-4">
                 <h3 class="text-lg font-bold text-[#1a1a1a] mb-4" style="font-family: 'Playfair Display', serif;">Đánh giá đơn hàng #{{ order.order_number }}</h3>

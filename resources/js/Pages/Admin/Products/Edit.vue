@@ -125,7 +125,7 @@ const submit = async () => {
                     <p v-if="errors.base_price" class="text-red-500 text-sm mt-1">{{ errors.base_price[0] }}</p>
                 </div>
 
-                <!-- Existing Images -->
+                
                 <div>
                     <label class="block text-sm font-medium mb-2">Hình ảnh sản phẩm</label>
                     <div v-if="existingImages.length" class="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 gap-3 mb-3">
@@ -145,7 +145,7 @@ const submit = async () => {
                         </div>
                     </div>
 
-                    <!-- New Image Previews -->
+                    
                     <div v-if="newPreviews.length" class="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 gap-3 mb-3">
                         <div v-for="(preview, index) in newPreviews" :key="'new-'+index" class="relative group rounded-lg overflow-hidden border-2 border-dashed border-green-400">
                             <img :src="preview.url" class="w-full h-24 object-cover" />

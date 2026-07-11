@@ -12,7 +12,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('user_id')->constrained()->cascadeOnDelete();
             $table->foreignId('order_id')->nullable()->constrained()->nullOnDelete();
-            $table->string('type'); // earn, redeem
+            $table->string('type'); 
             $table->integer('points');
             $table->string('description');
             $table->timestamp('created_at')->useCurrent();

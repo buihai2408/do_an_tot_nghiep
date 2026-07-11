@@ -9,6 +9,7 @@ use App\Services\CartService;
 use App\Services\CouponService;
 use App\Services\OrderService;
 use App\Services\PayOSService;
+use Illuminate\Support\Facades\Log;
 
 class CheckoutController extends Controller
 {
@@ -25,8 +26,14 @@ class CheckoutController extends Controller
                     $cancelUrl = route('checkout.payos.cancel');
                     $redirect = $payOSService->createPaymentLink($order, $returnUrl, $cancelUrl);
                 } catch (\Exception $e) {
+                    Log::error('PayOS: Failed to create payment link after order', [
+                        'order_id' => $order->id,
+                        'order_number' => $order->order_number,
+                        'error' => $e->getMessage(),
+                    ]);
+
                     return response()->json([
-                        'message' => 'Đặt hàng thành công nhưng không tạo được link thanh toán. Vui lòng thử lại.',
+                        'message' => 'Đặt hàng thành công nhưng không tạo được link thanh toán PayOS. Vui lòng vào chi tiết đơn hàng để thử lại.',
                         'order' => ['id' => $order->id, 'order_number' => $order->order_number],
                         'redirect' => route('orders.show', $order),
                     ], 201);

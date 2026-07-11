@@ -32,7 +32,7 @@ const selectedSort = ref(getInitialSort());
 const isListening = ref(false);
 
 const applyFilters = () => {
-    // Đảm bảo selectedSort luôn hợp lệ
+    
     if (!sortOptions.map(o => o.value).includes(selectedSort.value)) {
         selectedSort.value = 'featured';
     }
@@ -68,7 +68,7 @@ const startVoiceSearch = () => {
 
     recognition.onresult = (event) => {
         const transcript = event.results[0][0].transcript;
-        // Loại bỏ dấu chấm ở cuối nếu có (do Google Speech API thường tự thêm)
+        
         search.value = transcript.replace(/\.$/, '');
     };
 
@@ -87,7 +87,7 @@ const startVoiceSearch = () => {
 
 <template>
     <AppLayout>
-        <!-- Page Header -->
+        
         <section class="py-16 lg:py-20" style="background:#2C1810;">
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
                 <p class="text-xs font-semibold tracking-[0.3em] uppercase mb-3 flex items-center justify-center gap-3" style="color:#D4A853;">
@@ -101,7 +101,7 @@ const startVoiceSearch = () => {
         </section>
 
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-            <!-- Filters -->
+            
             <div class="flex flex-col md:flex-row gap-4 mb-10 pb-8" style="border-bottom:1px solid #E8D9C5;">
                 <div class="flex-1 relative flex items-center">
                     <span class="absolute left-3 text-base">🔍</span>
@@ -114,7 +114,7 @@ const startVoiceSearch = () => {
                         onfocus="this.style.borderColor='#D4A853'; this.style.boxShadow='0 0 0 3px rgba(212,168,83,0.12)'"
                         onblur="this.style.borderColor='#E8D9C5'; this.style.boxShadow='none'"
                     />
-                    <!-- Voice Search Button -->
+                    
                     <button @click="startVoiceSearch" type="button" class="absolute right-3 p-1.5 rounded-full transition-colors duration-200"
                         :class="isListening ? 'text-red-600 animate-pulse bg-red-100' : 'text-gray-400 hover:text-[#2C1810] hover:bg-[#E8D9C5]'"
                         title="Tìm kiếm bằng giọng nói">
@@ -140,7 +140,7 @@ const startVoiceSearch = () => {
                 </select>
             </div>
 
-            <!-- Products grid -->
+            
             <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 lg:gap-8">
                 <Link
                     v-for="product in products.data"
@@ -154,7 +154,7 @@ const startVoiceSearch = () => {
                         <div v-else class="w-full h-full flex items-center justify-center">
                             <svg class="w-16 h-16" style="color:#D4A853; opacity:0.5;" fill="currentColor" viewBox="0 0 24 24"><path d="M2 21h18v-2H2v2zM20 8h-2V5h2v3zm2-4h-2V2a1 1 0 00-1-1H3a1 1 0 00-1 1v11a4 4 0 004 4h8a4 4 0 004-4v-1h2a2 2 0 002-2V6a2 2 0 00-2-2zm-4 9a2 2 0 01-2 2H6a2 2 0 01-2-2V3h14v10zm4-3h-2V6h2v4z"/></svg>
                         </div>
-                        <!-- Quick-view overlay on hover -->
+                        
                         <div class="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300" style="background:rgba(44,24,16,0.4);">
                             <span class="text-xs font-semibold tracking-widest uppercase px-4 py-2" style="background:#D4A853; color:#2C1810; border-radius:2px;">Xem chi tiết</span>
                         </div>
@@ -176,14 +176,14 @@ const startVoiceSearch = () => {
                 </Link>
             </div>
 
-            <!-- Empty state -->
+            
             <div v-if="products.data.length === 0" class="text-center py-20">
                 <div class="text-5xl mb-4">☕</div>
                 <p class="text-lg font-semibold mb-2" style="color:#2C1810;">Không tìm thấy sản phẩm</p>
                 <p class="text-sm" style="color:#8B7355;">Hãy thử tìm kiếm với từ khóa khác.</p>
             </div>
 
-            <!-- Pagination -->
+            
             <div v-if="products.links?.length > 3" class="flex justify-center mt-12 space-x-1">
                 <template v-for="link in products.links" :key="link.label">
                     <Link

@@ -33,7 +33,7 @@ const updateStatus = async () => {
                 <span class="px-4 py-2 rounded-full text-sm font-semibold bg-amber-100 text-amber-800">{{ order.status_label }}</span>
             </div>
 
-            <!-- Status transition -->
+            
             <div v-if="allowedTransitions.length" class="bg-white rounded border border-[#E8D9C5] p-6 mb-6 shadow-sm">
                 <h2 class="font-bold mb-3">Cập nhật trạng thái</h2>
                 <div class="flex items-center space-x-4">
@@ -62,7 +62,7 @@ const updateStatus = async () => {
                 </div>
             </div>
 
-            <!-- Items -->
+            
             <div class="bg-white rounded border border-[#E8D9C5] p-6 shadow-sm">
                 <h2 class="font-bold mb-4">Sản phẩm</h2>
                 <div class="space-y-3">

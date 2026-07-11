@@ -76,7 +76,7 @@ const deleteProduct = async (id) => {
             </table>
         </div>
 
-        <!-- Pagination -->
+        
         <Pagination :links="products.links" />
     </AdminLayout>
 </template>

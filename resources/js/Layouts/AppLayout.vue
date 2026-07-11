@@ -32,14 +32,14 @@ const navigation = [
     <div class="min-h-screen overflow-x-hidden" style="background:#FAF6F0; font-family:'Inter',sans-serif;">
         <ToastNotification />
 
-        <!-- ── NAVBAR ──────────────────────────────────────────────── -->
+        
         <nav style="background:#2C1810; border-bottom:1px solid #5C3A1E;" class="sticky top-0 z-50">
             <div class="max-w-screen-2xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div class="flex justify-between items-center h-16 lg:h-20">
 
-                    <!-- Logo -->
+                    
                     <Link href="/" class="flex items-center gap-2.5 group">
-                        <!-- Coffee cup icon -->
+                        
                         <div style="background:#D4A853; border-radius:8px;" class="w-8 h-8 flex items-center justify-center flex-shrink-0 transition group-hover:scale-105">
                             <svg class="w-5 h-5" style="color:#2C1810;" fill="currentColor" viewBox="0 0 24 24">
                                 <path d="M2 21h18v-2H2v2zM20 8h-2V5h2v3zm2-4h-2V2a1 1 0 00-1-1H3a1 1 0 00-1 1v11a4 4 0 004 4h8a4 4 0 004-4v-1h2a2 2 0 002-2V6a2 2 0 00-2-2zm-4 9a2 2 0 01-2 2H6a2 2 0 01-2-2V3h14v10zm4-3h-2V6h2v4z"/>
@@ -48,7 +48,7 @@ const navigation = [
                         <span class="text-xl font-bold text-white tracking-wider" style="font-family:'Playfair Display',serif;">Trạm Cà Phê</span>
                     </Link>
 
-                    <!-- Desktop nav links -->
+                    
                     <div class="hidden md:flex items-center space-x-8">
                         <Link
                             v-for="item in navigation"
@@ -63,9 +63,9 @@ const navigation = [
                         </Link>
                     </div>
 
-                    <!-- Right actions -->
+                    
                     <div class="flex items-center space-x-5">
-                        <!-- Cart -->
+                        
                         <Link href="/cart" class="relative transition" style="color:rgba(255,255,255,0.7);"
                             onmouseover="this.style.color='#D4A853'"
                             onmouseout="this.style.color='rgba(255,255,255,0.7)'">
@@ -79,7 +79,7 @@ const navigation = [
                             </span>
                         </Link>
 
-                        <!-- User dropdown -->
+                        
                         <template v-if="page.props.auth.user">
                             <div class="relative" @mouseenter="openDropdown" @mouseleave="closeDropdown">
                                 <button class="flex items-center text-sm transition gap-1.5" style="color:rgba(255,255,255,0.85);">
@@ -114,7 +114,7 @@ const navigation = [
                                 onmouseover="this.style.background='#E8C17A'" onmouseout="this.style.background='#D4A853'">Đăng ký</Link>
                         </template>
 
-                        <!-- Mobile menu toggle -->
+                        
                         <button @click="mobileMenuOpen = !mobileMenuOpen" class="md:hidden" style="color:rgba(255,255,255,0.8);">
                             <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path v-if="!mobileMenuOpen" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 6h16M4 12h16M4 18h16" />
@@ -125,7 +125,7 @@ const navigation = [
                 </div>
             </div>
 
-            <!-- Mobile menu -->
+            
             <div v-if="mobileMenuOpen" style="background:#2C1810; border-top:1px solid #5C3A1E;" class="md:hidden pb-4">
                 <Link v-for="item in navigation" :key="item.name" :href="item.href"
                     class="block px-6 py-3 text-sm tracking-widest uppercase transition"
@@ -140,16 +140,16 @@ const navigation = [
             </div>
         </nav>
 
-        <!-- ── MAIN CONTENT ──────────────────────────────────────── -->
+        
         <main>
             <slot />
         </main>
 
-        <!-- ── FOOTER ────────────────────────────────────────────── -->
+        
         <footer style="background:#1C1208; color:#B5A089;">
             <div class="max-w-screen-2xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
                 <div class="grid grid-cols-1 md:grid-cols-4 gap-10">
-                    <!-- Brand -->
+                    
                     <div class="md:col-span-1">
                         <div class="flex items-center gap-2 mb-4">
                             <div style="background:#D4A853; border-radius:6px;" class="w-7 h-7 flex items-center justify-center">
@@ -160,7 +160,7 @@ const navigation = [
                             <h3 class="text-lg font-bold text-white" style="font-family:'Playfair Display',serif;">Trạm Cà Phê</h3>
                         </div>
                         <p class="text-sm leading-relaxed mb-5">Thưởng thức hương vị cà phê đích thực, pha chế từ những hạt cà phê được chọn lọc kỹ lưỡng.</p>
-                        <!-- Social icons -->
+                        
                         <div class="flex gap-3">
                             <a href="#" class="w-8 h-8 rounded-full flex items-center justify-center transition hover:scale-110" style="background:#2C1810;">
                                 <svg class="w-4 h-4" style="color:#D4A853;" fill="currentColor" viewBox="0 0 24 24"><path d="M18 2h-3a5 5 0 00-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 011-1h3z"/></svg>
@@ -171,7 +171,7 @@ const navigation = [
                         </div>
                     </div>
 
-                    <!-- Explore -->
+                    
                     <div>
                         <h4 class="text-xs font-semibold tracking-widest uppercase mb-5" style="color:#D4A853;">Khám phá</h4>
                         <ul class="space-y-3 text-sm">
@@ -181,7 +181,7 @@ const navigation = [
                         </ul>
                     </div>
 
-                    <!-- Hours -->
+                    
                     <div>
                         <h4 class="text-xs font-semibold tracking-widest uppercase mb-5" style="color:#D4A853;">Giờ mở cửa</h4>
                         <ul class="space-y-3 text-sm">
@@ -190,7 +190,7 @@ const navigation = [
                         </ul>
                     </div>
 
-                    <!-- Contact -->
+                    
                     <div>
                         <h4 class="text-xs font-semibold tracking-widest uppercase mb-5" style="color:#D4A853;">Liên hệ</h4>
                         <ul class="space-y-3 text-sm">
@@ -201,7 +201,7 @@ const navigation = [
                     </div>
                 </div>
 
-                <!-- Bottom bar -->
+                
                 <div class="mt-12 pt-8 flex flex-col md:flex-row justify-between items-center text-xs" style="border-top:1px solid #2C1810; color:#6B5340;">
                     <p>© {{ new Date().getFullYear() }} Trạm Cà Phê. All rights reserved.</p>
                     <div class="flex space-x-6 mt-4 md:mt-0">
@@ -212,7 +212,7 @@ const navigation = [
             </div>
         </footer>
 
-        <!-- AI Chatbot (floating, bottom-right) -->
+        
         <ChatBot />
     </div>
 </template>

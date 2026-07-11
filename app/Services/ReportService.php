@@ -29,7 +29,7 @@ class ReportService
             'orders_today' => Order::whereBetween('created_at', [$start, $end])->count(),
             'new_customers' => User::where('role', 'customer')
                 ->whereBetween('created_at', [$start, $end])->count(),
-            'pending_orders' => Order::where('status', OrderStatus::Pending)->count(), // Keep overall pending
+            'pending_orders' => Order::where('status', OrderStatus::Pending)->count(), 
             'total_revenue' => Order::where('status', OrderStatus::Completed)->sum('total'),
             'total_orders' => Order::count(),
             'total_customers' => User::where('role', 'customer')->count(),

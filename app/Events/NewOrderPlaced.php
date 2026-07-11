@@ -17,9 +17,9 @@ class NewOrderPlaced implements ShouldBroadcastNow
 
     public $order;
 
-    /**
-     * Create a new event instance.
-     */
+    
+
+
     public function __construct(Order $order)
     {
         $this->order = [
@@ -31,11 +31,11 @@ class NewOrderPlaced implements ShouldBroadcastNow
         ];
     }
 
-    /**
-     * Get the channels the event should broadcast on.
-     *
-     * @return array<int, \Illuminate\Broadcasting\Channel>
-     */
+    
+
+
+
+
     public function broadcastOn(): array
     {
         return [
@@ -43,9 +43,9 @@ class NewOrderPlaced implements ShouldBroadcastNow
         ];
     }
     
-    /**
-     * The event's broadcast name.
-     */
+    
+
+
     public function broadcastAs(): string
     {
         return 'NewOrderPlaced';

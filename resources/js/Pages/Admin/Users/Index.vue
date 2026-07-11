@@ -44,7 +44,7 @@ const updateRole = async (user, role) => {
             </table>
         </div>
 
-        <!-- Pagination -->
+        
         <Pagination :links="users.links" />
     </AdminLayout>
 </template>

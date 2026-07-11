@@ -17,35 +17,35 @@ use App\Http\Controllers\Api\Admin\ReviewController as AdminReviewController;
 use App\Http\Controllers\Api\Admin\ReportController as AdminReportController;
 use Illuminate\Support\Facades\Route;
 
-// PayOS webhook (public - called by PayOS server)
+
 Route::post('/payos/webhook', [PayOSController::class, 'webhook']);
 
-// Chatbot proxy (public - available to all users including guests)
+
 Route::post('/chatbot/message', [ChatbotController::class, 'sendMessage']);
 
-// Cart (public - works with session for guests)
+
 Route::post('/cart/items', [CartController::class, 'store']);
 Route::put('/cart/items/{cartItem}', [CartController::class, 'update']);
 Route::delete('/cart/items/{cartItem}', [CartController::class, 'destroy']);
 Route::delete('/cart', [CartController::class, 'clear']);
 
-// Auth-required routes
+
 Route::middleware('auth:sanctum')->group(function () {
-    // Checkout
+    
     Route::post('/checkout', [CheckoutController::class, 'store']);
     Route::post('/checkout/apply-coupon', [CheckoutController::class, 'applyCoupon']);
 
-    // Orders
+    
     Route::post('/orders/{order}/cancel', [OrderController::class, 'cancel']);
     Route::post('/orders/{order}/review', [OrderController::class, 'review']);
 
-    // Addresses
+    
     Route::get('/addresses', [AddressController::class, 'index']);
     Route::post('/addresses', [AddressController::class, 'store']);
     Route::put('/addresses/{address}', [AddressController::class, 'update']);
     Route::delete('/addresses/{address}', [AddressController::class, 'destroy']);
 
-    // Admin API (Admin + Staff)
+    
     Route::middleware(\App\Http\Middleware\EnsureIsAdminOrStaff::class)->prefix('admin')->group(function () {
         Route::get('/orders/new', [AdminOrderController::class, 'newOrders']);
 
@@ -79,7 +79,7 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::get('/reports/products', [AdminReportController::class, 'products']);
         Route::get('/reports/customers', [AdminReportController::class, 'customers']);
 
-        // Admin-only
+        
         Route::middleware(\App\Http\Middleware\EnsureIsAdmin::class)->group(function () {
             Route::put('/users/{user}', [AdminUserController::class, 'update']);
         });

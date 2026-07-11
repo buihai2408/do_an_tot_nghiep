@@ -54,7 +54,7 @@ const deleteAccount = () => {
 
 <template>
     <AppLayout>
-        <!-- Page Header -->
+        
         <section class="bg-[#1a1a1a] py-16 lg:py-20">
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
                 <h1 class="text-4xl lg:text-5xl font-bold text-white" style="font-family: 'Playfair Display', serif;">Hồ sơ cá nhân</h1>
@@ -62,7 +62,7 @@ const deleteAccount = () => {
         </section>
 
         <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-            <!-- Profile Information -->
+            
             <div class="bg-white border border-gray-100 p-8 mb-8">
                 <h2 class="text-xs font-semibold tracking-widest uppercase text-[#1a1a1a] mb-1">Thông tin cá nhân</h2>
                 <p class="text-sm text-gray-400 mb-6">Cập nhật tên và email của bạn.</p>
@@ -92,7 +92,7 @@ const deleteAccount = () => {
                 </form>
             </div>
 
-            <!-- Update Password -->
+            
             <div class="bg-white border border-gray-100 p-8 mb-8">
                 <h2 class="text-xs font-semibold tracking-widest uppercase text-[#1a1a1a] mb-1">Đổi mật khẩu</h2>
                 <p class="text-sm text-gray-400 mb-6">Đảm bảo tài khoản của bạn sử dụng mật khẩu mạnh.</p>
@@ -122,7 +122,7 @@ const deleteAccount = () => {
                 </form>
             </div>
 
-            <!-- Delete Account -->
+            
             <div class="bg-white border border-red-200 p-8">
                 <h2 class="text-xs font-semibold tracking-widest uppercase text-red-600 mb-1">Xóa tài khoản</h2>
                 <p class="text-sm text-gray-400 mb-4">Sau khi xóa, toàn bộ dữ liệu của bạn sẽ bị mất vĩnh viễn.</p>
@@ -131,7 +131,7 @@ const deleteAccount = () => {
                 </button>
             </div>
 
-            <!-- Delete Modal -->
+            
             <Teleport to="body">
                 <div v-if="showDeleteModal" class="fixed inset-0 z-50 flex items-center justify-center">
                     <div class="fixed inset-0 bg-black/50" @click="showDeleteModal = false"></div>

@@ -9,7 +9,7 @@ const submit = () => { submitted.value = true; };
 
 <template>
     <AppLayout>
-        <!-- Hero -->
+        
         <section class="py-16 lg:py-20" style="background:#2C1810;">
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
                 <p class="text-xs font-semibold tracking-[0.3em] uppercase mb-3 flex items-center justify-center gap-3" style="color:#D4A853;">
@@ -25,13 +25,13 @@ const submit = () => { submitted.value = true; };
         <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-16 lg:py-24">
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-16">
 
-                <!-- Contact Info -->
+                
                 <div>
                     <p class="text-xs font-semibold tracking-[0.3em] uppercase mb-4" style="color:#D4A853;">Thông tin liên hệ</p>
                     <h2 class="text-3xl font-bold mb-10" style="color:#2C1810; font-family:'Playfair Display',serif;">Tìm Chúng Tôi</h2>
 
                     <div class="space-y-7">
-                        <!-- Address -->
+                        
                         <div class="flex gap-5 group">
                             <div class="w-12 h-12 flex items-center justify-center flex-shrink-0 transition group-hover:scale-110"
                                 style="background:#2C1810; border-radius:8px; box-shadow:0 4px 15px rgba(44,24,16,0.2);">
@@ -42,7 +42,7 @@ const submit = () => { submitted.value = true; };
                                 <p class="text-sm leading-relaxed" style="color:#8B7355;">175 Tây Sơn<br>Đống Đa, Hà Nội</p>
                             </div>
                         </div>
-                        <!-- Phone -->
+                        
                         <div class="flex gap-5 group">
                             <div class="w-12 h-12 flex items-center justify-center flex-shrink-0 transition group-hover:scale-110"
                                 style="background:#2C1810; border-radius:8px; box-shadow:0 4px 15px rgba(44,24,16,0.2);">
@@ -53,7 +53,7 @@ const submit = () => { submitted.value = true; };
                                 <p class="text-sm" style="color:#8B7355;">0966461728</p>
                             </div>
                         </div>
-                        <!-- Email -->
+                        
                         <div class="flex gap-5 group">
                             <div class="w-12 h-12 flex items-center justify-center flex-shrink-0 transition group-hover:scale-110"
                                 style="background:#2C1810; border-radius:8px; box-shadow:0 4px 15px rgba(44,24,16,0.2);">
@@ -64,7 +64,7 @@ const submit = () => { submitted.value = true; };
                                 <p class="text-sm" style="color:#8B7355;">info@coffeeshop.vn</p>
                             </div>
                         </div>
-                        <!-- Hours -->
+                        
                         <div class="flex gap-5 group">
                             <div class="w-12 h-12 flex items-center justify-center flex-shrink-0 transition group-hover:scale-110"
                                 style="background:#2C1810; border-radius:8px; box-shadow:0 4px 15px rgba(44,24,16,0.2);">
@@ -79,7 +79,7 @@ const submit = () => { submitted.value = true; };
                     </div>
                 </div>
 
-                <!-- Contact Form -->
+                
                 <div>
                     <div v-if="submitted" class="p-10 text-center" style="background:#FAF6F0; border:1px solid #E8D9C5; border-radius:4px;">
                         <div class="w-16 h-16 mx-auto mb-6 rounded-full flex items-center justify-center" style="background:#ECFDF5;">
@@ -146,7 +146,7 @@ const submit = () => { submitted.value = true; };
             </div>
         </div>
 
-        <!-- Map placeholder -->
+        
         <section class="py-12" style="background:#FAF6F0;">
             <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div class="flex items-center justify-center" style="background:#E8D9C5; height:250px; border-radius:4px; border:1px solid #D4B896;">

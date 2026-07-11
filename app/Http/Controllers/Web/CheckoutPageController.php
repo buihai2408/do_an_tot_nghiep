@@ -17,7 +17,7 @@ class CheckoutPageController extends Controller
     {
         $cart = $cartService->getCartWithItems();
         $summary = $cartService->getCartSummary();
-        /** @var User $user */
+        
         $user = Auth::user();
         $addresses = $user->addresses()->orderByDesc('is_default')->get();
 

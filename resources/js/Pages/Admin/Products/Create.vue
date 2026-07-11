@@ -109,7 +109,7 @@ const submit = async () => {
                     <p v-if="errors.base_price" class="text-red-500 text-sm mt-1">{{ errors.base_price[0] }}</p>
                 </div>
 
-                <!-- Images Upload -->
+                
                 <div>
                     <label class="block text-sm font-medium mb-2">Hình ảnh sản phẩm</label>
                     <div v-if="imagePreviews.length" class="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 gap-3 mb-3">
@@ -143,7 +143,7 @@ const submit = async () => {
                     <label class="flex items-center"><input v-model="form.has_sugar_level" type="checkbox" class="rounded text-[#D4A853] mr-2" /> Chọn Mức đường</label>
                 </div>
 
-                <!-- Sizes -->
+                
                 <div>
                     <label class="block text-sm font-medium mb-2">Kích thước & Giá</label>
                     <div v-for="size in selectedSizes" :key="size.size_id" class="flex items-center space-x-4 mb-2">
@@ -152,7 +152,7 @@ const submit = async () => {
                     </div>
                 </div>
 
-                <!-- Toppings -->
+                
                 <div>
                     <label class="block text-sm font-medium mb-2">Topping</label>
                     <div class="flex flex-wrap gap-2">

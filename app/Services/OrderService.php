@@ -142,8 +142,14 @@ class OrderService
             
             $loadedOrder = $order->load(['items.toppings']);
             
-            // Dispatch event for admin real-time notification
-            broadcast(new NewOrderPlaced($loadedOrder));
+            try {
+                broadcast(new NewOrderPlaced($loadedOrder));
+            } catch (\Exception $e) {
+                \Illuminate\Support\Facades\Log::warning('Broadcast NewOrderPlaced failed', [
+                    'order_id' => $loadedOrder->id,
+                    'error' => $e->getMessage(),
+                ]);
+            }
 
             return $loadedOrder;
         });
@@ -166,7 +172,14 @@ class OrderService
             $this->loyaltyService->earnPoints($order->user, $order->fresh());
             
             $freshOrder = $order->fresh();
-            broadcast(new OrderStatusUpdated($freshOrder));
+            try {
+                broadcast(new OrderStatusUpdated($freshOrder));
+            } catch (\Exception $e) {
+                \Illuminate\Support\Facades\Log::warning('Broadcast OrderStatusUpdated failed', [
+                    'order_id' => $freshOrder->id,
+                    'error' => $e->getMessage(),
+                ]);
+            }
             return $freshOrder;
         } elseif ($newStatus === OrderStatus::Cancelled) {
             $updateData['cancelled_at'] = now();
@@ -176,7 +189,14 @@ class OrderService
         $order->update($updateData);
         
         $freshOrder = $order->fresh();
-        broadcast(new OrderStatusUpdated($freshOrder));
+        try {
+            broadcast(new OrderStatusUpdated($freshOrder));
+        } catch (\Exception $e) {
+            \Illuminate\Support\Facades\Log::warning('Broadcast OrderStatusUpdated failed', [
+                'order_id' => $freshOrder->id,
+                'error' => $e->getMessage(),
+            ]);
+        }
         return $freshOrder;
     }
 

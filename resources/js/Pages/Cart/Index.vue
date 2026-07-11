@@ -15,7 +15,7 @@ defineProps({
 
 <template>
     <AppLayout>
-        <!-- Page Header -->
+        
         <section class="py-16 lg:py-20" style="background:#2C1810;">
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
                 <p class="text-xs font-semibold tracking-[0.3em] uppercase mb-3 flex items-center justify-center gap-3" style="color:#D4A853;">
@@ -41,10 +41,10 @@ defineProps({
             </div>
 
             <div v-else class="grid grid-cols-1 lg:grid-cols-12 gap-12">
-                <!-- Items List -->
+                
                 <div class="lg:col-span-8">
                     <div class="bg-white rounded-2xl border overflow-hidden" style="border-color:#E8D9C5; box-shadow:0 10px 30px rgba(44,24,16,0.03);">
-                        <!-- Header -->
+                        
                         <div class="hidden md:grid grid-cols-12 gap-4 px-8 py-5 text-xs font-bold tracking-widest uppercase" style="background:#FAF6F0; color:#A16A38; border-bottom:1px solid #E8D9C5;">
                             <div class="col-span-6">Sản phẩm</div>
                             <div class="col-span-3 text-center">Số lượng</div>
@@ -52,7 +52,7 @@ defineProps({
                             <div class="col-span-1"></div>
                         </div>
 
-                        <!-- Product Items -->
+                        
                         <div class="divide-y" style="border-color:#F2EBE0;">
                             <div v-for="item in cart.items" :key="item.id" class="grid grid-cols-1 md:grid-cols-12 gap-6 items-center p-6 lg:p-8 transition-colors hover:bg-[#FAF6F0]/50">
                                 <div class="md:col-span-6 flex items-start gap-5">
@@ -100,7 +100,7 @@ defineProps({
                     </div>
                 </div>
 
-                <!-- Order Summary Sidebar -->
+                
                 <div class="lg:col-span-4">
                     <div class="bg-white p-8 rounded-2xl border sticky top-28" style="border-color:#E8D9C5; box-shadow:0 20px 40px rgba(44,24,16,0.06);">
                         <h2 class="text-lg font-bold mb-6 flex items-center gap-2" style="color:#2C1810;">

@@ -31,7 +31,7 @@ const progressPercent = () => {
 
 <template>
     <AppLayout>
-        <!-- Page Header -->
+        
         <section class="bg-[#1a1a1a] py-16 lg:py-20">
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
                 <h1 class="text-4xl lg:text-5xl font-bold text-white" style="font-family: 'Playfair Display', serif;">Điểm thưởng</h1>
@@ -39,7 +39,7 @@ const progressPercent = () => {
         </section>
 
         <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-            <!-- Current Tier Card -->
+            
             <div :class="tierBgColors[summary.tier_color]" class="bg-gradient-to-r text-white p-8 lg:p-10 mb-10">
                 <div class="flex items-center justify-between">
                     <div>
@@ -74,7 +74,7 @@ const progressPercent = () => {
                 </div>
             </div>
 
-            <!-- Stats -->
+            
             <div class="grid grid-cols-2 md:grid-cols-3 gap-4 mb-10">
                 <div class="bg-[#f8f5f0] p-6 text-center">
                     <p class="text-3xl font-bold text-[#1a1a1a]">{{ summary.points.toLocaleString() }}</p>
@@ -90,7 +90,7 @@ const progressPercent = () => {
                 </div>
             </div>
 
-            <!-- Tier Benefits Table -->
+            
             <div class="bg-white border border-gray-100 p-8 mb-10">
                 <h2 class="text-xs font-semibold tracking-widest uppercase text-[#1a1a1a] mb-6">Quyền lợi theo hạng</h2>
                 <div class="overflow-x-auto">
@@ -123,7 +123,7 @@ const progressPercent = () => {
                 </div>
             </div>
 
-            <!-- How it works -->
+            
             <div class="bg-white border border-gray-100 p-8 mb-10">
                 <h2 class="text-xs font-semibold tracking-widest uppercase text-[#1a1a1a] mb-6">Cách thức hoạt động</h2>
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
@@ -151,7 +151,7 @@ const progressPercent = () => {
                 </div>
             </div>
 
-            <!-- Transaction History -->
+            
             <div class="bg-white border border-gray-100 p-8">
                 <h2 class="text-xs font-semibold tracking-widest uppercase text-[#1a1a1a] mb-6">Lịch sử điểm</h2>
 

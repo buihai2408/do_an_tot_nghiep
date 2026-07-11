@@ -55,7 +55,7 @@ Route::middleware(['auth', \App\Http\Middleware\EnsureIsAdminOrStaff::class])->p
     Route::get('/sizes', [AdminSizeController::class, 'index'])->name('sizes.index');
     Route::get('/reviews', [AdminReviewController::class, 'index'])->name('reviews.index');
 
-    // Admin-only
+    
     Route::middleware(\App\Http\Middleware\EnsureIsAdmin::class)->group(function () {
         Route::get('/users', [AdminUserController::class, 'index'])->name('users.index');
     });

@@ -101,21 +101,21 @@ onMounted(() => {
 
 onUnmounted(() => {
     if (window.Echo) {
-        // Not leaving channel to allow AdminLayout to keep listening
+        
     }
 });
 </script>
 
 <template>
     <AdminLayout>
-        <!-- Page header -->
+        
         <div class="mb-8 flex flex-col md:flex-row md:items-end justify-between gap-4">
             <div>
                 <p class="text-xs font-semibold tracking-[0.2em] uppercase mb-1 text-[#D4A853]">Tổng quan</p>
                 <h1 class="text-2xl font-bold text-[#2C1810] font-playfair">Dashboard</h1>
             </div>
             
-            <!-- Month Selector -->
+            
             <div class="flex items-center bg-white p-1 rounded-lg border border-[#E8D9C5] shadow-sm">
                 <select v-model="selectedMonth" @change="changeMonth" class="border-0 bg-transparent text-sm font-semibold text-[#8B7355] focus:ring-0 cursor-pointer outline-none">
                     <option v-for="m in 12" :key="m" :value="m">Tháng {{ m }}</option>
@@ -123,33 +123,33 @@ onUnmounted(() => {
             </div>
         </div>
 
-        <!-- KPIs -->
+        
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5 mb-8">
-            <!-- Doanh thu tháng -->
+            
             <div class="bg-white p-6 rounded-lg border border-[#E8D9C5] border-l-4 border-l-[#D4A853] shadow-sm transition hover:-translate-y-0.5">
                 <p class="text-xs font-semibold tracking-widest uppercase mb-2 text-[#8B7355]">💰 Doanh thu tháng {{ month }}</p>
                 <p class="text-2xl font-bold text-[#2C1810] font-playfair">{{ formatCurrency(stats.revenue_today) }}</p>
             </div>
-            <!-- Đơn hàng tháng -->
+            
             <div class="bg-white p-6 rounded-lg border border-[#E8D9C5] border-l-4 border-l-[#5C3A1E] shadow-sm transition hover:-translate-y-0.5">
                 <p class="text-xs font-semibold tracking-widest uppercase mb-2 text-[#8B7355]">📋 Đơn hàng tháng {{ month }}</p>
                 <p class="text-2xl font-bold text-[#2C1810] font-playfair">{{ stats.orders_today }}</p>
             </div>
-            <!-- Chờ xác nhận — nổi bật -->
+            
             <div class="bg-white p-6 rounded-lg border border-[#FEF3C7] border-l-4 border-l-[#F59E0B] shadow-sm bg-amber-50/30 transition hover:-translate-y-0.5">
                 <p class="text-xs font-semibold tracking-widest uppercase mb-2 text-[#92400E]">⏳ Chờ xác nhận</p>
                 <p class="text-2xl font-bold text-[#D97706] font-playfair">{{ stats.pending_orders }}</p>
             </div>
-            <!-- Tổng khách hàng -->
+            
             <div class="bg-white p-6 rounded-lg border border-[#E8D9C5] border-l-4 border-l-[#8B7355] shadow-sm transition hover:-translate-y-0.5">
                 <p class="text-xs font-semibold tracking-widest uppercase mb-2 text-[#8B7355]">👥 Tổng khách hàng</p>
                 <p class="text-2xl font-bold text-[#2C1810] font-playfair">{{ stats.total_customers }}</p>
             </div>
         </div>
 
-        <!-- Charts Row -->
+        
         <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
-            <!-- Revenue Chart -->
+            
             <div class="bg-white p-6 rounded-lg border border-[#E8D9C5] shadow-sm lg:col-span-2">
                 <h2 class="text-xs font-bold tracking-widest uppercase mb-5 pb-3 text-[#2C1810] border-b border-[#F2EBE0]">📈 Doanh thu tháng {{ month }}</h2>
                 <div class="h-72 w-full relative">
@@ -158,7 +158,7 @@ onUnmounted(() => {
                 </div>
             </div>
 
-            <!-- Order Status Chart -->
+            
             <div class="bg-white p-6 rounded-lg border border-[#E8D9C5] shadow-sm">
                 <h2 class="text-xs font-bold tracking-widest uppercase mb-5 pb-3 text-[#2C1810] border-b border-[#F2EBE0]">📊 Trạng thái đơn hàng</h2>
                 <div class="h-72 w-full relative">
@@ -169,7 +169,7 @@ onUnmounted(() => {
         </div>
 
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-            <!-- Top products -->
+            
             <div class="bg-white p-6 rounded-lg border border-[#E8D9C5] shadow-sm">
                 <h2 class="text-xs font-bold tracking-widest uppercase mb-5 pb-3 text-[#2C1810] border-b border-[#F2EBE0]">☕ Sản phẩm bán chạy</h2>
                 <div v-if="!topProducts?.length" class="text-center py-8 text-[#B5A089]">Chưa có dữ liệu</div>
@@ -190,7 +190,7 @@ onUnmounted(() => {
                 </div>
             </div>
 
-            <!-- Top customers -->
+            
             <div class="bg-white p-6 rounded-lg border border-[#E8D9C5] shadow-sm">
                 <h2 class="text-xs font-bold tracking-widest uppercase mb-5 pb-3 text-[#2C1810] border-b border-[#F2EBE0]">🌟 Top khách hàng</h2>
                 <div v-if="!topCustomers?.length" class="text-center py-8 text-[#B5A089]">Chưa có dữ liệu</div>
@@ -213,7 +213,7 @@ onUnmounted(() => {
         </div>
 
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mt-8">
-            <!-- Revenue summary -->
+            
             <div class="bg-white p-6 rounded-lg border border-[#E8D9C5] shadow-sm">
                 <h2 class="text-xs font-bold tracking-widest uppercase mb-5 pb-3 text-[#2C1810] border-b border-[#F2EBE0]">📋 Tổng kết hoạt động</h2>
                 <div class="space-y-4">
@@ -232,7 +232,7 @@ onUnmounted(() => {
                 </div>
             </div>
 
-            <!-- Revenue Table -->
+            
             <div class="bg-white p-6 rounded-lg border border-[#E8D9C5] shadow-sm">
                 <h2 class="text-xs font-bold tracking-widest uppercase mb-5 pb-3 text-[#2C1810] border-b border-[#F2EBE0]">📅 Doanh thu theo ngày</h2>
                 <div v-if="!revenueChart?.labels?.length" class="text-center py-8 text-[#B5A089]">Chưa có dữ liệu</div>

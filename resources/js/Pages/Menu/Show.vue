@@ -70,7 +70,7 @@ const toggleTopping = (id) => {
 
 <template>
     <AppLayout>
-        <!-- Breadcrumb -->
+        
         <div style="background:#FAF6F0; border-bottom:1px solid #E8D9C5;" class="py-4 lg:py-6">
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <nav class="flex items-center text-sm font-medium tracking-wide" style="color:#8B7355;">
@@ -86,7 +86,7 @@ const toggleTopping = (id) => {
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 lg:py-20">
             <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16">
                 
-                <!-- Image Gallery (Left Side) -->
+                
                 <div class="lg:col-span-5 relative">
                     <div class="sticky top-28">
                         <div class="aspect-[4/5] bg-[#F8F5F0] overflow-hidden rounded-xl border" style="border-color:#E8D9C5; box-shadow:0 20px 40px rgba(44,24,16,0.06);">
@@ -105,7 +105,7 @@ const toggleTopping = (id) => {
                                 <svg class="w-32 h-32 opacity-20" style="color:#2C1810;" fill="currentColor" viewBox="0 0 24 24"><path d="M2 21h18v-2H2v2zM20 8h-2V5h2v3zm2-4h-2V2a1 1 0 00-1-1H3a1 1 0 00-1 1v11a4 4 0 004 4h8a4 4 0 004-4v-1h2a2 2 0 002-2V6a2 2 0 00-2-2zm-4 9a2 2 0 01-2 2H6a2 2 0 01-2-2V3h14v10zm4-3h-2V6h2v4z"/></svg>
                             </div>
                         </div>
-                        <!-- Thumbnails -->
+                        
                         <div v-if="hasMultipleImages" class="flex gap-4 mt-6 justify-center">
                             <button
                                 v-for="(img, i) in allImages"
@@ -120,7 +120,7 @@ const toggleTopping = (id) => {
                     </div>
                 </div>
 
-                <!-- Product Details (Right Side) -->
+                
                 <div class="lg:col-span-7 flex flex-col justify-center">
                     <div class="mb-8">
                         <span class="inline-block px-3 py-1 text-xs font-bold tracking-widest uppercase rounded-full mb-4" style="background:#F2EBE0; color:#A16A38;">
@@ -142,7 +142,7 @@ const toggleTopping = (id) => {
                     </div>
 
                     <div class="space-y-8">
-                        <!-- Size Selector -->
+                        
                         <div v-if="product.sizes?.length">
                             <div class="flex items-center justify-between mb-4">
                                 <h3 class="text-sm font-bold tracking-widest uppercase flex items-center gap-2" style="color:#2C1810;">
@@ -167,7 +167,7 @@ const toggleTopping = (id) => {
                         </div>
 
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-                            <!-- Ice Level -->
+                            
                             <div v-if="product.has_ice_level">
                                 <h3 class="text-sm font-bold tracking-widest uppercase flex items-center gap-2 mb-4" style="color:#2C1810;">
                                     <span class="text-xl">🧊</span> Mức đá
@@ -187,7 +187,7 @@ const toggleTopping = (id) => {
                                 </div>
                             </div>
 
-                            <!-- Sugar Level -->
+                            
                             <div v-if="product.has_sugar_level">
                                 <h3 class="text-sm font-bold tracking-widest uppercase flex items-center gap-2 mb-4" style="color:#2C1810;">
                                     <span class="text-xl">🍯</span> Mức đường
@@ -208,7 +208,7 @@ const toggleTopping = (id) => {
                             </div>
                         </div>
 
-                        <!-- Toppings -->
+                        
                         <div v-if="product.toppings?.length">
                             <h3 class="text-sm font-bold tracking-widest uppercase flex items-center gap-2 mb-4" style="color:#2C1810;">
                                 <span class="text-xl">✨</span> Topping thêm
@@ -227,7 +227,7 @@ const toggleTopping = (id) => {
                                             :style="selectedToppings.includes(topping.id) ? 'border-color:#2C1810; background:#2C1810;' : 'border-color:#A16A38;'">
                                             <svg v-if="selectedToppings.includes(topping.id)" class="w-3.5 h-3.5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"/></svg>
                                         </div>
-                                        <!-- Checkbox ẩn -->
+                                        
                                         <input
                                             type="checkbox"
                                             class="hidden"
@@ -241,17 +241,17 @@ const toggleTopping = (id) => {
                             </div>
                         </div>
 
-                        <!-- Add to Cart Bar -->
+                        
                         <div class="mt-10 pt-8" style="border-top:1px solid #E8D9C5;">
                             <div class="flex flex-col sm:flex-row items-center gap-6">
-                                <!-- Quantity -->
+                                
                                 <div class="flex items-center h-14 bg-white rounded-xl border-2 overflow-hidden shrink-0" style="border-color:#E8D9C5;">
                                     <button @click="quantity > 1 && quantity--" class="w-14 h-full flex items-center justify-center text-xl transition-colors hover:bg-[#FAF6F0]" style="color:#2C1810;">−</button>
                                     <span class="w-12 h-full flex items-center justify-center font-bold text-lg" style="color:#2C1810;">{{ quantity }}</span>
                                     <button @click="quantity++" class="w-14 h-full flex items-center justify-center text-xl transition-colors hover:bg-[#FAF6F0]" style="color:#2C1810;">+</button>
                                 </div>
                                 
-                                <!-- Submit -->
+                                
                                 <button
                                     @click="handleAddToCart"
                                     :disabled="loading"
@@ -270,7 +270,7 @@ const toggleTopping = (id) => {
                 </div>
             </div>
 
-            <!-- Reviews Section -->
+            
             <div v-if="product.reviews?.length" class="mt-24 pt-16" style="border-top:1px solid #E8D9C5;">
                 <div class="max-w-4xl mx-auto">
                     <h2 class="text-3xl font-bold mb-12 text-center" style="color:#2C1810; font-family:'Playfair Display',serif;">Đánh giá từ khách hàng</h2>

@@ -4,7 +4,7 @@ import AppLayout from '@/Layouts/AppLayout.vue';
 
 <template>
     <AppLayout>
-        <!-- Hero -->
+        
         <section class="relative min-h-[55vh] flex items-center justify-center bg-cover bg-center" style="background-image:url('/images/background_home.jpg')">
             <div class="absolute inset-0" style="background:linear-gradient(to bottom, rgba(28,18,8,0.7), rgba(44,24,16,0.5));"></div>
             <div class="relative z-10 text-center px-4">
@@ -18,7 +18,7 @@ import AppLayout from '@/Layouts/AppLayout.vue';
             </div>
         </section>
 
-        <!-- Story -->
+        
         <section class="py-20 lg:py-28" style="background:white;">
             <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
@@ -32,7 +32,7 @@ import AppLayout from '@/Layouts/AppLayout.vue';
                             <p>Chúng tôi tin rằng một ly cà phê ngon không chỉ đến từ nguyên liệu tốt, mà còn từ sự tỉ mỉ trong từng công đoạn pha chế, từ tâm huyết của người barista và từ không gian mà bạn thưởng thức nó.</p>
                             <p>Mỗi ngày, đội ngũ của chúng tôi làm việc với niềm đam mê để đảm bảo rằng từng giọt cà phê đều mang lại trải nghiệm tuyệt vời nhất cho khách hàng.</p>
                         </div>
-                        <!-- Signature divider -->
+                        
                         <div class="flex items-center gap-3 mt-8">
                             <div class="w-12 h-0.5" style="background:#D4A853;"></div>
                             <span class="text-xs tracking-widest uppercase" style="color:#D4A853;">Est. 2019</span>
@@ -45,7 +45,7 @@ import AppLayout from '@/Layouts/AppLayout.vue';
             </div>
         </section>
 
-        <!-- Values -->
+        
         <section class="py-20 lg:py-28" style="background:#FAF6F0;">
             <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div class="text-center mb-16">
@@ -58,7 +58,7 @@ import AppLayout from '@/Layouts/AppLayout.vue';
                     </div>
                 </div>
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-10">
-                    <!-- Passion -->
+                    
                     <div class="text-center group">
                         <div class="w-16 h-16 mx-auto mb-6 flex items-center justify-center transition-transform group-hover:scale-110"
                             style="background:#2C1810; border-radius:8px; box-shadow:0 4px 20px rgba(44,24,16,0.2);">
@@ -67,7 +67,7 @@ import AppLayout from '@/Layouts/AppLayout.vue';
                         <h3 class="text-sm font-bold tracking-widest uppercase mb-3" style="color:#2C1810;">Đam Mê</h3>
                         <p class="text-sm leading-relaxed" style="color:#8B7355;">Mỗi tách cà phê là một tác phẩm nghệ thuật, được tạo ra từ sự đam mê và tận tâm của đội ngũ chúng tôi.</p>
                     </div>
-                    <!-- Quality -->
+                    
                     <div class="text-center group">
                         <div class="w-16 h-16 mx-auto mb-6 flex items-center justify-center transition-transform group-hover:scale-110"
                             style="background:#2C1810; border-radius:8px; box-shadow:0 4px 20px rgba(44,24,16,0.2);">
@@ -76,7 +76,7 @@ import AppLayout from '@/Layouts/AppLayout.vue';
                         <h3 class="text-sm font-bold tracking-widest uppercase mb-3" style="color:#2C1810;">Chất Lượng</h3>
                         <p class="text-sm leading-relaxed" style="color:#8B7355;">Nguyên liệu được chọn lọc từ những vùng trồng tốt nhất, đảm bảo hương vị thuần khiết trong từng giọt.</p>
                     </div>
-                    <!-- Community -->
+                    
                     <div class="text-center group">
                         <div class="w-16 h-16 mx-auto mb-6 flex items-center justify-center transition-transform group-hover:scale-110"
                             style="background:#2C1810; border-radius:8px; box-shadow:0 4px 20px rgba(44,24,16,0.2);">
@@ -89,7 +89,7 @@ import AppLayout from '@/Layouts/AppLayout.vue';
             </div>
         </section>
 
-        <!-- Numbers -->
+        
         <section class="py-20 lg:py-24" style="background:#2C1810;">
             <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div class="grid grid-cols-2 md:grid-cols-4 gap-8 text-center">

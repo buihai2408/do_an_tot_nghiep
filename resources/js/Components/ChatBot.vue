@@ -3,27 +3,29 @@ import { ref, computed, nextTick } from 'vue';
 import { usePage } from '@inertiajs/vue3';
 import axios from 'axios';
 
-// ── Inertia page props (auth user info) ────────────────────────────────────
+
 const page = usePage();
 const authUser = computed(() => page.props.auth?.user ?? null);
 
-// ── State ──────────────────────────────────────────────────────────────────
+
 const isOpen         = ref(false);
 const isLoading      = ref(false);
 const inputText      = ref('');
-const conversationId = ref(null);   // null = cuộc hội thoại mới (không gửi lên server)
+const conversationId = ref(null);   
 const messages       = ref([]);
 const messagesEnd    = ref(null);
 const inputRef       = ref(null);
 const hasGreeted     = ref(false);
 
-// ── Suggested quick questions (thêm gợi ý cá nhân nếu đã đăng nhập) ───────
+
 const suggestions = computed(() => {
     const base = [
+        '🔥 Sản phẩm bán chạy nhất?',
+        '⭐ Sản phẩm được yêu thích nhất?',
+        '🎫 Có mã giảm giá nào không?',
         '☕ Menu có những gì?',
         '💰 Giá cả như thế nào?',
         '🕒 Giờ mở cửa?',
-        '📍 Địa chỉ quán?',
     ];
     if (authUser.value) {
         return [
@@ -35,15 +37,15 @@ const suggestions = computed(() => {
     return base;
 });
 
-// ── Greeting cá nhân hóa ──────────────────────────────────────────────────
+
 const greetingText = computed(() => {
     if (authUser.value) {
-        return `Xin chào, **${authUser.value.name}**! 👋 Tôi là trợ lý AI của Trạm Cà Phê. Tôi có thể tra cứu đơn hàng, điểm thưởng, menu và nhiều thông tin khác cho bạn. Bạn cần hỗ trợ gì? ☕`;
+        return `Xin chào, **${authUser.value.name}**! 👋 Tôi là trợ lý AI của Trạm Cà Phê. Tôi có thể tra cứu đơn hàng, điểm thưởng, sản phẩm bán chạy, mã giảm giá và nhiều thông tin khác cho bạn. Bạn cần hỗ trợ gì? ☕`;
     }
-    return 'Xin chào! 👋 Tôi là trợ lý AI của Trạm Cà Phê. Tôi có thể giúp bạn tìm hiểu về menu, giá cả, khuyến mãi, giờ mở cửa và nhiều thông tin khác. Bạn muốn hỏi gì nào? ☕';
+    return 'Xin chào! 👋 Tôi là trợ lý AI của Trạm Cà Phê. Tôi có thể giúp bạn tìm hiểu về menu, sản phẩm bán chạy, đánh giá, mã giảm giá và nhiều thông tin khác. Bạn muốn hỏi gì nào? ☕';
 });
 
-// ── Methods ────────────────────────────────────────────────────────────────
+
 function toggleChat() {
     isOpen.value = !isOpen.value;
     if (isOpen.value && !hasGreeted.value) {
@@ -71,15 +73,15 @@ async function sendMessage() {
     const query = inputText.value.trim();
     if (!query || isLoading.value) return;
 
-    // Add user message
+    
     messages.value.push({ id: Date.now(), role: 'user', text: query });
     inputText.value = '';
-    resetTextareaHeight();   // reset chiều cao textarea về 1 dòng
+    resetTextareaHeight();   
     isLoading.value = true;
     await scrollToBottom();
 
     try {
-        // Chỉ gửi conversation_id khi có giá trị thực
+        
         const payload = { query };
         if (conversationId.value) {
             payload.conversation_id = conversationId.value;
@@ -87,7 +89,7 @@ async function sendMessage() {
 
         const res = await axios.post('/api/chatbot/message', payload);
 
-        // Lưu conversation_id để duy trì ngữ cảnh các tin nhắn tiếp theo
+        
         if (res.data.conversation_id) {
             conversationId.value = res.data.conversation_id;
         }
@@ -119,15 +121,15 @@ function handleKeydown(e) {
     }
 }
 
-// Tự động tăng chiều cao textarea theo nội dung
+
 function autoResize(e) {
     const el = e?.target ?? inputRef.value;
     if (!el) return;
-    el.style.height = 'auto';          // reset về auto trước
-    el.style.height = el.scrollHeight + 'px'; // rồi đặt đúng bằng content
+    el.style.height = 'auto';          
+    el.style.height = el.scrollHeight + 'px'; 
 }
 
-// Reset textarea về 1 dòng sau khi gửi
+
 function resetTextareaHeight() {
     const el = inputRef.value;
     if (!el) return;
@@ -136,9 +138,9 @@ function resetTextareaHeight() {
 
 function clearChat() {
     messages.value      = [];
-    conversationId.value = null;  // reset về null để server biết là cuộc hội thoại mới
+    conversationId.value = null;  
     hasGreeted.value    = false;
-    // Hiển thị greeting lại
+    
     setTimeout(() => {
         hasGreeted.value = true;
         messages.value.push({
@@ -154,7 +156,7 @@ async function scrollToBottom() {
     messagesEnd.value?.scrollIntoView({ behavior: 'smooth' });
 }
 
-// Format text: **bold**, *italic*, newlines -> <br>
+
 function formatText(text) {
     if (!text) return '';
     return text
@@ -165,7 +167,7 @@ function formatText(text) {
 </script>
 
 <template>
-    <!-- Floating Button -->
+    
     <div class="fixed bottom-4 right-4 md:bottom-7 md:right-7 z-[9999] font-sans">
         <button
             id="chatbot-toggle-btn"
@@ -174,21 +176,21 @@ function formatText(text) {
             @click="toggleChat"
             aria-label="Mở hộp chat AI"
         >
-            <!-- Chat icon -->
+            
             <svg v-if="!isOpen" class="w-6 h-6 z-10 transition-all duration-300 text-[#2C1810]" viewBox="0 0 24 24" fill="none" stroke="currentColor">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                     d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
             </svg>
-            <!-- Close icon -->
+            
             <svg v-else class="w-6 h-6 z-10 transition-all duration-300 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
             </svg>
 
-            <!-- Pulse ring (only when closed) -->
+            
             <span v-if="!isOpen" class="absolute inset-[-4px] rounded-full bg-[rgba(212,168,83,0.35)] animate-[ping_2s_ease-out_infinite]"></span>
         </button>
 
-        <!-- Chat Window -->
+        
         <Transition
             enter-active-class="transition-all duration-300 ease-[cubic-bezier(0.34,1.56,0.64,1)]"
             enter-from-class="opacity-0 scale-90 translate-y-4"
@@ -199,7 +201,7 @@ function formatText(text) {
         >
             <div v-if="isOpen" id="chatbot-window" class="absolute bottom-[72px] right-0 w-[calc(100vw-32px)] sm:w-[375px] h-[calc(100vh-120px)] sm:h-[570px] bg-white rounded-2xl shadow-[0_20px_60px_rgba(44,24,16,0.22)] flex flex-col overflow-hidden border border-[#E8D9C5] origin-bottom-right" role="dialog" aria-label="Chatbot AI">
 
-                <!-- Header -->
+                
                 <div class="flex items-center justify-between p-3.5 bg-gradient-to-br from-[#2C1810] to-[#5C3A1E] shrink-0 border-b border-[rgba(212,168,83,0.2)]">
                     <div class="flex items-center gap-2.5">
                         <div class="w-9 h-9 bg-[#D4A853] rounded-full flex items-center justify-center shrink-0">
@@ -230,9 +232,9 @@ function formatText(text) {
                     </div>
                 </div>
 
-                <!-- Messages -->
+                
                 <div id="chatbot-messages" class="flex-1 overflow-y-auto p-4 flex flex-col gap-3 scroll-smooth bg-[#FFFDF9] scrollbar-thin scrollbar-thumb-[#E8D9C5] scrollbar-track-transparent">
-                    <!-- Empty state with suggestions -->
+                    
                     <div v-if="messages.length === 0" class="flex flex-col items-center justify-center flex-1 py-6 px-2 text-center">
                         <div class="text-5xl mb-2.5 animate-bounce">☕</div>
                         <p class="text-[13px] text-[#8B7355] mb-4 leading-relaxed">Hỏi tôi bất cứ điều gì về Trạm Cà Phê!</p>
@@ -246,7 +248,7 @@ function formatText(text) {
                         </div>
                     </div>
 
-                    <!-- Message list -->
+                    
                     <div
                         v-for="msg in messages"
                         :key="msg.id"
@@ -269,7 +271,7 @@ function formatText(text) {
                         ></div>
                     </div>
 
-                    <!-- Typing indicator -->
+                    
                     <div v-if="isLoading" class="flex items-end gap-2 animate-[fadeInUp_0.25s_ease]">
                         <div class="w-7 h-7 rounded-full bg-[#D4A853] flex items-center justify-center shrink-0">
                             <svg class="w-4 h-4 fill-[#2C1810]" viewBox="0 0 24 24">
@@ -286,9 +288,9 @@ function formatText(text) {
                     <div ref="messagesEnd"></div>
                 </div>
 
-                <!-- Input -->
+                
                 <div class="border-t border-[#F2EBE0] shrink-0 bg-white">
-                    <!-- Suggestions (show when no messages or few messages) -->
+                    
                     <div v-if="messages.length > 0 && messages.length <= 2" class="flex flex-wrap gap-1.5 pt-2 px-3 justify-start border-t border-[#F2EBE0]">
                         <button
                             v-for="s in suggestions"
@@ -329,7 +331,7 @@ function formatText(text) {
 </template>
 
 <style>
-/* Animation classes for Tailwind */
+
 @keyframes fadeInUp {
     from {
         opacity: 0;

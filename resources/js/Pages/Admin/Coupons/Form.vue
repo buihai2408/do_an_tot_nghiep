@@ -6,6 +6,17 @@ import axios from 'axios';
 
 const props = defineProps({ coupon: { type: Object, default: null } });
 
+const toLocalDatetime = (utcString) => {
+    if (!utcString) return '';
+    const date = new Date(utcString);
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const day = String(date.getDate()).padStart(2, '0');
+    const hours = String(date.getHours()).padStart(2, '0');
+    const minutes = String(date.getMinutes()).padStart(2, '0');
+    return `${year}-${month}-${day}T${hours}:${minutes}`;
+};
+
 const form = ref({
     code: props.coupon?.code || '',
     name: props.coupon?.name || '',
@@ -14,8 +25,8 @@ const form = ref({
     min_order_amount: props.coupon?.min_order_amount || 0,
     max_discount: props.coupon?.max_discount || '',
     usage_limit: props.coupon?.usage_limit || '',
-    starts_at: props.coupon?.starts_at?.substring(0, 16) || '',
-    expires_at: props.coupon?.expires_at?.substring(0, 16) || '',
+    starts_at: toLocalDatetime(props.coupon?.starts_at),
+    expires_at: toLocalDatetime(props.coupon?.expires_at),
     is_active: props.coupon?.is_active ?? true,
 });
 const errors = ref({});

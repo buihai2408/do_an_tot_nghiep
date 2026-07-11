@@ -23,13 +23,6 @@ class CouponController extends Controller
 
     public function destroy(Coupon $coupon)
     {
-        // Kiểm tra mã giảm giá đã được sử dụng trong đơn hàng chưa
-        if ($coupon->orders()->count() > 0) {
-            return response()->json([
-                'message' => 'Không thể xóa mã giảm giá đã được sử dụng trong đơn hàng!',
-            ], 422);
-        }
-
         $coupon->delete();
         return response()->json(['message' => 'Đã xóa mã giảm giá!']);
     }

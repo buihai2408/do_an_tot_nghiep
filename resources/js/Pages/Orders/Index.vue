@@ -40,7 +40,7 @@ onUnmounted(() => {
 
 <template>
     <AppLayout>
-        <!-- Page Header -->
+        
         <section class="bg-[#1a1a1a] py-16 lg:py-20">
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
                 <h1 class="text-4xl lg:text-5xl font-bold text-white" style="font-family: 'Playfair Display', serif;">Đơn hàng của tôi</h1>
@@ -76,7 +76,7 @@ onUnmounted(() => {
                 </Link>
             </div>
 
-            <!-- Pagination -->
+            
             <div v-if="orders.links?.length > 3" class="flex justify-center mt-12 space-x-1">
                 <template v-for="link in orders.links" :key="link.label">
                     <Link

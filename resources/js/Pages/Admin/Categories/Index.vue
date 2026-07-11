@@ -85,10 +85,10 @@ const deleteCategory = async (id) => {
             </table>
         </div>
 
-        <!-- Pagination -->
+        
         <Pagination :links="categories.links" />
 
-        <!-- Modal -->
+        
         <div v-if="showForm" class="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
             <div class="bg-white rounded-2xl p-6 max-w-md w-full mx-4">
                 <h3 class="text-lg font-bold mb-4">{{ editingCategory ? 'Sửa danh mục' : 'Thêm danh mục' }}</h3>
